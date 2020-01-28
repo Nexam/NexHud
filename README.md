@@ -8,8 +8,12 @@ This is the early version of **NexHud**, *you can already test it and play with 
 
 ## Can i test it ?
 It will be my honor Commander o7 !
-*Take a look at **/Config/Readme-shortcuts.txt** & **/Config/Shortcuts.json** to configure your shortcut*
+
+Download the last Beta version here
 [Build folder](https://github.com/Nexam/NexHud/tree/master/Builds)
+
+*Take a look at **/Config/Readme-shortcuts.txt** & **/Config/Shortcuts.json** to configure your shortcut*
+You will need .Net Framework installed and be aware this is an early beta version.
 
 ## What is NexHud ?
 NexHud is a Enhanced Hud for Elite: Dangerous on SteamVR.
