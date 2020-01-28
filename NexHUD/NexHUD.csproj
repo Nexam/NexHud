@@ -169,8 +169,12 @@
     <EmbeddedResource Include="Resources\ranks\rank-8.png" />
     <EmbeddedResource Include="Resources\ranks\rank-9.png" />
     <None Include="App.config" />
-    <Content Include="Config\Readme-shortcuts.txt" />
-    <Content Include="Config\Readme-searchs.txt" />
+    <Content Include="Config\Readme-shortcuts.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Readme-searchs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Elite\SearchEntry.cs" />
     <Content Include="manifest.vrmanifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
