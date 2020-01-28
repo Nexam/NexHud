@@ -10,7 +10,7 @@ This is the early version of **NexHud**, *you can already test it and play with 
 It will be my honor Commander o7 !
 
 Download the last Beta version here
-[Build folder](https://github.com/Nexam/NexHud/tree/master/Builds)
+[NexHud Beta](https://github.com/Nexam/NexHud/releases)
 
 *Take a look at **/Config/Readme-shortcuts.txt** & **/Config/Shortcuts.json** to configure your shortcut*
 You will need .Net Framework installed and be aware this is an early beta version.
