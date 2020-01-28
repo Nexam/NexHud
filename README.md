@@ -2,10 +2,18 @@
 ## Enhanced VR Hud for Elite: Dangerous
 
 This is the early version of **NexHud**, *you can already test it and play with it* if you want to :)
-Take a look at NexHUD/Config to configure your shortcut & searchs (please do not commit your configuration. Change it in the bin/ directory you are compiling the project)
 
 ![Gif0](https://github.com/Nexam/NexHud/blob/master/Medias/Nexhud-0.1-0.gif?raw=true)
 ![Gif0](https://github.com/Nexam/NexHud/blob/master/Medias/Nexhud-0.1-1.gif?raw=true)
+
+## Can i test it ?
+It will be my honor Commander o7 !
+
+Download the last Beta version here
+[NexHud Beta](https://github.com/Nexam/NexHud/releases)
+
+*Take a look at **/Config/Readme-shortcuts.txt** & **/Config/Shortcuts.json** to configure your shortcut*
+You will need .Net Framework installed and be aware this is an early beta version.
 
 ## What is NexHud ?
 NexHud is a Enhanced Hud for Elite: Dangerous on SteamVR.
