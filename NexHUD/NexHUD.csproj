@@ -117,6 +117,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="EDDB\EDDBSystemPage.cs" />
+    <Compile Include="EDEngineer\BlueprintCategorie.cs" />
+    <Compile Include="EDEngineer\BlueprintDatas.cs" />
+    <Compile Include="EDEngineer\BlueprintName.cs" />
+    <Compile Include="EDEngineer\BlueprintType.cs" />
     <Compile Include="EDSM\EDSMSystemDatas.cs" />
     <Compile Include="Elite\Enums\EDEnumHelper.cs" />
     <Compile Include="Elite\Enums\EliteEconomy.cs" />
@@ -145,7 +149,7 @@
     <Compile Include="UI\NxMainPanelPlayerInfos.cs" />
     <Compile Include="UI\NxMainPanelTopInfos.cs" />
     <Compile Include="UI\NxMainPanel.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="NexHud.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +188,8 @@
     <None Include="Config\Shortcuts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Datas\blueprints.json" />
+    <EmbeddedResource Include="Datas\entryData.json" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
