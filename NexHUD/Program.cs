@@ -35,8 +35,8 @@ namespace NexHUD
         public static void Main(string[] args)
         {
             SteamVR_NexHUD.LogEvent += SteamVR_NexHUD_Log;
-            BodyTester();
-            return;
+            //BodyTester();
+            //return;
 
 
 
