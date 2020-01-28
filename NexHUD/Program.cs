@@ -37,9 +37,9 @@ namespace NexHUD
         public static void Main(string[] args)
         {
             SteamVR_NexHUD.LogEvent += SteamVR_NexHUD_Log;
-            
+
             //To test Spansh.co.uk for bodies search. I know, this is dirty :)
-            /*BodyTester();
+         /*   BodyTester();
             return;*/
 
 
@@ -51,6 +51,7 @@ namespace NexHUD
             m_IngameConsoleTb.reverseDrawing = true;
             m_IngameConsoleTb.reverseLineOrder = true;
             initElite();
+
 
             //User params
             UserSearchs.readConfigFile();
@@ -91,25 +92,26 @@ namespace NexHUD
             Stopwatch _watch = new Stopwatch();
             _watch.Start();
 
-            EliteMaterial m = EliteMaterial.Antimony;
-            Random r = new Random();
-            m = (EliteMaterial)r.Next(Enum.GetNames(typeof(EliteMaterial)).Length);
 
-            Console.WriteLine("Get best match for "+ m + " around " + _currentSystem + "...");
+            //Random search
+            EliteRawMaterial[] _mats = new EliteRawMaterial[] { EliteRawMaterial.Phosphorus };
+            // Random r = new Random();
+            // m = (EliteMaterial)r.Next(Enum.GetNames(typeof(EliteMaterial)).Length);
 
-            int _distance = 10;
-            int _step = 10;
+            Console.Write("Get best match around " + _currentSystem + " for: ");
+            for (int j = 0; j < _mats.Length; j++)
+            {
+                Console.Write(_mats[j] +"("+ EliteMaterialHelper.getGrade(_mats[j])  +")" + (j < _mats.Length - 1 ? "" : ","));
+            }
+            Console.WriteLine();
+
+            int _distance = 100;
+            int _step = 100;
             int _totalCount = 0;
             while (_distance <= 100)
             {
                 Console.WriteLine("search from {0} to {1}", _distance - _step, _distance);
-               SpanshBodiesResult _response = ExternalDBConnection.SpanshBodies(_currentSystem, new KeyValuePair<EliteMaterial, double>[]
-                {
-                new KeyValuePair<EliteMaterial, double>(m, EliteMaterialHelper.getDefaultThreshold(m) )
-                },
-                _distance, 
-                _distance - _step
-                    );
+                SpanshBodiesResult _response = ExternalDBConnection.SpanshBodies(_currentSystem, _mats);
 
                 Console.WriteLine(_response);
 
@@ -118,13 +120,18 @@ namespace NexHUD
 
                     for (int i = 0; i < _response.results.Length; i++)
                     {
-                        Console.WriteLine("- {0} . {5}: {1}% . Landable = {2}. Distance = {3}. Distance to Arrival = {4}",
-                            _response.results[i].name,
-                            _response.results[i].materials.Where(x => x.name == m.ToString()).FirstOrDefault().share,
-                            _response.results[i].is_landable,
-                            _response.results[i].distance,
-                            _response.results[i].distance_to_arrival,
-                            m);
+                        Console.Write("- {0} (Dist:{1}. DistTA:{2}", _response.results[i].name, Math.Round((double)_response.results[i].distance, 1), _response.results[i].distance_to_arrival);
+                        for (int j = 0; j < _mats.Length; j++)
+                        {
+                            Console.Write("| {0}: {1}%",
+                                _mats[j],
+                                _response.results[i].materials.Where(x => x.name == _mats[j].ToString()).FirstOrDefault().share,
+                                _response.results[i].distance,
+                                _response.results[i].distance_to_arrival
+                                );
+
+                        }
+                        Console.WriteLine();
                     }
                     _totalCount += _response.results.Length;
                 }

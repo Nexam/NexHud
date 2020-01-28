@@ -120,7 +120,7 @@
     <Compile Include="EDSM\EDSMSystemDatas.cs" />
     <Compile Include="Elite\Enums\EDEnumHelper.cs" />
     <Compile Include="Elite\Enums\EliteEconomy.cs" />
-    <Compile Include="Elite\Enums\EliteMaterial.cs" />
+    <Compile Include="Elite\Enums\EliteRawMaterial.cs" />
     <Compile Include="Elite\Enums\EliteReserve.cs" />
     <Compile Include="Elite\Enums\EliteStates.cs" />
     <Compile Include="Elite\Enums\EliteAllegiance.cs" />
