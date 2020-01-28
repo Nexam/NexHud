@@ -1,0 +1,94 @@
+﻿[{
+    searchName : "Double painites",
+    searchType : "system",
+    searchDisplay : ["allegiance", "security", "nameNotes"],
+    searchParams : [
+        [ "name", 
+            "Hyades Sector DB-X d1-112
+            ;Omicron Capricorni B
+            ;HIP 73269
+            ;HIP 21991
+            ;HIP 80266
+            ;Xi-2 Lupi
+            ;HR 6844
+            ;HIP 76772
+            ;HIP 59425
+            ;HIP 66481
+            ;HIP 19054
+            ;HIP 25368
+            ;HIP 37222
+            ;Eol Prou QX-T d3-415
+            ;Eol Prou HQ-N c7-13
+            ;Eol Prou RS-T d3-660
+            ;Eol Prou PH-K c9-497
+            ;Eol Prou PC-K c9-104
+            ;Randgnid
+        "],
+        [ "nameNotes", 
+            "2 ring A
+            ;B1 ring A
+            ;A1 ring A (narrow overlap)
+            ;1 ring A
+            ;6 ring A
+            ;A2 ring A
+            ;A3 ring A
+            ;2 ring A
+            ;2 ring A
+            ;8 ring A
+            ;1 ring A
+            ;1 ring A
+            ;3 ring A
+            ;4 ring A (low yield)
+            ;4 ring A
+            ;ABC3 ring A
+            ;A3 ring A (low yield)
+            ;3 ring A
+            ;4 ring A
+        "]
+    ]
+},
+{
+    searchName : "Fed/Empire in Boom",
+    searchType : "system",
+    searchDisplay : ["allegiance", "state", "security","state"],
+    searchParams : [
+        [ "allegiance", "federation;empire" ],
+        [ "state", "boom" ]
+    ]
+},
+{
+    searchName : "Anarchy sec + Outbreak",
+    searchType : "system",
+    searchDisplay : ["allegiance", "government", "economy", "security","state"],
+    searchParams : [
+        [ "security", "anarchy;lawless" ],
+        [ "state", "outbreak" ]
+    ]
+},
+{
+    searchName : "Agri / Inde / Nosec",
+    searchType : "system",
+    searchDisplay : ["allegiance",  "government", "econmy", "state", "security"],
+    searchParams : [
+        [ "econmy", "agriculture" ],
+        [ "allegiance", "independent" ],
+        [ "security", "anarchy;lawless" ]
+    ]
+},
+{
+    searchName : "War or Civil War !",
+    searchType : "system", 
+    searchDisplay : ["allegiance", "government", "security","state"],
+    searchParams : [
+        [ "state", "war;civil war" ]
+    ]
+},
+{
+    searchName : "Closest !",
+    searchType : "system",
+    searchMaxRadius : 20,
+    searchDisplay : ["allegiance",  "security", "population","state","government",],
+    
+},
+
+]

@@ -1,0 +1,38 @@
+﻿[
+	{
+		id : "right",
+		key : "Number2",
+		modifiers : ["RShift","RAlt"]
+	},
+	{
+		id : "left",
+		key : "Number1",
+		modifiers : ["RShift","RAlt"]
+	},
+	{
+		id : "down",
+		key : "Number3",
+		modifiers : ["RShift","RAlt"]
+	},
+	{
+		id : "up",
+		key : "Number4",
+		modifiers : ["RShift","RAlt"]
+	},
+	{
+		id : "select",
+		key : "Number5",
+		modifiers : ["RShift","RAlt"]
+	},
+	{
+		id : "menu",
+		menuMode : "hold",
+		modifiers : ["RShift","RAlt"]
+	},
+	{
+		id : "back",
+		key : "Number6",
+		modifiers : ["RShift","RAlt"]
+	},
+
+]
