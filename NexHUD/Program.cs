@@ -17,6 +17,8 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Threading;
+using NexHUD.Spansh;
+using NexHUD.Elite.Enums;
 
 namespace NexHUD
 {
@@ -35,8 +37,10 @@ namespace NexHUD
         public static void Main(string[] args)
         {
             SteamVR_NexHUD.LogEvent += SteamVR_NexHUD_Log;
-            //BodyTester();
-            //return;
+            
+            //To test Spansh.co.uk for bodies search. I know, this is dirty :)
+            /*BodyTester();
+            return;*/
 
 
 
@@ -83,79 +87,61 @@ namespace NexHUD
         {
             string _currentSystem = "Nemehi";
 
-            string _material = "Antimony";
 
             Stopwatch _watch = new Stopwatch();
-            int _count = 0;
             _watch.Start();
 
-            Console.WriteLine("Get systems arround " + _currentSystem + "...");
-            //get system around;
-            EDSMSystemDatas[] _edsmSystems = ExternalDBConnection.EDSMSystemsInSphereRadius(_currentSystem, 0, 40, false);
-            Console.WriteLine("System list received in {0}ms | {1} systems!", _watch.ElapsedMilliseconds, _edsmSystems.Length);
+            EliteMaterial m = EliteMaterial.Antimony;
+            Random r = new Random();
+            m = (EliteMaterial)r.Next(Enum.GetNames(typeof(EliteMaterial)).Length);
 
+            Console.WriteLine("Get best match for "+ m + " around " + _currentSystem + "...");
 
-            List<string> _fields = new List<string>();
-            foreach (var f in typeof(EDSMMaterials).GetFields().Where(f => f.IsPublic))
+            int _distance = 10;
+            int _step = 10;
+            int _totalCount = 0;
+            while (_distance <= 100)
             {
-                _fields.Add(f.Name);
-            }
-
-            string _bestMatch = "";
-            double _bestPercent = 0.0;
-            double _threshold = 2.0;
-
-            foreach (EDSMSystemDatas _edsmSys in _edsmSystems)
-            {
-                _count++;
-                EDSMSystemDatas _systemFound = ExternalDBConnection.EDSMSystemBodies(_edsmSys.name);
-                if (_systemFound == null)
-                    break;
-                if (_systemFound.bodies != null)
+                Console.WriteLine("search from {0} to {1}", _distance - _step, _distance);
+               SpanshBodiesResult _response = ExternalDBConnection.SpanshBodies(_currentSystem, new KeyValuePair<EliteMaterial, double>[]
                 {
-                    foreach (EDSMBody _body in _systemFound.bodies)
+                new KeyValuePair<EliteMaterial, double>(m, EliteMaterialHelper.getDefaultThreshold(m) )
+                },
+                _distance, 
+                _distance - _step
+                    );
+
+                Console.WriteLine(_response);
+
+                if (_response != null)
+                {
+
+                    for (int i = 0; i < _response.results.Length; i++)
                     {
-                        if (_body.materials == null)
-                            continue;
-                        string _match = "";
-
-                        bool _ThresholdOk = false;
-                        foreach(string f in _fields)
-                        {
-                            if ( !_material.Equals(f) )
-                                continue;
-                            var _value = _body.materials.GetType().GetField(f).GetValue(_body.materials);
-                            if (_value != null)
-                            {
-                                _match += string.Format("{0}:{1}%", f, _value);
-                                _ThresholdOk = (double)_value > _threshold;
-                                if (_bestPercent < (double)_value )
-                                {
-                                    _bestMatch = string.Format("Best Match = System {0}, bodie {1}. || {2}", _systemFound.name, _body.name, _match);
-                                    _bestPercent = (double)_value;
-                                }
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(_match) && _ThresholdOk)
-                            Console.WriteLine("Match for system {0} bodie {1}. {2}", _systemFound.name, _body.name, _match);
+                        Console.WriteLine("- {0} . {5}: {1}% . Landable = {2}. Distance = {3}. Distance to Arrival = {4}",
+                            _response.results[i].name,
+                            _response.results[i].materials.Where(x => x.name == m.ToString()).FirstOrDefault().share,
+                            _response.results[i].is_landable,
+                            _response.results[i].distance,
+                            _response.results[i].distance_to_arrival,
+                            m);
                     }
+                    _totalCount += _response.results.Length;
                 }
 
-                Thread.Sleep(100);
-                if (_count % 10 == 0)
+                if (_totalCount < 11)
                 {
-                    Console.WriteLine("system {0}/{1}. {2}ms elapsed", _count, _edsmSystems.Length, _watch.ElapsedMilliseconds);
-                    Thread.Sleep(1000);
+                    _distance += _step;
+                    Console.WriteLine("Extending the search...");
                 }
-                if (_count >= 100)
+                else
                     break;
             }
+
             _watch.Stop();
             Console.WriteLine("Search finisehd in {0}ms", _watch.ElapsedMilliseconds);
-            Console.WriteLine(_bestMatch);
             Console.WriteLine("Type any key to exit");
             Console.ReadKey();
-            throw new ApplicationException("END");
         }
 
 

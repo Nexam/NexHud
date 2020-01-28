@@ -120,6 +120,7 @@
     <Compile Include="EDSM\EDSMSystemDatas.cs" />
     <Compile Include="Elite\Enums\EDEnumHelper.cs" />
     <Compile Include="Elite\Enums\EliteEconomy.cs" />
+    <Compile Include="Elite\Enums\EliteMaterial.cs" />
     <Compile Include="Elite\Enums\EliteReserve.cs" />
     <Compile Include="Elite\Enums\EliteStates.cs" />
     <Compile Include="Elite\Enums\EliteAllegiance.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Elite\Enums\EliteSecurity.cs" />
     <Compile Include="Elite\Enums\EliteSystemThreat.cs" />
     <Compile Include="Keyboard\Shortcuts.cs" />
+    <Compile Include="Spansh\SpanshBodiesResult.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="UI\NxMainPanelSearch.cs" />
     <Compile Include="UI\NxMainPanelMenu.cs" />
