@@ -28,6 +28,8 @@ Here is the list of the features planned
 - [x] Show basic informations about the current system (Allegiance, economy, estimated value, etc)
 - [ ] Show a summary about the commander (Current ship, balance, bounty to collect, bounty on your head, etc..)
 - [x] Menu to access various services of NexHud
+- [ ] Access to ED Radios: Radio Sidewinder, Lave Radio & Hutton Orbital Radio
+- [ ] (option) Audio process (reverb/equalizer) of the Radios to match the cockpit size
 
 #### Searchs
 - [x] Search for system around your CMDR current position matching parameters (Allegiance, economy, etc...)
