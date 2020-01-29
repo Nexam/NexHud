@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NexHUD.EDDB;
+using NexHUD.EDEngineer;
 using NexHUD.EDSM;
+using NexHUD.Spansh;
 using NexHUD.UI;
 using NexHUDCore;
 
@@ -30,7 +32,7 @@ namespace NexHUD.Elite
         }
         #endregion
 
-       
+
         /** Internal Datas Base **/
         private Dictionary<string, EDSystem> m_systems;
         private EDSystem _unknowSystem;
@@ -62,7 +64,7 @@ namespace NexHUD.Elite
 
         private void Events_LocationEvent(object sender, EliteAPI.Events.LocationInfo e)
         {
-            if( e.StarSystem != _lastCurrentSystem )
+            if (e.StarSystem != _lastCurrentSystem)
             {
                 m_systemAround = new List<string>();
                 m_greatestSearchRadius = 0;
@@ -70,7 +72,7 @@ namespace NexHUD.Elite
             }
         }
 
-      public UserSearchResult getUserSearchResult(uint _id)
+        public UserSearchResult getUserSearchResult(uint _id)
         {
             if (m_lastUSRs.ContainsKey(_id))
                 return m_lastUSRs[_id];
@@ -91,7 +93,7 @@ namespace NexHUD.Elite
             m_lastSearchId++;
             m_lastUSRs.Add(m_lastSearchId, new UserSearchResult(_search, m_lastSearchId));
 
-            SteamVR_NexHUD.Log("New search for {0} id {1}", _search.searchType, m_lastSearchId );
+            SteamVR_NexHUD.Log("New search for {0} id {1}", _search.searchType, m_lastSearchId);
             m_lastSearchThread = new Thread(() => _startResearch(m_lastSearchId));
             m_lastSearchThread.Start();
 
@@ -106,8 +108,7 @@ namespace NexHUD.Elite
             int _statAddedSystem = 0;
             int _statUpdatedSystem = 0;
 
-
-            if ( !m_lastUSRs.ContainsKey(_id) )
+            if (!m_lastUSRs.ContainsKey(_id))
                 return;
 
             //Check if search is still valid
@@ -126,12 +127,12 @@ namespace NexHUD.Elite
                 else if (m_lastUSRs[_id].entry.searchType == NxSearchType.system)
                 {
                     //If names are specified we will ignore other parameters
-                    if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.name))
+                    if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.name))
                     {
-                        string[] _names = m_lastUSRs[_id].entry.spf[NxSearchParam.name];
+                        string[] _names = m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.name];
                         string[] _namesNotes = new string[0];
-                        if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.nameNotes))
-                            _namesNotes = m_lastUSRs[_id].entry.spf[NxSearchParam.nameNotes];
+                        if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.nameNotes))
+                            _namesNotes = m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.nameNotes];
 
 
                         for (int i = 0; i < _names.Length; i++)
@@ -169,13 +170,13 @@ namespace NexHUD.Elite
                         if (m_lastUSRs[_id].entry.searchMaxRadius > _startRardius && m_lastUSRs[_id].entry.searchMaxRadius < _maxEdsmRadius)
                             _maxEdsmRadius = m_lastUSRs[_id].entry.searchMaxRadius;
 
-                            int[] _increments = new int[]
-                        {
+                        int[] _increments = new int[]
+                    {
                             //Threshold,increment
                             60,20,
                             90,10,
                             100,5
-                        };
+                    };
 
                         int _pass = 1;
                         if (_radius < _startRardius)
@@ -234,28 +235,28 @@ namespace NexHUD.Elite
                             IEnumerable<EDSystem> _ordered = _systemInRadius.OrderBy(s => s.distanceFromCurrentSystem);
 
                             //Allegiance
-                            if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.allegiance))
-                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.spf[NxSearchParam.allegiance].Any(y => x.allegiance.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
+                            if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.allegiance))
+                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.allegiance].Any(y => x.allegiance.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
 
                             //Government
-                            if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.government))
-                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.spf[NxSearchParam.government].Any(y => x.government.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
+                            if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.government))
+                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.government].Any(y => x.government.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
 
                             //Primary economy
-                            if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.economy))
-                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.spf[NxSearchParam.economy].Any(y => x.economy.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
+                            if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.economy))
+                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.economy].Any(y => x.economy.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
 
                             //Reserve
-                            if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.reserve))
-                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.spf[NxSearchParam.reserve].Any(y => x.reserve.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
+                            if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.reserve))
+                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.reserve].Any(y => x.reserve.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
 
                             //Security
-                            if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.security))
-                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.spf[NxSearchParam.security].Any(y => x.security.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
+                            if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.security))
+                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.security].Any(y => x.security.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
 
                             //State
-                            if (m_lastUSRs[_id].entry.spf.ContainsKey(NxSearchParam.state))
-                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.spf[NxSearchParam.state].Any(y => x.state.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
+                            if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.state))
+                                _ordered = _ordered.Where(x => m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.state].Any(y => x.state.ToStringFormated().Equals(y, StringComparison.InvariantCultureIgnoreCase)));
 
 
 
@@ -269,7 +270,7 @@ namespace NexHUD.Elite
                             }
                             _radiusMinimum = _radius;
 
-                            for(int _inc = 0; _inc < _increments.Length; _inc+=2 )
+                            for (int _inc = 0; _inc < _increments.Length; _inc += 2)
                             {
                                 if (_radius < _increments[_inc])
                                 {
@@ -282,6 +283,74 @@ namespace NexHUD.Elite
                             _pass++;
                         }
                     }
+                }
+                else if (m_lastUSRs[_id].entry.searchType == NxSearchType.body)
+                {
+                    List<string> _listMaterials = new List<string>();
+                    //Make sure the materials are valid
+                    if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.rawMaterial))
+                    {
+                        foreach (string _material in m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.rawMaterial])
+                        {
+                            if (EngineerHelper.isRawMaterial(_material))
+                                _listMaterials.Add(_material);
+                        }
+                    }
+                    bool? isLandable = null;
+                    if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.isLandable))
+                    {
+                        isLandable = m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.isLandable][0] == "true";
+                    }
+
+
+                    if (_listMaterials.Count > 0)
+                    {
+                        int maxDistance = 20;
+
+                        if (m_lastUSRs[_id].entry.searchMaxRadius > 0)
+                            maxDistance = Math.Min(m_lastUSRs[_id].entry.searchMaxRadius, 100);
+
+                        SpanshBodiesResult _spanshResult = ExternalDBConnection.SpanshBodies(getCurrentSystem().name, maxDistance, _listMaterials.ToArray(), isLandable);
+
+                        //Get infos about the targeted systems
+                        List<string> _systemWithBodies = new List<string>();
+                        foreach (SpanshBody b in _spanshResult.results)
+                        {
+                            if (!_systemWithBodies.Contains(b.system_name))
+                                _systemWithBodies.Add(b.system_name);
+
+                        }
+
+                        List<string> _systemToUpdate = new List<string>();
+                        //Clean list for system we already received infos
+                        foreach (string s in _systemWithBodies)
+                        {
+                            if (m_systems.ContainsKey(s))
+                            {
+                                if (!m_systems[s].receivedEdsmBasics && !m_systems[s].receivedEdsmInfos)
+                                    _systemToUpdate.Add(s);
+                            }
+                            else
+                            {
+                                m_systemAround.Add(s);
+                                m_systems.Add(s, new EDSystem());
+                                _systemToUpdate.Add(s);
+                            }
+                        }
+                        if( _systemToUpdate.Count > 0 )
+                        {
+                            EDSMSystemDatas[] _edsmDatas = ExternalDBConnection.EDSMSystemsList(_systemToUpdate.ToArray(), true);
+                            foreach (EDSMSystemDatas _data in _edsmDatas)
+                                m_systems[_data.name].updateEDSM(_data);
+                        }
+
+                        foreach(SpanshBody b in _spanshResult.results)
+                        {
+                            m_lastUSRs[_id].addBody(m_systems[b.system_name].addOrUpdateBody(b));
+                        }
+                        
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -313,8 +382,8 @@ namespace NexHUD.Elite
             string _systemName = Program.EliteAPI.Location.StarSystem;
             if (m_systems.ContainsKey(_systemName))
             {
-                if ( !m_systems[_systemName].isEDSMComplete() || !m_systems[_systemName].receivedEddbInfos)
-                        updateCurrentSystemInfos();                
+                if (!m_systems[_systemName].isEDSMComplete() || !m_systems[_systemName].receivedEddbInfos)
+                    updateCurrentSystemInfos();
 
                 return m_systems[_systemName];
             }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using NexHUD.EDEngineer;
 using NexHUD.Elite;
 using NexHUDCore;
 using NexHUDCore.NxItems;
@@ -112,8 +113,9 @@ namespace NexHUD.UI
 
         }
 
-        public void onSearchResult(NxSearchDisplay[] _displays, EDSystem _system)
+        public void onSearchResult(NxSearchDisplay[] _displays, Dictionary<NxSearchParam, string[]> _params, EDSystem _system, EDBody _body)
         {
+            
             int _x = x + 370;
             for(int i = 0; i < m_Properties.Length; i++)
             {
@@ -145,10 +147,44 @@ namespace NexHUD.UI
                                 m_Properties[i].Color = EDColors.RED;
                                 break;
                             case NxSearchDisplay.secondEconomy:
-                                m_Properties[i].text = _system.secondEconomy.ToStringFormated(); 
+                                m_Properties[i].text = _system.secondEconomy.ToStringFormated();
                                 break;
                             case NxSearchDisplay.population:
                                 m_Properties[i].text = String.Format("{0:#,##0}", _system.population);
+                                break;
+
+
+                            /* BODIES */
+                            case NxSearchDisplay.materials:
+                                if (_body != null &&  _params.ContainsKey(NxSearchParam.rawMaterial))
+                                {
+                                    string _mStr = "";
+                                    int _mCount = 0;
+                                    for (int j = 0; j < _body.materials.Length; j++)
+                                    {
+                                        if(_params[NxSearchParam.rawMaterial].Contains(_body.materials[j].Key))
+                                         {
+                                            if (_mCount > 0)
+                                                _mStr += " / ";
+                                            _mStr += string.Format("{0} : {1}%", EngineerHelper.getChemicalSymbol(_body.materials[j].Key), Math.Round(_body.materials[j].Value,1) );
+                                            _mCount++;
+                                        }
+                                    }
+                                    m_Properties[i].text = _mStr;
+                                    m_Properties[i].Color = EDColors.YELLOW;
+                                }
+                                break;
+                            case NxSearchDisplay.distanceToArrival:
+                                if (_body != null)
+                                {
+                                    m_Properties[i].text = _body.distance_to_arrival + " Ls";
+                                }
+                                break;
+                            case NxSearchDisplay.bodyName:
+                                if (_body != null)
+                                {
+                                    m_Properties[i].text = _body.name;
+                                }
                                 break;
                         }
                     }
@@ -197,6 +233,12 @@ namespace NexHUD.UI
                     return 95;
                 case NxSearchDisplay.population:
                     return 90;
+                case NxSearchDisplay.materials:
+                    return 250;
+                case NxSearchDisplay.distanceToArrival:
+                    return 80;
+                case NxSearchDisplay.bodyName:
+                    return 105;
             }
             return 100;
         }
@@ -380,9 +422,10 @@ namespace NexHUD.UI
                             }
                         }
                     }
-                    m_searchTitles.onSearchResult(_lastUSR.displays, null);
+                    m_searchTitles.onSearchResult(_lastUSR.displays, null, null, null);
                     List<EDSystem> _systems = _lastUSR.getSystemByDist();
-                  
+                    List<EDBody> _bodys = _lastUSR.getBodys();
+
                     m_CursorMaxY = m_buttonRow - 1 + Math.Min( _systems.Count, MAX_LINE_RESULT );
 
                     int _lineSelected = m_CursorY - (m_buttonRow );
@@ -390,16 +433,29 @@ namespace NexHUD.UI
                     m_loading.y = m_searchResults[0].y + 60;
                     for (int i = 0; i < m_searchResults.Length; i++)
                     {
-                        if (_systems != null && i < _systems.Count)
+                        if (_lastUSR.searchType == NxSearchType.system && _systems != null && i < _systems.Count)
                         {
                             m_searchResults[i].isVisible = true;
                             m_searchResults[i].Distance.text = _systems[i].distanceFromCurrentSystem.ToString("#0.0") + "Ly";
                             m_searchResults[i].SystemName.text = _systems[i].name;
 
-                            m_searchResults[i].onSearchResult(_lastUSR.displays, _systems[i]);
+                            m_searchResults[i].onSearchResult(_lastUSR.displays, _lastUSR.entry.searchParamsFormated, _systems[i], null);
                             m_searchResults[i].isSelected = _lineSelected == i;
                             if (m_searchResults[i].isSelected)
                                 _systemSelected = _systems[i];
+
+                            m_loading.y = m_searchResults[i].y + 60;
+                        }
+                        else if (_lastUSR.searchType == NxSearchType.body && _bodys != null && i < _bodys.Count)
+                        {
+                            m_searchResults[i].isVisible = true;
+                            m_searchResults[i].Distance.text = _bodys[i].system.distanceFromCurrentSystem.ToString("#0.0") + "Ly";
+                            m_searchResults[i].SystemName.text = _bodys[i].system.name;
+
+                            m_searchResults[i].onSearchResult(_lastUSR.displays, _lastUSR.entry.searchParamsFormated, _bodys[i].system, _bodys[i] );
+                            m_searchResults[i].isSelected = _lineSelected == i;
+                            if (m_searchResults[i].isSelected)
+                                _systemSelected = _bodys[i].system;
 
                             m_loading.y = m_searchResults[i].y + 60;
                         }

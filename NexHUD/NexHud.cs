@@ -18,7 +18,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Threading;
 using NexHUD.Spansh;
-using NexHUD.Elite.Enums;
 using NexHUD.EDEngineer;
 
 namespace NexHUD
@@ -40,12 +39,9 @@ namespace NexHUD
             SteamVR_NexHUD.LogEvent += SteamVR_NexHUD_Log;
 
             //To test Spansh.co.uk for bodies search. I know, this is dirty :)
-            /*BodyTester();
-            return;*/
+           /* BodyTester();
+            return; */
 
-            //Engineer test
-           /* EngineerTester();
-            return;*/
 
 
 
@@ -89,35 +85,6 @@ namespace NexHUD
 
         }
 
-        private static void EngineerTester()
-        {
-            string _bpJson = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "Datas.blueprints.json");
-
-            BlueprintDatas[] _datas = Newtonsoft.Json.JsonConvert.DeserializeObject<BlueprintDatas[]>(_bpJson);
-
-            Console.WriteLine("datas:" + _datas.Length);
-
-            //listing
-            List<string> _type = new List<string>();
-            foreach (BlueprintDatas d in _datas)
-            {
-                if (!_type.Contains(d.Name) && !d.Engineers.Contains("@Synthesis") && !d.Engineers.Contains("@Technology") && d.Type != "Unlock")
-                    _type.Add(d.Name);
-            }
-            for (int i = 0; i < _type.Count; i++)
-                Console.WriteLine(i + ":" + _type[i]);
-
-            using (StreamWriter output = new StreamWriter("Blueprints.cs"))
-            {
-                output.WriteLine("public enum BlueprintName");
-                output.WriteLine("{");
-                foreach (string t in _type)
-                    output.WriteLine(t.Replace(" ", "").Replace("-","_") +",");
-                output.WriteLine("}");
-            }
-
-            Console.ReadKey();
-        }
         private static void BodyTester()
         {
             string _currentSystem = "Nemehi";
@@ -128,14 +95,14 @@ namespace NexHUD
 
 
             //Random search
-            EliteRawMaterial[] _mats = new EliteRawMaterial[] { EliteRawMaterial.Phosphorus };
+            string[] _mats = new string[] { "Phosphorus" };
             // Random r = new Random();
             // m = (EliteMaterial)r.Next(Enum.GetNames(typeof(EliteMaterial)).Length);
 
             Console.Write("Get best match around " + _currentSystem + " for: ");
             for (int j = 0; j < _mats.Length; j++)
             {
-                Console.Write(_mats[j] + "(" + EliteMaterialHelper.getGrade(_mats[j]) + ")" + (j < _mats.Length - 1 ? "" : ","));
+                Console.Write(_mats[j] + (j < _mats.Length - 1 ? "" : ","));
             }
             Console.WriteLine();
 
@@ -145,7 +112,7 @@ namespace NexHUD
             while (_distance <= 100)
             {
                 Console.WriteLine("search from {0} to {1}", _distance - _step, _distance);
-                SpanshBodiesResult _response = ExternalDBConnection.SpanshBodies(_currentSystem, _mats);
+                SpanshBodiesResult _response = ExternalDBConnection.SpanshBodies(_currentSystem,100, _mats, true);
 
                 Console.WriteLine(_response);
 

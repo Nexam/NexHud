@@ -4,7 +4,7 @@ Right now, i don't have an UI for you, but you can edit "Searchs.json"
 Make sure to respect the format !!
 
 searchName : "The name of your search. This is what display the button in the Search panel"
-searchType : "system"  --> This is the type of search (more to come)
+searchType : "system", "body"  --> This is the type of search (more to come)
 
 searchDisplay : nameNotes,allegiance,government,state,economy,secondEconomy,reserve,security,population
 ==> the properties to display in the search panels. It's to limited 6, but keep in mind some may be cropped or not appear if you add too much
@@ -17,7 +17,9 @@ searchParams :
 
     ---> this is the paramaters for the search. You need at least one parameter.
 
-searchMaxRadius : You can specify a maximum radius to speedup the search. The maximum is 100. The default value is 100.
+searchMaxRadius : You can specify a maximum radius to speedup the search. The maximum is 100. 
+                  The default value is 100 for system and 20 for bodies.
+                  Note that increasing the distance increase the search time.
 
 ========================
 SYSTEM SEARCH PARAMETERS
@@ -47,3 +49,13 @@ economy :   agriculture, extraction, high tech, industrial, military, prison, re
 reserve :  depleted, low, common, major, pristine
 
 security : low, medium, high, anarchy, lawless
+
+========================
+BODY SEARCH PARAMETERS
+========================
+additionnal search display for bodies: 
+searchDisplay: materials, distanceToArrival
+
+isLandable: true, false
+
+rawMaterial: Any raw materials. If you search for several materials at a time, it will return a match with ALL of this materials. It can increase the search time. I recommand to search for a material at a time. You can find the list of raw materials here: https://inara.cz/galaxy-components/

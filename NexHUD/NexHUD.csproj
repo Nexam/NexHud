@@ -119,12 +119,12 @@
     <Compile Include="EDDB\EDDBSystemPage.cs" />
     <Compile Include="EDEngineer\BlueprintCategorie.cs" />
     <Compile Include="EDEngineer\BlueprintDatas.cs" />
-    <Compile Include="EDEngineer\BlueprintName.cs" />
-    <Compile Include="EDEngineer\BlueprintType.cs" />
+    <Compile Include="EDEngineer\EngineerHelper.cs" />
+    <Compile Include="EDEngineer\MaterialDatas.cs" />
     <Compile Include="EDSM\EDSMSystemDatas.cs" />
+    <Compile Include="Elite\EDBody.cs" />
     <Compile Include="Elite\Enums\EDEnumHelper.cs" />
     <Compile Include="Elite\Enums\EliteEconomy.cs" />
-    <Compile Include="Elite\Enums\EliteRawMaterial.cs" />
     <Compile Include="Elite\Enums\EliteReserve.cs" />
     <Compile Include="Elite\Enums\EliteStates.cs" />
     <Compile Include="Elite\Enums\EliteAllegiance.cs" />
@@ -188,8 +188,8 @@
     <None Include="Config\Shortcuts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="Datas\blueprints.json" />
-    <EmbeddedResource Include="Datas\entryData.json" />
+    <EmbeddedResource Include="EDEngineer\Datas\blueprints.json" />
+    <EmbeddedResource Include="EDEngineer\Datas\entryData.json" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>

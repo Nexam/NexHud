@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NexHUD.EDDB;
 using NexHUD.EDSM;
+using NexHUD.Spansh;
 
 namespace NexHUD.Elite
 {
@@ -50,6 +51,11 @@ namespace NexHUD.Elite
 
         private double m_distanceFromCurrentSystem = -1;
         public double distanceFromCurrentSystem { get { return m_distanceFromCurrentSystem; } }
+
+
+        private Dictionary<int,EDBody> m_Bodys = new Dictionary<int, EDBody>();
+
+
         public void calculDistanceFromCurrent()
         {
             EDSystem _oSys = EDDatas.Instance.getCurrentSystem();
@@ -100,6 +106,18 @@ namespace NexHUD.Elite
                     return EliteSystemThreat.Low;
 
             }
+        }
+
+        public EDBody addOrUpdateBody(SpanshBody _spanshDatas)
+        {
+            if (_spanshDatas.edsm_id == null)
+                throw new Exception("Missing edsm id for body " + _spanshDatas.name);
+            if (!m_Bodys.ContainsKey((int)_spanshDatas.edsm_id))
+                m_Bodys.Add((int)_spanshDatas.edsm_id, new EDBody(this));
+
+            m_Bodys[(int)_spanshDatas.edsm_id].update(_spanshDatas);
+
+            return m_Bodys[(int)_spanshDatas.edsm_id];
         }
      
         public void updateEDDB(EDDBSystemDatas _datas)

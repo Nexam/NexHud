@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NexHUD.EDDB;
 using NexHUD.EDSM;
-using NexHUD.Elite.Enums;
 using NexHUD.Spansh;
 using NexHUDCore;
 
@@ -148,14 +147,16 @@ namespace NexHUD
             }
         }
 
-        public static SpanshBodiesResult SpanshBodies(string _systemOrigin, EliteRawMaterial[] _materials)
+        public static SpanshBodiesResult SpanshBodies(string _systemOrigin, int _maxDistance, string[] _materials, bool? _isLandable = null)
         {
+            _maxDistance = Math.Min(_maxDistance, 100);
+            
             Dictionary<string, string> _sParams = new Dictionary<string, string>();
 
             spanshValue<double?> [] _spanshMats = new spanshValue<double?>[_materials.Length];
             for(int i = 0; i < _materials.Length; i++)
             {
-                _spanshMats[i] = new spanshValue<double?>(_materials[i].ToString(), ">", 0 );
+                _spanshMats[i] = new spanshValue<double?>(_materials[i], ">", 0 );
             }
             spanshSortValue[] _spanshMatsSort = new spanshSortValue[_materials.Length];
             for (int i = 0; i < _materials.Length; i++)
@@ -169,9 +170,9 @@ namespace NexHUD
                 reference_system = _systemOrigin,
                 filters = new spanshFilter()
                 {
-                    distance_from_coords = new spanshValue<int?>() { max = 100 },
+                    distance_from_coords = new spanshValue<int?>() { max = _maxDistance },
                     materials = _spanshMats,
-                    is_landable = new spanshValue<bool?>(true)
+                    is_landable = new spanshValue<bool?>(_isLandable)
                 },
                 sort = new spanshSort[] { new spanshSort() {
                     materials = _spanshMatsSort,
@@ -214,6 +215,21 @@ namespace NexHUD
             return null;
         }
 
+        public static EDSMSystemDatas[] EDSMSystemsList(string[] _exactNameList, bool _showInformation = true)
+        {
+            string _edsmParams = "";
+            foreach (string s in _exactNameList)
+                _edsmParams += string.Format("systemName[]={0}&", s);
+            _edsmParams += "showCoordinates=1";
+            if (_showInformation)
+                _edsmParams += "&showInformation=1";
+
+            string _json = requestGETFromURL(url_EDSMSystems, _edsmParams.ToString());
+
+            try { return JsonConvert.DeserializeObject<EDSMSystemDatas[]>(_json); }
+            catch (Exception ex) { SteamVR_NexHUD.Log(ex.Message); }
+            return null;
+        }
         public static EDSMSystemDatas[] EDSMSystemsInSphereRadius(string _originSystem, int _minRadius, int _radius, bool _showInformation = true)
         {
             string _edsmParams = string.Format("systemName={0}&minRadius={1}&radius={2}&showCoordinates=1", _originSystem, _minRadius, _radius);

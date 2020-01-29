@@ -14,7 +14,7 @@ namespace NexHUD.EDEngineer
         HullReinforcementPackage,
         Cannon,
         Thrusters,
-        Multi_cannon,
+        Multi__cannon,
         MissileRack,
         PowerPlant,
         ChaffLauncher,
@@ -36,7 +36,7 @@ namespace NexHUD.EDEngineer
         WakeScanner,
         PulseLaser,
         Refinery,
-        AutoField_MaintenanceUnit,
+        AutoField__MaintenanceUnit,
         FuelTransferLimpetController,
         FrameShiftDrive,
         HatchBreakerLimpetController,
@@ -44,6 +44,10 @@ namespace NexHUD.EDEngineer
         TorpedoPylon,
         CollectorLimpetController,
         ShieldCellBank,
+        Sensors,
+        SurfaceScanner,
+        //Synthesis
+
         GuardianPlasmaChargerMunitions,
         GuardianGaussCannonMunitions,
         AXSmallCalibreMunitions,
@@ -52,7 +56,10 @@ namespace NexHUD.EDEngineer
         FlechetteLauncherMunitions,
         GuardianShardCannonMunitions,
         AXExplosiveMunitions,
+        //LifeSupport,
         Limpets,
+        //ChaffLauncher,
+        //HeatSinkLauncher,
         FSDInjection,
         PlasmaMunitions,
         ExplosiveMunitions,
@@ -63,10 +70,6 @@ namespace NexHUD.EDEngineer
         SRVAmmoRestock,
         SRVRepair,
         SRVRefuel,
-        Sensors,
-        SurfaceScanner,
-        Unlock,
-        Human,
-        Guardian,
+
     }
 }

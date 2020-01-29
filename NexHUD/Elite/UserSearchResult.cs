@@ -19,21 +19,29 @@ namespace NexHUD.Elite
         private uint m_searchId = 0;
         private NxSearchEntry m_entry;
         private List<EDSystem> m_systems = new List<EDSystem>();
+        private List<EDBody> m_bodys = new List<EDBody>();
+
         public bool isDone { get { return m_isDone; } set { m_isDone = value; } }
-        public NxSearchType searchType { 
-            get {
+        public NxSearchType searchType
+        {
+            get
+            {
                 if (m_entry != null)
                     return m_entry.searchType;
                 else
                     return NxSearchType.none;
-            } 
+            }
         }
-        public NxSearchDisplay[] displays { get {
+        public NxSearchDisplay[] displays
+        {
+            get
+            {
                 if (m_entry != null)
                     return m_entry.searchDisplayFormated;
                 else
                     return new NxSearchDisplay[0];
-            } }
+            }
+        }
 
         public uint searchID { get { return m_searchId; } }
 
@@ -61,11 +69,27 @@ namespace NexHUD.Elite
             return new List<EDSystem>(_result);
         }
 
-        public void addSystem(EDSystem _system)
-        {
-            _system.calculDistanceFromCurrent();
-            m_systems.Add(_system);
+        public List<EDBody> getBodys()
+        {          
+            return m_bodys; //They are already ordered
         }
 
+        public void addSystem(EDSystem _system)
+        {
+            if (m_systems.Where(x => x.name == _system.name).FirstOrDefault() == null)
+            {
+                _system.calculDistanceFromCurrent();
+                m_systems.Add(_system);
+            }
+
+        }
+        public void addBody(EDBody _body)
+        {
+            if (m_bodys.Where(x => x.edsmId == _body.edsmId).FirstOrDefault() == null)
+            {
+                _body.system.calculDistanceFromCurrent();
+                m_bodys.Add(_body);
+            }
+        }
     }
 }

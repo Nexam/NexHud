@@ -18,7 +18,7 @@ namespace NexHUD.Elite
 
 		private Dictionary<NxSearchParam, string[]> m_searchParamFormated;
 
-		public Dictionary<NxSearchParam, string[]> spf { get { return m_searchParamFormated; } }
+		public Dictionary<NxSearchParam, string[]> searchParamsFormated { get { return m_searchParamFormated; } }
 
 		private NxSearchDisplay[] m_searchDisplayFormated;
 
@@ -47,6 +47,8 @@ namespace NexHUD.Elite
 				}
 			}
 			List<NxSearchDisplay> _sdf = new List<NxSearchDisplay>();
+			if (searchType == NxSearchType.body)
+				_sdf.Add(NxSearchDisplay.bodyName);
 			foreach (string _sd in searchDisplay)
 			{
 				NxSearchDisplay _ssp = NxSearchDisplay.Unexpected;
@@ -78,7 +80,11 @@ namespace NexHUD.Elite
 		state,
 		economy,
 		reserve,
-		security
+		security,
+
+		//BODYS
+		rawMaterial,
+		isLandable
 	}
 	public enum NxSearchDisplay
 	{
@@ -92,5 +98,9 @@ namespace NexHUD.Elite
 		reserve,
 		security,
 		population,
+		//Bodys
+		bodyName, //auto
+		materials,
+		distanceToArrival
 	}
 }

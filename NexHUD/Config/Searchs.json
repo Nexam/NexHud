@@ -90,5 +90,16 @@
     searchDisplay : ["allegiance",  "security", "population","state","government",],
     
 },
+{
+    searchName : "Phosphorus",
+    searchType : "body",
+    searchMaxRadius : 20,
+    searchDisplay : ["materials", "allegiance", "distanceToArrival"],
+    searchParams : [
+        [ "isLandable", "true" ],
+        [ "rawMaterial", "Phosphorus" ]
+    ]
+    
+},
 
 ]
