@@ -59,7 +59,7 @@ namespace NexHUD.Elite
             _unknowSystem.security = EliteSecurity.Lawless;
             _unknowSystem.government = EliteGovernment.None;
 
-            Program.EliteAPI.Events.LocationEvent += Events_LocationEvent;
+            NexHudCore.eliteApi.Events.LocationEvent += Events_LocationEvent;
         }
 
         private void Events_LocationEvent(object sender, EliteAPI.Events.LocationInfo e)
@@ -379,7 +379,7 @@ namespace NexHUD.Elite
 
         public EDSystem getCurrentSystem()
         {
-            string _systemName = Program.EliteAPI.Location.StarSystem;
+            string _systemName = NexHudCore.eliteApi.Location.StarSystem;
             if (m_systems.ContainsKey(_systemName))
             {
                 if (!m_systems[_systemName].isEDSMComplete() || !m_systems[_systemName].receivedEddbInfos)
@@ -399,7 +399,7 @@ namespace NexHUD.Elite
 
         private void updateCurrentSystemInfos()
         {
-            if (m_currentSystemThread != null && m_currentSystemThread.ThreadState == System.Threading.ThreadState.Running && _lastCurrentSystem == Program.EliteAPI.Location.StarSystem)
+            if (m_currentSystemThread != null && m_currentSystemThread.ThreadState == System.Threading.ThreadState.Running && _lastCurrentSystem == NexHudCore.eliteApi.Location.StarSystem)
             {
                 return; //Loading already in process
             }
@@ -408,7 +408,7 @@ namespace NexHUD.Elite
                 if (m_currentSystemThread != null) //We changed system before the loading was done for the previous.
                     m_currentSystemThread.Abort();
 
-                _lastCurrentSystem = Program.EliteAPI.Location.StarSystem;
+                _lastCurrentSystem = NexHudCore.eliteApi.Location.StarSystem;
                 m_currentSystemThread = new Thread(updateCurrentSystemThread);
                 m_currentSystemThread.Start();
             }
@@ -417,7 +417,7 @@ namespace NexHUD.Elite
 
         private void updateCurrentSystemThread()
         {
-            string _systemName = Program.EliteAPI.Location.StarSystem;
+            string _systemName = NexHudCore.eliteApi.Location.StarSystem;
             if (string.IsNullOrEmpty(_systemName))
                 return;
             Stopwatch _watch = new Stopwatch();
