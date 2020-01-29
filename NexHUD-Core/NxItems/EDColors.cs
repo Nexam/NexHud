@@ -25,6 +25,8 @@ namespace NexHUDCore.NxItems
 
         public static Color RED = Color.FromArgb( 255, 0, 0);
 
+        public static Color GRAY = Color.FromArgb( 126, 126, 126);
+
         public static Color getColor(Color _c, float _Alpha)
         {
            return Color.FromArgb((int)(_Alpha * 255.0f), _c);

@@ -15,6 +15,10 @@ namespace NexHUD.EDEngineer
 
         private static BlueprintDatas[] m_bpDatas;
         private static MaterialDatas[] m_matDatas;
+
+        public static BlueprintDatas[] blueprints { get { loadDatas(); return m_bpDatas; } }
+        public static MaterialDatas[] materials { get { loadDatas(); return m_matDatas; } }
+
         public static void loadDatas()
         {
             if (m_dataLoaded)
@@ -25,12 +29,76 @@ namespace NexHUD.EDEngineer
             m_bpDatas = JsonConvert.DeserializeObject<BlueprintDatas[]>(_json);
             SteamVR_NexHUD.Log(">>{0} blueprints loaded", m_bpDatas.Length);
 
+            //Assigning categories
+            foreach (BlueprintDatas d in m_bpDatas)
+                d.Categorie = getCategorie(d);
+
+
             SteamVR_NexHUD.Log("Loading materials datas...");
             _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "EDEngineer.Datas.entryData.json");
             m_matDatas = JsonConvert.DeserializeObject<MaterialDatas[]>(_json);
-            SteamVR_NexHUD.Log(">>{0} materials loaded", m_bpDatas.Length);
+            SteamVR_NexHUD.Log(">>{0} materials loaded", m_matDatas.Length);
+
+
 
             m_dataLoaded = true;
+        }
+
+        public static BlueprintCategorie getCategorie(BlueprintDatas _datas)
+        {
+            if (_datas.Engineers.Contains("@Synthesis"))
+                return BlueprintCategorie.Synthesis;
+
+            switch(_datas.Type)
+            {
+                case "Beam Laser":
+                case "Burst Laser":
+                case "Cannon":
+                case "Fragment Cannon":
+                case "Mine Launcher":
+                case "Missile Rack":
+                case "Multi-Cannon":
+                case "Plasma Accelerator":
+                case "Pulse Laser":
+                case "Rail Gun":
+                case "Seeker Missile Rack":
+                case "Torpedo Pylon":
+                    return BlueprintCategorie.Hardpoint;
+                case "Chaff Launcher":
+                case "Electronic Countermeasure":
+                case "Frame Shift Wake Scanner":
+                case "Heat Sink Launcher":
+                case "Kill Warrent Scanner":
+                case "Manifest Scanner":
+                case "Point Defence":
+                case "Shield Booster":
+                    return BlueprintCategorie.Utility;
+                case "Auto Field-Maintenance Unit":
+                case "Collector Limpet Controller":
+                case "Detailed Surface Scanner":
+                case "Frame Shift Interdictor":
+                case "Fuel Scoop":
+                case "Fuel Transfer Limpet Controller":
+                case "Hatch Breaker Limpet Controller":
+                case "Hull Reinforcement Package":
+                case "Prospector Limpet Controller":
+                case "Refinery":
+                case "Shield Cell Bank":
+                case "Shield Generator":
+                    return BlueprintCategorie.OptionalInternal;
+                case "Frame Shift Drive":
+                case "Life Support":
+                case "Power Distributor":
+                case "Power Plant":
+                case "Sensors":
+                case "Thrusters":
+                    return BlueprintCategorie.CoreInternal;
+                case "Armour":
+                    return BlueprintCategorie.Armour;
+
+            }
+
+            return BlueprintCategorie.Other;
         }
 
         public static bool isRawMaterial(string _materialName)

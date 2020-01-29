@@ -34,7 +34,8 @@ namespace NexHUD.UI
         public NxMainPanelMenu m_menuPanel;
         public NxMainPanelPlayerInfos m_playerInfosPanel;
         public NxMainPanelSearch m_searchPanel;
-
+        //Improve
+        public NxMainPanelBlueprints m_bluePrintPanel;
         public NxMenu()
         {
 
@@ -66,7 +67,7 @@ namespace NexHUD.UI
             m_menuPanel = new NxMainPanelMenu(this);
             m_frame.NxOverlay.Add(m_menuPanel);
             //Desactivate unavailable buttons
-            m_menuPanel.setActive(NxMainPanelMenuButton.MenuButtonType.Improve, false);
+            //m_menuPanel.setActive(NxMainPanelMenuButton.MenuButtonType.Improve, false);
             m_menuPanel.setActive(NxMainPanelMenuButton.MenuButtonType.Trade, false);
 
             m_playerInfosPanel = new NxMainPanelPlayerInfos(this);
@@ -75,6 +76,9 @@ namespace NexHUD.UI
             m_searchPanel = new NxMainPanelSearch(this);
             m_frame.NxOverlay.Add(m_searchPanel);
 
+            m_bluePrintPanel = new NxMainPanelBlueprints(this);
+            m_frame.NxOverlay.Add(m_bluePrintPanel);
+
         }
 
         public void changeState(MenuState _newState)
@@ -82,17 +86,23 @@ namespace NexHUD.UI
             if (_newState == m_state)
                 return;
             m_state = _newState;
-            switch(m_state)
+
+            m_searchPanel.isVisible = false;
+            m_bluePrintPanel.isVisible = false;
+            m_menuPanel.isVisible = false;
+            m_playerInfosPanel.isVisible = false;
+
+            switch (m_state)
             {
                 case MenuState.Main:
                     m_menuPanel.isVisible = true;
                     m_playerInfosPanel.isVisible = true;
-                    m_searchPanel.isVisible = false;
                     break;
                 case MenuState.Search:
-                    m_menuPanel.isVisible = false;
-                    m_playerInfosPanel.isVisible = false;
                     m_searchPanel.isVisible = true;
+                    break;
+                case MenuState.Improve:
+                    m_bluePrintPanel.isVisible = true;
                     break;
             }
         }

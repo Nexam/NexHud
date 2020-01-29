@@ -16,7 +16,7 @@ namespace NexHUD.EDEngineer
       "Mining"
     ],
     "Group": "Category7"*/
-    class MaterialDatas
+    public class MaterialDatas
     {
         public string Name;
         public string Rarity;

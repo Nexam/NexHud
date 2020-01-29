@@ -39,14 +39,15 @@ namespace NexHUD
             SteamVR_NexHUD.LogEvent += SteamVR_NexHUD_Log;
 
             //To test Spansh.co.uk for bodies search. I know, this is dirty :)
-           /* BodyTester();
-            return; */
+            /* BodyTester();
+             return; */
 
 
-
+            EngineerHelper.loadDatas();
 
             if (!Shortcuts.loadShortcuts())
                 return;
+
 
             m_IngameConsoleTb = new NxTextbox(0, 0, 700, 500, "", EDColors.ORANGE, 24);
             m_IngameConsoleTb.reverseDrawing = true;

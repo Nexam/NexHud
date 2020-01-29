@@ -12,6 +12,8 @@ namespace NexHUD.EDEngineer
         Utility,
         OptionalInternal,
         CoreInternal,
-        Armour
+        Armour,
+        Synthesis,
+        Other,
     }
 }

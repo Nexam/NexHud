@@ -143,6 +143,8 @@
     <Compile Include="Keyboard\Shortcuts.cs" />
     <Compile Include="Spansh\SpanshBodiesResult.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="UI\NxButton.cs" />
+    <Compile Include="UI\NxMainPanelBlueprints.cs" />
     <Compile Include="UI\NxMainPanelSearch.cs" />
     <Compile Include="UI\NxMainPanelMenu.cs" />
     <Compile Include="UI\NxMainPanelMenuButton.cs" />
@@ -185,6 +187,9 @@
     <Content Include="manifest.vrmanifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Config\Shortcuts-Save.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Config\Shortcuts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

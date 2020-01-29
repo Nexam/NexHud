@@ -76,10 +76,7 @@ namespace NexHUD.UI
         {
             x = _x;
             y = _y;
-            m_Type = _type;
-
-            //INACTIVES
-            
+            m_Type = _type;            
             
             //background
             Color = EDColors.getColor(EDColors.ORANGE, 0.2f);

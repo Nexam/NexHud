@@ -15,6 +15,10 @@ namespace NexHUD.EDEngineer
         public BlueprintEffect[] Effects;
         public int Grade;
         public string CoriolisGuid;
+
+        public BlueprintCategorie Categorie { get; internal set; }
+
+        public bool IsExperimental { get { return Grade == 0; } }
     }
     public class BlueprintIngredient
     {

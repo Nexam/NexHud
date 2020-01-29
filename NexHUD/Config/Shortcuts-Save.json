@@ -1,27 +1,27 @@
 ﻿[
 	{
 		id : "right",
-		key : "right",
+		key : "Number2",
 		modifiers : ["RShift","RAlt"]
 	},
 	{
 		id : "left",
-		key : "left",
+		key : "Number1",
 		modifiers : ["RShift","RAlt"]
 	},
 	{
 		id : "down",
-		key : "down",
+		key : "Number3",
 		modifiers : ["RShift","RAlt"]
 	},
 	{
 		id : "up",
-		key : "up",
+		key : "Number4",
 		modifiers : ["RShift","RAlt"]
 	},
 	{
 		id : "select",
-		key : "END",
+		key : "Number5",
 		modifiers : ["RShift","RAlt"]
 	},
 	{
@@ -31,7 +31,7 @@
 	},
 	{
 		id : "back",
-		key : "Home",
+		key : "Number6",
 		modifiers : ["RShift","RAlt"]
 	},
 
