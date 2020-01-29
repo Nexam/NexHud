@@ -238,7 +238,7 @@ namespace NexHUD.UI
                 case NxSearchDisplay.distanceToArrival:
                     return 80;
                 case NxSearchDisplay.bodyName:
-                    return 105;
+                    return 115;
             }
             return 100;
         }
@@ -426,7 +426,10 @@ namespace NexHUD.UI
                     List<EDSystem> _systems = _lastUSR.getSystemByDist();
                     List<EDBody> _bodys = _lastUSR.getBodys();
 
-                    m_CursorMaxY = m_buttonRow - 1 + Math.Min( _systems.Count, MAX_LINE_RESULT );
+                    if( _lastUSR.searchType == NxSearchType.system)
+                        m_CursorMaxY = m_buttonRow - 1 + Math.Min( _systems.Count, MAX_LINE_RESULT );
+                    else if( _lastUSR.searchType == NxSearchType.body)
+                        m_CursorMaxY = m_buttonRow - 1 + Math.Min(_bodys.Count, MAX_LINE_RESULT);
 
                     int _lineSelected = m_CursorY - (m_buttonRow );
 

@@ -101,5 +101,26 @@
     ]
     
 },
-
+{
+    searchName : "Arsenic",
+    searchType : "body",
+    searchMaxRadius : 20,
+    searchDisplay : ["materials", "security", "distanceToArrival"],
+    searchParams : [
+        [ "isLandable", "true" ],
+        [ "rawMaterial", "Arsenic" ]
+    ]
+    
+},
+{
+    searchName : "Selenium",
+    searchType : "body",
+    searchMaxRadius : 20,
+    searchDisplay : ["materials", "state", "distanceToArrival"],
+    searchParams : [
+        [ "isLandable", "true" ],
+        [ "rawMaterial", "Selenium" ]
+    ]
+    
+},
 ]
