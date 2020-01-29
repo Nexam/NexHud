@@ -1,14 +1,9 @@
-﻿using System;
+﻿using OpenTK.Graphics.OpenGL;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Valve.VR;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Graphics;
 using System.Drawing.Imaging;
-using System.Timers;
+using Valve.VR;
 
 namespace NexHUDCore.JsInterop
 {
@@ -48,8 +43,8 @@ namespace NexHUDCore.JsInterop
             uint notId = 0;
             EVRNotificationError err = EVRNotificationError.OK;
             err = OpenVR.Notifications.CreateNotification(_overlay.Handle, 0, EVRNotificationType.Transient, text, EVRNotificationStyle.Application, ref bmp, ref notId);
-            
-            if(err != EVRNotificationError.OK)
+
+            if (err != EVRNotificationError.OK)
             {
                 SteamVR_NexHUD.Log("Notification Failure: " + err.ToString());
                 return false;

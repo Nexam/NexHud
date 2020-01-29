@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NexHUDCore
 {
@@ -36,7 +32,7 @@ namespace NexHUDCore
 
         internal static Bitmap GetResourceImage(string dotFilePath)
         {
-            return GetResource(Assembly.GetExecutingAssembly() , dotFilePath, FileType.Image) as Bitmap;
+            return GetResource(Assembly.GetExecutingAssembly(), dotFilePath, FileType.Image) as Bitmap;
         }
         internal static string GetResourceText(string dotFilePath)
         {
@@ -44,11 +40,11 @@ namespace NexHUDCore
         }
         public static Bitmap GetResourceImage(Assembly _assembly, string dotFilePath)
         {
-            return GetResource(_assembly,dotFilePath, FileType.Image) as Bitmap;
+            return GetResource(_assembly, dotFilePath, FileType.Image) as Bitmap;
         }
         public static string GetResourceText(Assembly _assembly, string dotFilePath)
         {
-            return GetResource(_assembly,dotFilePath, FileType.Text) as string;
+            return GetResource(_assembly, dotFilePath, FileType.Text) as string;
         }
         /// <summary>
         /// This method allows you to specify the dot file path and type of the resource file and return it in its native format.

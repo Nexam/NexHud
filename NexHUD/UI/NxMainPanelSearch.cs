@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
-using NexHUD.EDEngineer;
+﻿using NexHUD.EDEngineer;
 using NexHUD.Elite;
 using NexHUDCore;
 using NexHUDCore.NxItems;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace NexHUD.UI
 {
 
-   
+
     public class NxMainPanelSearchButton : NxGroup
     {
         public const int Height = 30;
@@ -36,9 +31,9 @@ namespace NexHUD.UI
             m_background = new NxRectangle(x, y, m_width, Height, EDColors.getColor(EDColors.ORANGE, 0.1f));
             Add(m_background);
             Add(new NxRectangle(x, y, m_width, 1, EDColors.YELLOW));
-            Add(new NxRectangle(x, y+ Height-1, m_width, 1, EDColors.getColor( EDColors.YELLOW,0.5f) ));
+            Add(new NxRectangle(x, y + Height - 1, m_width, 1, EDColors.getColor(EDColors.YELLOW, 0.5f)));
 
-            searchName = new NxSimpleText(x + (m_width / 2), y + (Height / 2), "empty", EDColors.getColor( EDColors.WHITE, 0.2f) );
+            searchName = new NxSimpleText(x + (m_width / 2), y + (Height / 2), "empty", EDColors.getColor(EDColors.WHITE, 0.2f));
             searchName.centerHorizontal = true;
             searchName.centerVertical = true;
             Add(searchName);
@@ -46,14 +41,14 @@ namespace NexHUD.UI
         public override void Update()
         {
             base.Update();
-            if( searchName.text != "empty" )
+            if (searchName.text != "empty")
             {
                 if (Selected)
                     searchName.Color = EDColors.WHITE;
                 else
                     searchName.Color = EDColors.YELLOW;
             }
-            m_background.Color = Selected ? EDColors.getColor(EDColors.ORANGE, 0.8f): EDColors.getColor(EDColors.ORANGE,0.1f) ;
+            m_background.Color = Selected ? EDColors.getColor(EDColors.ORANGE, 0.8f) : EDColors.getColor(EDColors.ORANGE, 0.1f);
         }
     }
 
@@ -79,31 +74,31 @@ namespace NexHUD.UI
 
         public bool isSelected { get; set; }
 
-        public NxMainPanelSearchResult( int _y, bool _isTitle, NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public NxMainPanelSearchResult(int _y, bool _isTitle, NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
             m_isTitle = _isTitle;
             y = _y;
             int _height = 30;
-            m_background = new NxRectangle(x, y, NxMenu.Width, _height,  m_isTitle ? EDColors.getColor(EDColors.WHITE, 0.1f) : EDColors.getColor(EDColors.ORANGE, 0.1f));
+            m_background = new NxRectangle(x, y, NxMenu.Width, _height, m_isTitle ? EDColors.getColor(EDColors.WHITE, 0.1f) : EDColors.getColor(EDColors.ORANGE, 0.1f));
             Add(m_background);
             //Texts
-            int _ty = y+5;
+            int _ty = y + 5;
             int _textSize = 21;
             Color _textColor = m_isTitle ? EDColors.getColor(EDColors.WHITE, 0.4f) : EDColors.YELLOW;
             //m_Distance
-            m_Distance = new NxSimpleText(x+5, _ty, "Dist.", _textColor, _textSize);
+            m_Distance = new NxSimpleText(x + 5, _ty, "Dist.", _textColor, _textSize);
             Add(m_Distance);
             //m_SystemName
-            m_SystemName = new NxSimpleText(x+100, _ty, "System Name", _textColor, _textSize);
+            m_SystemName = new NxSimpleText(x + 100, _ty, "System Name", _textColor, _textSize);
             Add(m_SystemName);
-            Add(new NxRectangle(m_SystemName.x-5, y, 1, _height, Color.Black));
+            Add(new NxRectangle(m_SystemName.x - 5, y, 1, _height, Color.Black));
 
 
             m_Properties = new NxSimpleText[NxSearchEntry.MAX_PARAMS_DISPLAY];
             m_PropertiesSeparators = new NxRectangle[NxSearchEntry.MAX_PARAMS_DISPLAY];
             for (int i = 0; i < NxSearchEntry.MAX_PARAMS_DISPLAY; i++)
             {
-                m_Properties[i] = new NxSimpleText(x + 300*i, _ty, "Propertie "+(i+1).ToString(), _textColor, _textSize);
+                m_Properties[i] = new NxSimpleText(x + 300 * i, _ty, "Propertie " + (i + 1).ToString(), _textColor, _textSize);
                 m_PropertiesSeparators[i] = new NxRectangle(x + 300 * i - 5, y, 1, _height, Color.Black);
                 Add(m_Properties[i]);
                 Add(m_PropertiesSeparators[i]);
@@ -115,15 +110,15 @@ namespace NexHUD.UI
 
         public void onSearchResult(NxSearchDisplay[] _displays, Dictionary<NxSearchParam, string[]> _params, EDSystem _system, EDBody _body)
         {
-            
+
             int _x = x + 370;
-            for(int i = 0; i < m_Properties.Length; i++)
+            for (int i = 0; i < m_Properties.Length; i++)
             {
-                if( i < _displays.Length)
+                if (i < _displays.Length)
                 {
                     m_Properties[i].isVisible = true;
                     m_PropertiesSeparators[i].isVisible = true;
-                    if(m_isTitle)
+                    if (m_isTitle)
                     {
                         m_Properties[i].text = _displays[i].ToStringFormated();
                     }
@@ -156,17 +151,17 @@ namespace NexHUD.UI
 
                             /* BODIES */
                             case NxSearchDisplay.materials:
-                                if (_body != null &&  _params.ContainsKey(NxSearchParam.rawMaterial))
+                                if (_body != null && _params.ContainsKey(NxSearchParam.rawMaterial))
                                 {
                                     string _mStr = "";
                                     int _mCount = 0;
                                     for (int j = 0; j < _body.materials.Length; j++)
                                     {
-                                        if(_params[NxSearchParam.rawMaterial].Contains(_body.materials[j].Key))
-                                         {
+                                        if (_params[NxSearchParam.rawMaterial].Contains(_body.materials[j].Key))
+                                        {
                                             if (_mCount > 0)
                                                 _mStr += " / ";
-                                            _mStr += string.Format("{0} : {1}%", EngineerHelper.getChemicalSymbol(_body.materials[j].Key), Math.Round(_body.materials[j].Value,1) );
+                                            _mStr += string.Format("{0} : {1}%", EngineerHelper.getChemicalSymbol(_body.materials[j].Key), Math.Round(_body.materials[j].Value, 1));
                                             _mCount++;
                                         }
                                     }
@@ -204,7 +199,7 @@ namespace NexHUD.UI
         public override void Update()
         {
             base.Update();
-            if(!m_isTitle)
+            if (!m_isTitle)
             {
                 m_background.Color = isSelected ? EDColors.getColor(EDColors.ORANGE, 0.3f) : EDColors.getColor(EDColors.ORANGE, 0.1f);
                 m_SystemName.Color = isSelected ? EDColors.WHITE : EDColors.YELLOW;
@@ -370,7 +365,7 @@ namespace NexHUD.UI
                     m_CursorX--;
                 if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.down)) && m_CursorY < m_CursorMaxY)
                     m_CursorY++;
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up) ) && m_CursorY > 0)
+                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up)) && m_CursorY > 0)
                     m_CursorY--;
 
                 int _buttonSelectedId = m_CursorX + (m_CursorY * m_buttonPerRow);
@@ -405,7 +400,7 @@ namespace NexHUD.UI
                 {
                     if (_updateMessageResearchDelay > 1)
                     {
-                        if(_lastUSR.CurrentPass > 1 )
+                        if (_lastUSR.CurrentPass > 1)
                         {
                             if (!_lastUSR.isDone)
                             {
@@ -415,7 +410,7 @@ namespace NexHUD.UI
                                     _lastUSR.ResearchTime
                                     ), EDColors.ORANGE);
                             }
-                            else if(!_lastUSR.messageDisplayed)
+                            else if (!_lastUSR.messageDisplayed)
                             {
                                 displayMessage(string.Format("Research done in {0}ms!", _lastUSR.ResearchTime), EDColors.BLUE);
                                 _lastUSR.messageDisplayed = true;
@@ -426,12 +421,12 @@ namespace NexHUD.UI
                     List<EDSystem> _systems = _lastUSR.getSystemByDist();
                     List<EDBody> _bodys = _lastUSR.getBodys();
 
-                    if( _lastUSR.searchType == NxSearchType.system)
-                        m_CursorMaxY = m_buttonRow - 1 + Math.Min( _systems.Count, MAX_LINE_RESULT );
-                    else if( _lastUSR.searchType == NxSearchType.body)
+                    if (_lastUSR.searchType == NxSearchType.system)
+                        m_CursorMaxY = m_buttonRow - 1 + Math.Min(_systems.Count, MAX_LINE_RESULT);
+                    else if (_lastUSR.searchType == NxSearchType.body)
                         m_CursorMaxY = m_buttonRow - 1 + Math.Min(_bodys.Count, MAX_LINE_RESULT);
 
-                    int _lineSelected = m_CursorY - (m_buttonRow );
+                    int _lineSelected = m_CursorY - (m_buttonRow);
 
                     m_loading.y = m_searchResults[0].y + 60;
                     for (int i = 0; i < m_searchResults.Length; i++)
@@ -455,7 +450,7 @@ namespace NexHUD.UI
                             m_searchResults[i].Distance.text = _bodys[i].system.distanceFromCurrentSystem.ToString("#0.0") + "Ly";
                             m_searchResults[i].SystemName.text = _bodys[i].system.name;
 
-                            m_searchResults[i].onSearchResult(_lastUSR.displays, _lastUSR.entry.searchParamsFormated, _bodys[i].system, _bodys[i] );
+                            m_searchResults[i].onSearchResult(_lastUSR.displays, _lastUSR.entry.searchParamsFormated, _bodys[i].system, _bodys[i]);
                             m_searchResults[i].isSelected = _lineSelected == i;
                             if (m_searchResults[i].isSelected)
                                 _systemSelected = _bodys[i].system;
@@ -472,7 +467,7 @@ namespace NexHUD.UI
                     m_CursorMaxY = m_buttonRow - 1;
 
 
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select) ))
+                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
                 {
                     if (_searchSelected != null)
                     {
@@ -498,9 +493,9 @@ namespace NexHUD.UI
                 _updateMessageResearchDelay = 0;
 
         }
-    
-       
 
-       
+
+
+
     }
 }

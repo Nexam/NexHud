@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Input;
+﻿using OpenTK.Input;
+using System;
 
 namespace NexHUDCore
 {
@@ -23,7 +19,7 @@ namespace NexHUDCore
         {
             if (!Enum.TryParse(key, true, out OpentTkKey))
             {
-                if( id != "menu" ||( id == "menu" && !string.IsNullOrEmpty(key) ))
+                if (id != "menu" || (id == "menu" && !string.IsNullOrEmpty(key)))
                     return false;
             }
 
@@ -38,7 +34,7 @@ namespace NexHUDCore
 
             }
 
-            if (menuMode == "hold" && id == "menu" )
+            if (menuMode == "hold" && id == "menu")
                 holdMode = true;
 
             return true;

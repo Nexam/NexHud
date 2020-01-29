@@ -1,13 +1,12 @@
 ﻿using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 using System;
 using System.Collections.Generic;
-using Valve.VR;
-using OpenTK.Graphics.OpenGL;
-using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Drawing;
-using OpenTK.Input;
+using System.Threading;
+using Valve.VR;
 
 namespace NexHUDCore
 {
@@ -80,15 +79,17 @@ namespace NexHUDCore
         public static void Init()
         {
             Overlays = new List<NexHUDOverlay>();
-                       
+
             bool tryAgain = true;
 
-            while(tryAgain && !_doStop) {
+            while (tryAgain && !_doStop)
+            {
                 try
                 {
                     InitOpenVR();
                     tryAgain = false;
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     Log(e.Message);
                     Log("Trying again in 3 seconds");
@@ -105,8 +106,8 @@ namespace NexHUDCore
             _compositor = OpenVR.Compositor;
             _overlay = OpenVR.Overlay;
             _applications = OpenVR.Applications;
-            
-           
+
+
             gw = new GameWindow();
             GL.Enable(EnableCap.Texture2D);
 
@@ -141,7 +142,7 @@ namespace NexHUDCore
                 throw new Exception("Failed to init Overlay!");
             }
         }
-        
+
         private static readonly TrackedDevicePose_t[] _poses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
         private static readonly TrackedDevicePose_t[] _gamePoses = new TrackedDevicePose_t[0];
 
@@ -176,7 +177,7 @@ namespace NexHUDCore
 
             _introOverlay.BMPTexture = ResHelper.GetResourceImage("Resources.Logo.png");
 
-           // _introOverlay.BMPTexture = (Bitmap)Image.FromFile(Environment.CurrentDirectory + "\\Resources\\Logo.png");
+            // _introOverlay.BMPTexture = (Bitmap)Image.FromFile(Environment.CurrentDirectory + "\\Resources\\Logo.png");
 
             //_introOverlay.BMPTexture.MakeTransparent();
         }
@@ -219,10 +220,10 @@ namespace NexHUDCore
 
 
 
-                    _introOverlay.InGameOverlay.Width = (0.5f + (_introDelay/ _introTotalTime) * 0.05f) * _introWidth;
+                    _introOverlay.InGameOverlay.Width = (0.5f + (_introDelay / _introTotalTime) * 0.05f) * _introWidth;
 
-                    if (_introDelay < 1)                    
-                        _introOverlay.InGameOverlay.Alpha = MathHelper.Clamp(_introDelay, 0, 1f);                    
+                    if (_introDelay < 1)
+                        _introOverlay.InGameOverlay.Alpha = MathHelper.Clamp(_introDelay, 0, 1f);
                     else if (_introDelay > _introTotalTime - 1)
                         _introOverlay.InGameOverlay.Alpha = MathHelper.Clamp(_introTotalTime - _introDelay, 0, 1f);
                     else
@@ -277,7 +278,7 @@ namespace NexHUDCore
         private static void updateKeyboardStates()
         {
             //clean up
-            foreach( Key k in m_KeyPressedThisFrame ) 
+            foreach (Key k in m_KeyPressedThisFrame)
             {
                 if (!m_KeyPressedBefore.Contains(k))
                     m_KeyPressedBefore.Add(k);
@@ -294,16 +295,16 @@ namespace NexHUDCore
             for (int i = 0; i < _totalKeys; i++)
             {
                 Key k = (Key)i;
-                if ( Keyboard.GetState().IsKeyDown(k) )
+                if (Keyboard.GetState().IsKeyDown(k))
                 {
-                    if( !m_KeyPressedBefore.Contains(k) )
+                    if (!m_KeyPressedBefore.Contains(k))
                     {
                         m_KeyPressedThisFrame.Add(k);
                     }
                 }
                 else
                 {
-                    if( m_KeyPressedBefore.Contains(k) )
+                    if (m_KeyPressedBefore.Contains(k))
                     {
                         m_KeyPressedBefore.Remove(k);
                         m_lastKeysReleased.Add(k);
@@ -312,7 +313,7 @@ namespace NexHUDCore
             }
         }
 
-        
+
         public static bool isKeyPressed(Key k)
         {
             return m_KeyPressedThisFrame.Contains(k);
@@ -322,7 +323,7 @@ namespace NexHUDCore
             if (e == null)
                 return false;
             bool _modifiersOk = true;
-            
+
             foreach (Key m in e.OpenTkModifiers)
                 if (!Keyboard.GetState().IsKeyDown(m))
                     _modifiersOk = false;

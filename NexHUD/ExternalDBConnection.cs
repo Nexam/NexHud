@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NexHUD.EDDB;
 using NexHUD.EDSM;
 using NexHUD.Spansh;
 using NexHUDCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
 
 namespace NexHUD
 {
@@ -110,13 +105,13 @@ namespace NexHUD
                 min = _min;
                 max = _max;
             }
-            public spanshValue(T _v) : this(null, ( typeof(T) == typeof(bool?) ? null: "==" ), _v)
+            public spanshValue(T _v) : this(null, (typeof(T) == typeof(bool?) ? null : "=="), _v)
             {
             }
-            public spanshValue(string _comparison, T _v ) : this(null,  _comparison, _v)
+            public spanshValue(string _comparison, T _v) : this(null, _comparison, _v)
             {
             }
-            public spanshValue(string _name, string _comparison,  T _value )
+            public spanshValue(string _name, string _comparison, T _value)
             {
                 name = _name;
                 value = _value;
@@ -140,7 +135,7 @@ namespace NexHUD
             {
                 direction = _ascending ? "asc" : "desc";
             }
-            public spanshSortValue( string _name, bool _ascending)
+            public spanshSortValue(string _name, bool _ascending)
             {
                 name = _name;
                 direction = _ascending ? "asc" : "desc";
@@ -150,13 +145,13 @@ namespace NexHUD
         public static SpanshBodiesResult SpanshBodies(string _systemOrigin, int _maxDistance, string[] _materials, bool? _isLandable = null)
         {
             _maxDistance = Math.Min(_maxDistance, 100);
-            
+
             Dictionary<string, string> _sParams = new Dictionary<string, string>();
 
-            spanshValue<double?> [] _spanshMats = new spanshValue<double?>[_materials.Length];
-            for(int i = 0; i < _materials.Length; i++)
+            spanshValue<double?>[] _spanshMats = new spanshValue<double?>[_materials.Length];
+            for (int i = 0; i < _materials.Length; i++)
             {
-                _spanshMats[i] = new spanshValue<double?>(_materials[i], ">", 0 );
+                _spanshMats[i] = new spanshValue<double?>(_materials[i], ">", 0);
             }
             spanshSortValue[] _spanshMatsSort = new spanshSortValue[_materials.Length];
             for (int i = 0; i < _materials.Length; i++)
@@ -180,7 +175,7 @@ namespace NexHUD
                     distance_from_coords = new spanshSortValue(true)
                 } }
             };
-            string _spanshJson = JsonConvert.SerializeObject(p, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });  ;
+            string _spanshJson = JsonConvert.SerializeObject(p, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }); ;
 
             Console.WriteLine(_spanshJson);
             string json = requestPOSTFromURL(url_SpanshBodies, _spanshJson);
@@ -188,11 +183,11 @@ namespace NexHUD
             {
                 SpanshBodiesResult result = JsonConvert.DeserializeObject<SpanshBodiesResult>(json);
                 Console.WriteLine("Result: {0} RealCount: {1}", result.count, result.results.Length);
-                Console.WriteLine("Search ID: "+result.search_reference);
+                Console.WriteLine("Search ID: " + result.search_reference);
 
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 SteamVR_NexHUD.Log(ex.Message);
                 SteamVR_NexHUD.Log(json);

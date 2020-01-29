@@ -119,6 +119,9 @@
     <None Include="Config\Searchs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Config\MaterialsSearchs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="EDDB\EDDBSystemPage.cs" />
     <Compile Include="EDEngineer\BlueprintCategorie.cs" />
     <Compile Include="EDEngineer\BlueprintDatas.cs" />
@@ -181,6 +184,7 @@
     <EmbeddedResource Include="Resources\ranks\rank-8.png" />
     <EmbeddedResource Include="Resources\ranks\rank-9.png" />
     <None Include="App.config" />
+    <Content Include="Config\Readme-materialsSearchs.txt" />
     <Content Include="Config\Readme-shortcuts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -230,6 +234,11 @@
     <Error Condition="!Exists('..\packages\Fody.6.0.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.0.0\build\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props'))" />
   </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

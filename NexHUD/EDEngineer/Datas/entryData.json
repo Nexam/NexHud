@@ -7,7 +7,7 @@
     "OriginDetails": [
       "Ship scanning (combat ships)",
       "Mission reward",
-      "Needed for The Sarge (50)"
+      "Needed for The Sarge (50)",
     ],
     "Group": "ShieldData"
   },
@@ -120,7 +120,7 @@
     "Kind": "Data",
     "OriginDetails": [
       "High wake scanning",
-      "Mission reward"
+      "Mission reward",
     ],
     "Group": "WakeScans"
   },

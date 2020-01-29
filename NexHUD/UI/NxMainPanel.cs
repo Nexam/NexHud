@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUDCore;
-using NexHUDCore.NxItems;
+﻿using NexHUDCore;
 using OpenTK;
-using OpenTK.Input;
+using System;
 
 namespace NexHUD.UI
 {
@@ -115,9 +108,9 @@ namespace NexHUD.UI
 
             if (Shortcuts.holdMode)
             {
-                if( SteamVR_NexHUD.isShortcutIsHold(Shortcuts.get(ShortcutId.menu ) ))
+                if (SteamVR_NexHUD.isShortcutIsHold(Shortcuts.get(ShortcutId.menu)))
                 {
-                    if(!m_frame.RenderInGameOverlay)
+                    if (!m_frame.RenderInGameOverlay)
                     {
                         m_frame.RenderInGameOverlay = true;
                     }
@@ -130,9 +123,9 @@ namespace NexHUD.UI
                 }
                 else
                 {
-                    if(m_frame.RenderInGameOverlay)
+                    if (m_frame.RenderInGameOverlay)
                     {
-                        m_frame.RenderInGameOverlay = false;                        
+                        m_frame.RenderInGameOverlay = false;
                     }
                     return;
                 }
@@ -157,21 +150,21 @@ namespace NexHUD.UI
             }
 
             if (m_frame.RenderInGameOverlay)
-            {                
+            {
                 //MAIN MENU NAVIGATION
                 if (m_menuPanel.isVisible)
                 {
-                    if (SteamVR_NexHUD.isShortcutPressed( Shortcuts.get(ShortcutId.right) ))
+                    if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.right)))
                     {
                         m_menuPanel.selectNext();
                     }
-                    else if (SteamVR_NexHUD.isShortcutPressed( Shortcuts.get(ShortcutId.left) ))
+                    else if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.left)))
                     {
                         m_menuPanel.selectPrev();
                     }
-                    else if( SteamVR_NexHUD.isShortcutPressed( Shortcuts.get(ShortcutId.select) ))
+                    else if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
                     {
-                        if( m_menuPanel.isSelectedMenuActive() )
+                        if (m_menuPanel.isSelectedMenuActive())
                         {
                             switch (m_menuPanel.SelectedMenu)
                             {

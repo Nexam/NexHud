@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using NexHUD.Elite;
+using NexHUDCore;
+using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using NexHUDCore;
 
 namespace NexHUD.EDEngineer
 {
@@ -39,8 +38,54 @@ namespace NexHUD.EDEngineer
             m_matDatas = JsonConvert.DeserializeObject<MaterialDatas[]>(_json);
             SteamVR_NexHUD.Log(">>{0} materials loaded", m_matDatas.Length);
 
+            SteamVR_NexHUD.Log("Loading search for materials...");
+            string _path = Environment.CurrentDirectory + "\\Config\\MaterialsSearchs.json";
+            NxSearchEntry[] _searchs = null;
+            if (File.Exists(_path))
+            {
+                try
+                {
+                    _json = File.ReadAllText(_path);
+                    _searchs = JsonConvert.DeserializeObject<NxSearchEntry[]>(_json);
+                }
+                catch (Exception ex)
+                {
+                    SteamVR_NexHUD.Log(ex.Message);
+                }
+            }
 
+            if( _searchs != null )
+            {
+                foreach(NxSearchEntry s in _searchs)
+                {
+                    s.format();
+                    MaterialDatas md = m_matDatas.Where(x => x.Name.ToLower() == s.searchName.ToLower()).FirstOrDefault();
+                    if (md != null)
+                        md.nxSearch = s;
+                }
+            }
 
+            foreach(MaterialDatas md in m_matDatas.Where(x => x.Kind == "Material" && x.Subkind == "Raw" && x.Name != "Boron" && x.Name != "Lead" && x.Name != "Rhenium") )
+            {
+                if( md.nxSearch == null)
+                {
+                    NxSearchEntry _newSearch = new NxSearchEntry()
+                    {
+                        searchName = md.Name,
+                        searchType = NxSearchType.body,
+                        searchDisplay = new string[] {"materials","threat", "distanceToArrival" },
+                        searchMaxRadius = 0, //default
+                        searchParams = new string[][] { new string[] { "isLandable", "true" }, new string[] { "rawMaterial", md.Name } }
+                    };
+                    _newSearch.format();
+                    md.nxSearch = _newSearch;
+                }
+            }
+
+            int searchFoundAndCreated = m_matDatas.Where(x => x.nxSearch != null).Count();
+
+            SteamVR_NexHUD.Log("{0}/{1} materials with available searchs", searchFoundAndCreated, m_matDatas.Length);
+           
             m_dataLoaded = true;
         }
 
@@ -49,7 +94,7 @@ namespace NexHUD.EDEngineer
             if (_datas.Engineers.Contains("@Synthesis"))
                 return BlueprintCategorie.Synthesis;
 
-            switch(_datas.Type)
+            switch (_datas.Type)
             {
                 case "Beam Laser":
                 case "Burst Laser":

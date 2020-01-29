@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace System
 {
@@ -57,32 +54,32 @@ namespace System
             newText.Append(_enumStr[0]);
             for (int i = 1; i < _enumStr.Length; i++)
             {
-                if(_enumStr[i] == '(' )
+                if (_enumStr[i] == '(')
                 {
                     newText.Append(' ');
                     continue;
                 }
-                if( i > 0 && _enumStr[i] == '+' && _enumStr[i-1] == ',')
+                if (i > 0 && _enumStr[i] == '+' && _enumStr[i - 1] == ',')
                 {
                     newText.Append(' ');
                     continue;
                 }
-                if (char.IsUpper(_enumStr[i]) )
+                if (char.IsUpper(_enumStr[i]))
                     if (_enumStr[i - 1] != ' ' && !_IgnoreSpace.Contains(_enumStr[i - 1]))
                     {
                         bool _prevIsUpper = char.IsUpper(_enumStr[i - 1]);
                         bool _nextIsUpper = i < _enumStr.Length - 1 ? char.IsUpper(_enumStr[i + 1]) : false;
 
                         bool _insertSpace = false;
-                        if( !_prevIsUpper)
+                        if (!_prevIsUpper)
                             _insertSpace = true;
                         if (_prevIsUpper && _nextIsUpper)
                             _insertSpace = false;
-                        if (_prevIsUpper && !_nextIsUpper && i < _enumStr.Length-1)
+                        if (_prevIsUpper && !_nextIsUpper && i < _enumStr.Length - 1)
                             _insertSpace = true;
-                        
-                        
-                        if(_insertSpace)
+
+
+                        if (_insertSpace)
                             newText.Append(' ');
                     }
                 newText.Append(_enumStr[i]);

@@ -1,25 +1,12 @@
-﻿using System;
-using OpenTK;
-using NexHUDCore;
-using EliteAPI;
-
-using Somfic.Logging;
-using Somfic.Logging.Handlers;
-using NexHUDCore.NxItems;
-using System.Net;
-using System.IO;
-using NexHUD.EDDB;
-using NexHUD.UI;
-using NexHUD.Elite;
-using NexHUD.EDSM;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Threading;
-using NexHUD.Spansh;
+﻿using EliteAPI;
 using NexHUD.EDEngineer;
-using NAudio.Wave;
+using NexHUD.Elite;
+using NexHUD.UI;
+using NexHUDCore;
+using NexHUDCore.NxItems;
+using OpenTK;
+using Somfic.Logging.Handlers;
+using System;
 
 namespace NexHUD
 {
@@ -30,7 +17,6 @@ namespace NexHUD
         private static NexHUDOverlay m_vrConsoleOverlay;
         private static NxTextbox m_vrConsoleTb;
         private static EliteDangerousAPI m_eliteApi;
-
         public static EliteDangerousAPI eliteApi { get { return m_eliteApi; } }
 
         [STAThreadAttribute]
@@ -42,7 +28,7 @@ namespace NexHUD
             initElite();
 
             initVR();
-            initVRConsole();         
+            initVRConsole();
 
             new NxMenu();
 
@@ -68,7 +54,7 @@ namespace NexHUD
             UserSearchs.readConfigFile();
 
         }
-       
+
         private static void initLogs()
         {
             //Core Log event
@@ -87,7 +73,7 @@ namespace NexHUD
 
         private static void initVRConsole()
         {
-           
+
 
             m_vrConsoleOverlay = new NexHUDOverlay(m_vrConsoleTb.width, m_vrConsoleTb.height, "Debug Console", "NexHUD Debug Console");
             m_vrConsoleOverlay.InGameOverlay.SetAttachment(AttachmentType.Absolute, new Vector3(-1.1f, -1.1f, -.3f), new Vector3(45, -90, 0));// new Vector3(-5.5f,3f, -3.8f), new Vector3(-35, -85, 0));

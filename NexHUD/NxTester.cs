@@ -1,12 +1,8 @@
 ﻿using NAudio.Wave;
 using NexHUD.Spansh;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace NexHUD
 {

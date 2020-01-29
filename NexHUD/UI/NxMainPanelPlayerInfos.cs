@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using EliteAPI.Events;
-using NexHUD.Elite;
+﻿using EliteAPI.Events;
 using NexHUDCore;
 using NexHUDCore.NxItems;
+using System;
+using System.Drawing;
+using System.Reflection;
 
 namespace NexHUD.UI
 {
@@ -58,7 +53,7 @@ namespace NexHUD.UI
             }
             return "Resources.ranks.rank-1.png";
         }
-        public NxMainPanelPlayerInfos( NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public NxMainPanelPlayerInfos(NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
             x = 0;
             y = NxMainPanelTopInfos.HEIGHT + 5;
@@ -66,19 +61,19 @@ namespace NexHUD.UI
 
             NexHudCore.eliteApi.Events.RankEvent += onRankEvent;
 
-            m_PlayerRank = new NxImage(x , y , ResHelper.GetResourceImage(Assembly.GetExecutingAssembly(), getImageForRank((int)NexHudCore.eliteApi.Commander.CombatRank, (int)NexHudCore.eliteApi.Commander.TradeRank, (int)NexHudCore.eliteApi.Commander.ExplorationRank)));
+            m_PlayerRank = new NxImage(x, y, ResHelper.GetResourceImage(Assembly.GetExecutingAssembly(), getImageForRank((int)NexHudCore.eliteApi.Commander.CombatRank, (int)NexHudCore.eliteApi.Commander.TradeRank, (int)NexHudCore.eliteApi.Commander.ExplorationRank)));
             Add(m_PlayerRank);
 
-            m_PlayerName = new NxSimpleText(x + 64, y, "CMDR "+NexHudCore.eliteApi.Commander.Commander, EDColors.WHITE, 22);
+            m_PlayerName = new NxSimpleText(x + 64, y, "CMDR " + NexHudCore.eliteApi.Commander.Commander, EDColors.WHITE, 22);
             Add(m_PlayerName);
 
-            m_ShipName = new NxSimpleText(x + 64, y+24, "Unknow ship", EDColors.ORANGE, 22, NxFonts.EuroCapital);
+            m_ShipName = new NxSimpleText(x + 64, y + 24, "Unknow ship", EDColors.ORANGE, 22, NxFonts.EuroCapital);
             Add(m_ShipName);
             NexHudCore.eliteApi.Events.SetUserShipNameEvent += Events_SetUserShipNameEvent;
 
             m_Balance = new NxSimpleText(m_menu.frame.WindowWidth, y, string.Empty, EDColors.YELLOW, 20);
             Add(m_Balance);
-            m_Rebuy = new NxSimpleText(m_menu.frame.WindowWidth, y+24, string.Empty, EDColors.RED, 18);
+            m_Rebuy = new NxSimpleText(m_menu.frame.WindowWidth, y + 24, string.Empty, EDColors.RED, 18);
             Add(m_Rebuy);
             NexHudCore.eliteApi.Events.LoadoutEvent += Events_LoadoutEvent;
         }
@@ -91,7 +86,7 @@ namespace NexHUD.UI
         private void Events_SetUserShipNameEvent(object sender, SetUserShipNameInfo e)
         {
             m_ShipName.text = e.Ship;
-           
+
         }
 
         private void onRankEvent(object sender, RankInfo e)
@@ -109,16 +104,16 @@ namespace NexHUD.UI
         {
             base.Update();
 
-            m_Balance.text = string.Format("{0:#,0}", NexHudCore.eliteApi.Commander.Credits) +" cr";
-            
-            m_Rebuy.text = "Rebuy: " +string.Format("{0:#,0}", m_lastRebuy);
+            m_Balance.text = string.Format("{0:#,0}", NexHudCore.eliteApi.Commander.Credits) + " cr";
+
+            m_Rebuy.text = "Rebuy: " + string.Format("{0:#,0}", m_lastRebuy);
 
             if (m_lastRebuy > NexHudCore.eliteApi.Commander.Credits / 5)
                 m_Rebuy.Color = EDColors.YELLOW;
             else if (m_lastRebuy > NexHudCore.eliteApi.Commander.Credits)
                 m_Rebuy.Color = EDColors.RED;
             else
-                m_Rebuy.Color =  EDColors.getColor( EDColors.WHITE, 0.5f) ;
+                m_Rebuy.Color = EDColors.getColor(EDColors.WHITE, 0.5f);
 
         }
     }

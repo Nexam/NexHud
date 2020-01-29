@@ -1,12 +1,10 @@
-﻿using System;
+﻿using NexHUD.EDEngineer;
+using NexHUDCore;
+using NexHUDCore.NxItems;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUD.EDEngineer;
-using NexHUDCore;
-using NexHUDCore.NxItems;
 
 namespace NexHUD.UI
 {
@@ -57,19 +55,19 @@ namespace NexHUD.UI
                 m_CursorCoords.X++;
             if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.left)) && m_CursorCoords.X > 0)
                 m_CursorCoords.X--;
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.down)) ) 
+            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.down)))
             {
-                if( m_CursorCoords.Y < m_CursorMaxY[m_CursorCoords.X] )
+                if (m_CursorCoords.Y < m_CursorMaxY[m_CursorCoords.X])
                     m_CursorCoords.Y++;
-                else if( m_CursorCoords.X < m_CursorMaxX)
+                else if (m_CursorCoords.X < m_CursorMaxX)
                 {
                     m_CursorCoords.X++;
                     m_CursorCoords.Y = 0;
                 }
             }
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up)) )
+            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up)))
             {
-                if (m_CursorCoords.Y > (m_CursorCoords.X == 0 ? 1 : 0) )
+                if (m_CursorCoords.Y > (m_CursorCoords.X == 0 ? 1 : 0))
                     m_CursorCoords.Y--;
                 else if (m_CursorCoords.X > 0)
                 {
@@ -83,7 +81,7 @@ namespace NexHUD.UI
             while (_selected == null)
             {
                 _selected = m_Buttons.Where(x => x.Coords == m_CursorCoords).FirstOrDefault();
-                if( _selected != null && !_selected.isSelectable )
+                if (_selected != null && !_selected.isSelectable)
                 {
                     if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up)))
                         m_CursorCoords.Y--;
@@ -159,7 +157,7 @@ namespace NexHUD.UI
                     m_Buttons[_btnId].Coords = _cCoords;
                     m_Buttons[_btnId].resetColors();
                     m_Buttons[_btnId].ColorLines = EDColors.BLACK;
-                    m_Buttons[_btnId].ColorLabel = EDColors.getColor( EDColors.YELLOW,.8f );
+                    m_Buttons[_btnId].ColorLabel = EDColors.getColor(EDColors.YELLOW, .8f);
                     m_Buttons[_btnId].Label = _data.Type;
                     m_Buttons[_btnId].isSelectable = true;
                     m_Buttons[_btnId].Selected = false;
@@ -168,7 +166,7 @@ namespace NexHUD.UI
                     m_Buttons[_btnId].Height = HEIGHT_TYPE;
                     _y += m_Buttons[_btnId].Height + _vSpace;
 
-                  
+
 
                     _btnId++;
                     _cCoords.Y++;
@@ -186,12 +184,12 @@ namespace NexHUD.UI
 
                     if (!string.IsNullOrEmpty(m_TypeSelected) && m_TypeSelected == _data.Type)
                     {
-                        m_CursorCoords = m_Buttons[_btnId-1].Coords;
+                        m_CursorCoords = m_Buttons[_btnId - 1].Coords;
                         m_Buttons[_btnId - 1].ColorLines = EDColors.YELLOW;
                         m_Buttons[_btnId - 1].ColorBack = EDColors.getColor(EDColors.ORANGE, 0.3f);
                         m_Buttons[_btnId - 1].ColorLabel = EDColors.YELLOW;
 
-                        foreach (BlueprintDatas _data2 in EngineerHelper.blueprints.Where(x => x.Type == m_TypeSelected && !x.IsExperimental ))
+                        foreach (BlueprintDatas _data2 in EngineerHelper.blueprints.Where(x => x.Type == m_TypeSelected && !x.IsExperimental))
                         {
                             if (_nameAdded.Contains(_data2.Name))
                                 continue;
@@ -201,7 +199,7 @@ namespace NexHUD.UI
                             m_Buttons[_btnId].Obj = _data2;
                             m_Buttons[_btnId].Coords = _cCoords;
                             m_Buttons[_btnId].resetColors();
-                            m_Buttons[_btnId].ColorBack = EDColors.getColor( EDColors.GREEN,0.4f);
+                            m_Buttons[_btnId].ColorBack = EDColors.getColor(EDColors.GREEN, 0.4f);
                             m_Buttons[_btnId].ColorBackSelected = EDColors.getColor(EDColors.GREEN, 0.8f);
                             m_Buttons[_btnId].ColorLines = EDColors.BLACK;
                             m_Buttons[_btnId].Label = _data2.Name;
@@ -226,7 +224,7 @@ namespace NexHUD.UI
                         }
                     }
 
-                  
+
                 }
 
             }

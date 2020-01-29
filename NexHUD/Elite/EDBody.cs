@@ -1,9 +1,5 @@
-﻿using System;
+﻿using NexHUD.Spansh;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUD.Spansh;
 
 namespace NexHUD.Elite
 {
@@ -21,7 +17,7 @@ namespace NexHUD.Elite
         public int estimated_scan_value;
         public double gravity;
         public bool isLandable;
-        public KeyValuePair<string,double>[] materials;
+        public KeyValuePair<string, double>[] materials;
         public string name;
         public KeyValuePair<string, double>[] solid_composition;
         public string subtype;

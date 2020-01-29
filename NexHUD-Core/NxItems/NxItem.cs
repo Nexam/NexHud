@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace NexHUDCore.NxItems
 {
@@ -14,7 +9,8 @@ namespace NexHUDCore.NxItems
         public Color Color
         {
             get { return m_Color; }
-            set {
+            set
+            {
                 if (m_Color != value)
                 {
                     makeItDirty();

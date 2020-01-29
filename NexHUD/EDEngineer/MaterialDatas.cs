@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NexHUD.Elite;
 
 namespace NexHUD.EDEngineer
 {
@@ -25,5 +21,7 @@ namespace NexHUD.EDEngineer
         public string Subkind;
         public string[] OriginDetails;
         public string Group;
+
+        public NxSearchEntry nxSearch;
     }
 }

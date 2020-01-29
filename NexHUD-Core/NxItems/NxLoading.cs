@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NexHUDCore.NxItems
 {
@@ -37,32 +33,32 @@ namespace NexHUDCore.NxItems
             m_brush2 = new SolidBrush(EDColors.WHITE);
             scales = new float[numbers];
             scales.Initialize();
-            
+
         }
         public override void Render(Graphics _g)
         {
-            int _totalWidth = width * numbers + spacing * (numbers-1);
+            int _totalWidth = width * numbers + spacing * (numbers - 1);
             int _h = height;
 
             int _x = x - _totalWidth / 2;
             int _y = y - height / 2;
 
             for (float i = 0; i < scales.Length; i++)
-                _g.FillRectangle(i  == 0 || i == (scales.Length-1) ? m_brush2 : m_brush, _x + width * i + spacing * i, _y - (_h * scales[(int)i]) / 2, width, _h * scales[(int)i]);
+                _g.FillRectangle(i == 0 || i == (scales.Length - 1) ? m_brush2 : m_brush, _x + width * i + spacing * i, _y - (_h * scales[(int)i]) / 2, width, _h * scales[(int)i]);
 
-            if( m_fondWide == 0)
+            if (m_fondWide == 0)
                 m_fondWide = _g.MeasureString("Loading", NxFont.getFont(NxFonts.EuroCapital, 16)).Width;
             //if()
-                _g.DrawString("Loading", NxFont.getFont(NxFonts.EuroCapital, 16), m_brush, x - m_fondWide / 2, _y + height / 2);
+            _g.DrawString("Loading", NxFont.getFont(NxFonts.EuroCapital, 16), m_brush, x - m_fondWide / 2, _y + height / 2);
 
-           // _g.FillRectangle(m_brush, _x + _w + spacing,           _y - (_h * s2) / 2,   _w,   _h * s2);
-           // _g.FillRectangle(m_brush, _x + _w * 2 + spacing * 2,   _y - (_h * s3) / 2,   _w,   _h * s3);
+            // _g.FillRectangle(m_brush, _x + _w + spacing,           _y - (_h * s2) / 2,   _w,   _h * s2);
+            // _g.FillRectangle(m_brush, _x + _w * 2 + spacing * 2,   _y - (_h * s3) / 2,   _w,   _h * s3);
         }
 
         public override void Update()
         {
             _elapsed += SteamVR_NexHUD.deltaTime * speed;
-                       
+
             if (_elapsed > 3.14f)
                 _elapsed = -3.14f;
 
@@ -75,14 +71,15 @@ namespace NexHUDCore.NxItems
                 incFreq = true;
             else if (freq > maxFreq)
                 incFreq = false;
-                
-           
 
-            for (float i = 0; i < scales.Length; i++ ){
+
+
+            for (float i = 0; i < scales.Length; i++)
+            {
                 float n = scales.Length;
-                scales[(int)i] = .1f + .9f * (1f + (float)Math.Cos(_elapsed + i / (n/ freq))) / 2f;
+                scales[(int)i] = .1f + .9f * (1f + (float)Math.Cos(_elapsed + i / (n / freq))) / 2f;
             }
-            
+
             makeItDirty();
         }
     }

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NexHUDCore.NxItems
 {
@@ -29,23 +26,23 @@ namespace NexHUDCore.NxItems
                 initialize();
             bool missing = true;
 
-            if( m_fonts.ContainsKey(_font) )
+            if (m_fonts.ContainsKey(_font))
             {
-                if(m_fonts[_font].ContainsKey( size) )
+                if (m_fonts[_font].ContainsKey(size))
                 {
                     missing = false;
                 }
             }
-            
-            if( missing )
+
+            if (missing)
             {
-                Font f  = new Font(m_fontNames[_font], size, GraphicsUnit.Pixel);
-               
+                Font f = new Font(m_fontNames[_font], size, GraphicsUnit.Pixel);
+
                 if (!m_fonts.ContainsKey(_font))
                     m_fonts.Add(_font, new Dictionary<int, Font>());
-                    
+
                 m_fonts[_font].Add(size, f);
-               
+
             }
             return m_fonts[_font][size];
         }

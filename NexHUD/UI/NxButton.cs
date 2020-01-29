@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NexHUDCore.NxItems;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUDCore.NxItems;
 
 namespace NexHUD.UI
 {
@@ -43,7 +38,7 @@ namespace NexHUD.UI
             get { return m_buttonName.text; }
             set { m_buttonName.text = value; }
         }
-        public int Height { get { return Selected? (int)(m_height * HeightInc) : m_height; } set { m_height = value; repos(); } }
+        public int Height { get { return Selected ? (int)(m_height * HeightInc) : m_height; } set { m_height = value; repos(); } }
         public int Width { get { return m_width; } set { m_width = value; repos(); } }
         public void resetColors()
         {
@@ -126,10 +121,10 @@ namespace NexHUD.UI
                 m_buttonName.size = 16;
             }
 
-            
+
 
             Lines[0].Color = ColorLines;
-            Lines[1].Color = EDColors.getColor(ColorLines,0.5f);
+            Lines[1].Color = EDColors.getColor(ColorLines, 0.5f);
         }
     }
 }

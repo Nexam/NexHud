@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUD.EDDB;
+﻿using NexHUD.EDDB;
 using NexHUD.EDSM;
 using NexHUD.Spansh;
+using System;
+using System.Collections.Generic;
 
 namespace NexHUD.Elite
 {
@@ -53,7 +50,7 @@ namespace NexHUD.Elite
         public double distanceFromCurrentSystem { get { return m_distanceFromCurrentSystem; } }
 
 
-        private Dictionary<int,EDBody> m_Bodys = new Dictionary<int, EDBody>();
+        private Dictionary<int, EDBody> m_Bodys = new Dictionary<int, EDBody>();
 
 
         public void calculDistanceFromCurrent()
@@ -61,7 +58,7 @@ namespace NexHUD.Elite
             EDSystem _oSys = EDDatas.Instance.getCurrentSystem();
             OpenTK.Vector3d o = new OpenTK.Vector3d(_oSys.x, _oSys.y, _oSys.z);
             OpenTK.Vector3d d = new OpenTK.Vector3d(x, y, z);
-            m_distanceFromCurrentSystem = Math.Round( OpenTK.Vector3d.Distance(o, d),2 );
+            m_distanceFromCurrentSystem = Math.Round(OpenTK.Vector3d.Distance(o, d), 2);
 
         }
 
@@ -69,7 +66,7 @@ namespace NexHUD.Elite
 
 
         private bool m_receivedEddbInfos = false;
-        public bool receivedEddbInfos {get{return m_receivedEddbInfos;} }
+        public bool receivedEddbInfos { get { return m_receivedEddbInfos; } }
 
         private bool m_receivedEdsmBasics = false;
         public bool receivedEdsmBasics { get { return m_receivedEdsmBasics; } }
@@ -119,7 +116,7 @@ namespace NexHUD.Elite
 
             return m_Bodys[(int)_spanshDatas.edsm_id];
         }
-     
+
         public void updateEDDB(EDDBSystemDatas _datas)
         {
             if (_datas == null)
@@ -137,7 +134,7 @@ namespace NexHUD.Elite
             if (_datas == null)
                 return;
             name = _datas.name;
-            if( _datas.coords != null )
+            if (_datas.coords != null)
             {
                 x = _datas.coords.x;
                 y = _datas.coords.y;
@@ -149,7 +146,7 @@ namespace NexHUD.Elite
 
             m_receivedEdsmBasics = true;
 
-            if ( _datas.requirePermit != null )
+            if (_datas.requirePermit != null)
             {
                 needsPermit = (bool)_datas.requirePermit;
                 m_receivedEdsmPermit = true;
@@ -157,8 +154,8 @@ namespace NexHUD.Elite
 
             if (_datas.information != null)
             {
-                if (_datas.information.allegiance != null )
-                    Enum.TryParse( _datas.information.allegiance.Replace(" ", string.Empty), true, out allegiance);
+                if (_datas.information.allegiance != null)
+                    Enum.TryParse(_datas.information.allegiance.Replace(" ", string.Empty), true, out allegiance);
                 if (_datas.information.government != null)
                     Enum.TryParse(_datas.information.government.Replace(" ", string.Empty), true, out government);
                 controlling_minor_faction = _datas.information.faction;
@@ -180,17 +177,17 @@ namespace NexHUD.Elite
             }
             if (_datas.primaryStar != null)
             {
-                if(_datas.primaryStar.name.Length > 0)
+                if (_datas.primaryStar.name.Length > 0)
                     star_name = _datas.primaryStar.name;
-                if(_datas.primaryStar.type.Length > 0)
+                if (_datas.primaryStar.type.Length > 0)
                     star_type = _datas.primaryStar.type;
                 if (_datas.primaryStar.isScoopable != null)
                     star_isScoopable = (bool)_datas.primaryStar.isScoopable;
 
                 m_receivedEdsmPrimaryStar = true;
             }
-          
-            if( _datas.valuableBodies != null )
+
+            if (_datas.valuableBodies != null)
             {
                 valuableBodies = _datas.valuableBodies;
                 if (_datas.valuableBodies != null)

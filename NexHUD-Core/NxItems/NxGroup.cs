@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NexHUDCore.NxItems
 {
@@ -41,11 +38,11 @@ namespace NexHUDCore.NxItems
             }
             isDirty = false;
         }
-        
+
         public override void Update()
         {
             bool _checkDirty = false;
-            if( m_parent != null )
+            if (m_parent != null)
                 _checkDirty = (m_parent.lastDirtyCheck + m_parent.dirtyCheckFreq < DateTime.Now);
 
             foreach (NxItem i in m_nxItems)

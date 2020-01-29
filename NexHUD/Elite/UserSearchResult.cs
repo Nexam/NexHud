@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NexHUD.Elite
 {
@@ -70,7 +67,7 @@ namespace NexHUD.Elite
         }
 
         public List<EDBody> getBodys()
-        {          
+        {
             return m_bodys; //They are already ordered
         }
 

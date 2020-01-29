@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace NexHUDCore.NxItems
 {
-    
+
     public class NxSimpleText : NxItem
     {
         private string m_text = "blank";
@@ -18,8 +13,8 @@ namespace NexHUDCore.NxItems
         private NxFonts m_font = NxFonts.EuroStile;
 
         public SizeF sizeF { get { return m_sizeF; } }
-       
-        public string text { get { return m_text; } set { if (m_text != value) makeItDirty(); m_text = value;  } }
+
+        public string text { get { return m_text; } set { if (m_text != value) makeItDirty(); m_text = value; } }
         public int size { get { return m_size; } set { if (m_size != value) makeItDirty(); m_size = value; } }
         public bool centerHorizontal { get { return m_centerHorizontal; } set { if (m_centerHorizontal != value) makeItDirty(); m_centerHorizontal = value; } }
         public bool centerVertical { get { return m_centerVertical; } set { if (m_centerVertical != value) makeItDirty(); m_centerVertical = value; } }
@@ -28,7 +23,7 @@ namespace NexHUDCore.NxItems
 
 
 
-        public NxSimpleText (int _x, int _y, string _text,  Color _color, int _size = 16, NxFonts _font = NxFonts.EuroStile)
+        public NxSimpleText(int _x, int _y, string _text, Color _color, int _size = 16, NxFonts _font = NxFonts.EuroStile)
         {
             text = _text;
             Color = _color;
@@ -40,8 +35,8 @@ namespace NexHUDCore.NxItems
         {
             m_sizeF = _g.MeasureString(text, NxFont.getFont(font, size));
             _g.DrawString(text, NxFont.getFont(font, size), SolidBrush,
-                m_centerHorizontal ? x - (sizeF.Width/2) :  x, 
-               m_centerVertical ? y - (sizeF.Height/2) : y);
+                m_centerHorizontal ? x - (sizeF.Width / 2) : x,
+               m_centerVertical ? y - (sizeF.Height / 2) : y);
         }
 
         public override void Update()

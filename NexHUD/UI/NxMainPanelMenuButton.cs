@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUDCore;
+﻿using NexHUDCore;
 using NexHUDCore.NxItems;
+using System.Drawing;
+using System.Reflection;
 
 namespace NexHUD.UI
 {
@@ -40,11 +35,11 @@ namespace NexHUD.UI
 
         private string getIconPath()
         {
-            switch(m_Type)
+            switch (m_Type)
             {
                 case MenuButtonType.Improve: return "Resources.MenuImages.menu_improve.png";
-                case MenuButtonType.Search: return  "Resources.MenuImages.menu_search.png";
-                case MenuButtonType.Trade: return   "Resources.MenuImages.menu_trade.png";
+                case MenuButtonType.Search: return "Resources.MenuImages.menu_search.png";
+                case MenuButtonType.Trade: return "Resources.MenuImages.menu_trade.png";
             }
             return "Resources.MenuImages.menu_search.png";
         }
@@ -76,8 +71,8 @@ namespace NexHUD.UI
         {
             x = _x;
             y = _y;
-            m_Type = _type;            
-            
+            m_Type = _type;
+
             //background
             Color = EDColors.getColor(EDColors.ORANGE, 0.2f);
             m_originRec = new Rectangle(x - (WIDTH / 2), y - (HEIGHT / 2), WIDTH, HEIGHT);
@@ -85,20 +80,20 @@ namespace NexHUD.UI
             Add(m_background);
 
             //Title
-            m_TopText = new NxSimpleText(x, m_background.y+5, getMenuTitle(), EDColors.ORANGE, 34, NxFonts.EuroCapital);
-            m_TopText.centerHorizontal  = true;
+            m_TopText = new NxSimpleText(x, m_background.y + 5, getMenuTitle(), EDColors.ORANGE, 34, NxFonts.EuroCapital);
+            m_TopText.centerHorizontal = true;
             Add(m_TopText);
 
             //Icon
-            m_Icon = new NxImage(m_background.x + (WIDTH - ICON_SIZE) / 2, m_background.y + 50, ResHelper.GetResourceImage(Assembly.GetExecutingAssembly(), getIconPath() ));
+            m_Icon = new NxImage(m_background.x + (WIDTH - ICON_SIZE) / 2, m_background.y + 50, ResHelper.GetResourceImage(Assembly.GetExecutingAssembly(), getIconPath()));
             Add(m_Icon);
 
             //Bottom Text
             int _botHeight = 80;
             int _padding = 5;
-            m_BottomText = new NxTextbox(m_background.x + _padding, m_background.y + (HEIGHT - _botHeight) - _padding, WIDTH - _padding*2, _botHeight, getBottomText(), EDColors.ORANGE, 19);
+            m_BottomText = new NxTextbox(m_background.x + _padding, m_background.y + (HEIGHT - _botHeight) - _padding, WIDTH - _padding * 2, _botHeight, getBottomText(), EDColors.ORANGE, 19);
             m_BottomText.showBounds = true;
-            m_BottomText.boundColors = EDColors.getColor( EDColors.ORANGE, .5f );
+            m_BottomText.boundColors = EDColors.getColor(EDColors.ORANGE, .5f);
             Add(m_BottomText);
 
         }
@@ -112,13 +107,13 @@ namespace NexHUD.UI
         {
             base.Update();
 
-            if( isSelected )
+            if (isSelected)
             {
                 m_background.x = m_originRec.X - SELECTED_ADD;
                 m_background.y = m_originRec.Y - SELECTED_ADD;
                 m_background.width = m_originRec.Width + SELECTED_ADD * 2;
                 m_background.height = m_originRec.Height + SELECTED_ADD * 2;
-                m_background.Color = EDColors.getColor( isActive ? EDColors.ORANGE : Color.Gray, 0.6f);
+                m_background.Color = EDColors.getColor(isActive ? EDColors.ORANGE : Color.Gray, 0.6f);
                 if (isActive)
                 {
                     m_BottomText.Color = EDColors.YELLOW;
@@ -131,7 +126,7 @@ namespace NexHUD.UI
                 m_background.y = m_originRec.Y;
                 m_background.width = m_originRec.Width;
                 m_background.height = m_originRec.Height;
-                m_background.Color = EDColors.getColor( isActive ? EDColors.ORANGE : Color.Gray, 0.2f);
+                m_background.Color = EDColors.getColor(isActive ? EDColors.ORANGE : Color.Gray, 0.2f);
                 m_BottomText.Color = EDColors.ORANGE;
                 m_TopText.Color = EDColors.ORANGE;
             }

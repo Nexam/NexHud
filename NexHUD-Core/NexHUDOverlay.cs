@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NexHUDCore.NxItems;
 using OpenTK.Graphics.OpenGL;
-using Valve.VR;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using OpenTK;
-using NexHUDCore.NxItems;
-using System.Diagnostics;
+using Valve.VR;
 
 namespace NexHUDCore
 {
@@ -86,7 +79,7 @@ namespace NexHUDCore
                     if (_renderInGameOverlay)
                     {
                         m_HideRequest = false;
-                        if (!InGameOverlay.IsVisible() )
+                        if (!InGameOverlay.IsVisible())
                         {
                             m_GradientValue = 0;
                             InGameOverlay.Show();
@@ -252,7 +245,7 @@ namespace NexHUDCore
 
             if (SteamVR_NexHUD.DefaultFragmentShaderPath != null /*|| FragmentShaderPath != null*/)
             {
-                SteamVR_NexHUD.Log("[OPENGL] Using Fragment Shader : "+ SteamVR_NexHUD.DefaultFragmentShaderPath);
+                SteamVR_NexHUD.Log("[OPENGL] Using Fragment Shader : " + SteamVR_NexHUD.DefaultFragmentShaderPath);
 
                 // string path = FragmentShaderPath != null ? FragmentShaderPath : SteamVR_NexHUD.DefaultFragmentShaderPath;
                 // CompileShader(path);
@@ -313,14 +306,14 @@ namespace NexHUDCore
 
 
             Bitmap _bitmap = BMPTexture;
-            if (m_BMPGradient != null && GradientIntro && ( ( m_GradientValue < 1 && !m_HideRequest ) || (m_GradientValue > 0 && m_HideRequest) ) )
+            if (m_BMPGradient != null && GradientIntro && ((m_GradientValue < 1 && !m_HideRequest) || (m_GradientValue > 0 && m_HideRequest)))
             {
                 if (!m_HideRequest)
                     m_GradientValue += SteamVR_NexHUD.deltaTime * 2f;
                 else
                     m_GradientValue -= SteamVR_NexHUD.deltaTime * 4f;
 
-                if( m_GradientValue <= 0 && m_HideRequest)
+                if (m_GradientValue <= 0 && m_HideRequest)
                 {
                     InGameOverlay.Hide();
                     return;

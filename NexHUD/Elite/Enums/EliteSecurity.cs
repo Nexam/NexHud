@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NexHUDCore.NxItems;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUDCore.NxItems;
 
 namespace NexHUD.Elite
 {

@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Valve.VR;
 
 namespace NexHUDCore.JsInterop
@@ -42,7 +40,7 @@ namespace NexHUDCore.JsInterop
                 OpenVR.Applications.GetApplicationPropertyString(AppKey, prop, propertyBuffer, 255, ref err);
 
 #if DEBUG
-                if(err != EVRApplicationError.None)
+                if (err != EVRApplicationError.None)
                     SteamVR_NexHUD.Log("EVRApplicationError on " + AppKey + " property " + prop.ToString() + ": " + err.ToString());
 #endif
 
@@ -64,7 +62,7 @@ namespace NexHUDCore.JsInterop
             StringBuilder keyBuffer = new StringBuilder(255);
             EVRApplicationError err = EVRApplicationError.None;
 
-            for(int i = 0; i < _applicationsInstance.GetApplicationCount(); i++)
+            for (int i = 0; i < _applicationsInstance.GetApplicationCount(); i++)
             {
                 err = _applicationsInstance.GetApplicationKeyByIndex((uint)i, keyBuffer, 255);
 

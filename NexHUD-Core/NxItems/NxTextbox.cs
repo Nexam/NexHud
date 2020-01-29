@@ -104,7 +104,7 @@ namespace NexHUDCore.NxItems
                     while (_ii < _words.Length)
                     {
                         string _interline = "";
-                        while ( _ii < _words.Length)
+                        while (_ii < _words.Length)
                         {
                             string _newWord = (_interline.Length != 0 ? " " : "") + _words[_ii];
                             if (_g.MeasureString(_interline + _newWord, trFont).Width < width)

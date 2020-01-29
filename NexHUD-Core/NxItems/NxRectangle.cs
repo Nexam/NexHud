@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace NexHUDCore.NxItems
 {
@@ -18,7 +13,7 @@ namespace NexHUDCore.NxItems
             {
                 if (m_w != value)
                 {
-                    m_w = value; 
+                    m_w = value;
                     makeItDirty();
                 }
             }
@@ -28,9 +23,9 @@ namespace NexHUDCore.NxItems
             get => m_h;
             set
             {
-                if( m_h != value)
+                if (m_h != value)
                 {
-                    m_h = value; 
+                    m_h = value;
                     makeItDirty();
                 }
             }

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using NexHUD.EDDB;
-using NexHUD.EDEngineer;
+﻿using NexHUD.EDEngineer;
 using NexHUD.EDSM;
 using NexHUD.Spansh;
 using NexHUD.UI;
 using NexHUDCore;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 
 namespace NexHUD.Elite
 {
@@ -337,18 +334,18 @@ namespace NexHUD.Elite
                                 _systemToUpdate.Add(s);
                             }
                         }
-                        if( _systemToUpdate.Count > 0 )
+                        if (_systemToUpdate.Count > 0)
                         {
                             EDSMSystemDatas[] _edsmDatas = ExternalDBConnection.EDSMSystemsList(_systemToUpdate.ToArray(), true);
                             foreach (EDSMSystemDatas _data in _edsmDatas)
                                 m_systems[_data.name].updateEDSM(_data);
                         }
 
-                        foreach(SpanshBody b in _spanshResult.results)
+                        foreach (SpanshBody b in _spanshResult.results)
                         {
                             m_lastUSRs[_id].addBody(m_systems[b.system_name].addOrUpdateBody(b));
                         }
-                        
+
                     }
 
                 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NexHUDCore.NxItems;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUDCore.NxItems;
 
 namespace NexHUD.UI
 {
@@ -60,15 +56,15 @@ namespace NexHUD.UI
              * 
              * */
             int ButtonY = (_menu.frame.WindowHeight / 2) + (NxMainPanelTopInfos.HEIGHT / 2);
-            int _number = Enum.GetNames( typeof(NxMainPanelMenuButton.MenuButtonType) ).Length;
+            int _number = Enum.GetNames(typeof(NxMainPanelMenuButton.MenuButtonType)).Length;
             m_buttons = new NxMainPanelMenuButton[_number];
             bool _pair = _number % 2 == 0;
-            for(int i = 0; i < _number; i++)
+            for (int i = 0; i < _number; i++)
             {
                 m_buttons[i] = new NxMainPanelMenuButton(
-                    _pair ? 
+                    _pair ?
                     (
-                        ( i-(_number / 2) ) *(NxMainPanelMenuButton.WIDTH + Spacing) + _menu.frame.WindowWidth / 2 + (NxMainPanelMenuButton.WIDTH/2) + (Spacing/2)
+                        (i - (_number / 2)) * (NxMainPanelMenuButton.WIDTH + Spacing) + _menu.frame.WindowWidth / 2 + (NxMainPanelMenuButton.WIDTH / 2) + (Spacing / 2)
                     )
                     :
                     (
@@ -88,7 +84,7 @@ namespace NexHUD.UI
 
         private void onSelectChange()
         {
-            for(int i = 0; i < m_buttons.Length; i++)
+            for (int i = 0; i < m_buttons.Length; i++)
             {
                 m_buttons[i].isSelected = i == m_selectedId;
             }
@@ -96,7 +92,7 @@ namespace NexHUD.UI
 
         public void selectNext()
         {
-            if( SelectedId < ButtonNumbers)
+            if (SelectedId < ButtonNumbers)
                 SelectedId++;
         }
         public void selectPrev()
@@ -113,7 +109,7 @@ namespace NexHUD.UI
                     m_buttons[i].isActive = _isActive;
             }
         }
-        
+
 
         public override void Render(Graphics _g)
         {
