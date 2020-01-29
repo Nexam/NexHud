@@ -31,10 +31,11 @@ Here is the list of the features planned
 
 #### Searchs
 - [x] Search for system around your CMDR current position matching parameters (Allegiance, economy, etc...)
-- [ ] Search for bodies around your CMDR current position matching parameters (Materials %, Terraformable, Ring type, etc...)
+- [x] Search for bodies around your CMDR current position matching parameters (Materials %, Terraformable, Ring type, etc...)
 
 #### Improve
-- [ ] Connection to Inara to show your craft list OR build your own craft list (depend of Inara Api :=) )
+- [ ] Display all blue print available
+- [ ] Pin blueprint into your craftlist
 - [ ] Search tools & tips to help you find the materials you need
 - [ ] Materials trader guide to show what you can trade to get what you want
 
