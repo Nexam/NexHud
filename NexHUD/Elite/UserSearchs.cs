@@ -24,8 +24,8 @@ namespace NexHUD.Elite
                 }
                 catch (Exception ex)
                 {
-                    SteamVR_NexHUD.Log("Error while reading Searchs.json");
-                    SteamVR_NexHUD.Log(ex.Message);
+                    NexHudEngine.Log("Error while reading Searchs.json");
+                    NexHudEngine.Log(ex.Message);
 
                     m_userSearchEntrys = new NxSearchEntry[]
                     {

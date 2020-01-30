@@ -18,10 +18,10 @@ namespace NexHUDCore.JsInterop
             public int glTextureId;
         }
 
-        private Overlay _overlay;
+        private OpenVrOverlay _overlay;
         private static Dictionary<string, NotificationIcon> _icons = new Dictionary<string, NotificationIcon>();
 
-        public Notifications(Overlay overlay)
+        public Notifications(OpenVrOverlay overlay)
         {
             _overlay = overlay;
         }
@@ -46,7 +46,7 @@ namespace NexHUDCore.JsInterop
 
             if (err != EVRNotificationError.OK)
             {
-                SteamVR_NexHUD.Log("Notification Failure: " + err.ToString());
+                NexHudEngine.Log("Notification Failure: " + err.ToString());
                 return false;
             }
             return true;

@@ -71,7 +71,7 @@ namespace NexHUD.UI
             if (!isVisible)
                 return;
 
-            if( SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.back) ) )
+            if( NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back) ) )
             {
                 if (m_state == UiImproveState.BlueprintDetail && m_previousState == UiImproveState.CraftList)
                     changeState(UiImproveState.CraftList);

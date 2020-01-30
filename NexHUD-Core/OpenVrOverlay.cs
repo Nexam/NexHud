@@ -5,7 +5,7 @@ using Valve.VR;
 
 namespace NexHUDCore
 {
-    public class Overlay
+    public class OpenVrOverlay
     {
         string _key;
         string _name;
@@ -89,11 +89,11 @@ namespace NexHUDCore
         /// Create object for an existing overlay by overlay key. Useful to gain access to the stock overlays.
         /// </summary>
         /// <param name="pchOverlayKey"></param>
-        public Overlay(string pchOverlayKey)
+        public OpenVrOverlay(string pchOverlayKey)
         {
             EVROverlayError ovrErr = EVROverlayError.None;
 
-            ovrErr = SteamVR_NexHUD.OverlayManager.FindOverlay(pchOverlayKey, ref _handle);
+            ovrErr = NexHudEngine.OverlayManager.FindOverlay(pchOverlayKey, ref _handle);
 
             if (ovrErr != EVROverlayError.None)
             {
@@ -103,15 +103,15 @@ namespace NexHUDCore
             _key = pchOverlayKey;
 
             StringBuilder sb = new StringBuilder();
-            SteamVR_NexHUD.OverlayManager.GetOverlayName(_handle, new StringBuilder(), 1000, ref ovrErr);
+            NexHudEngine.OverlayManager.GetOverlayName(_handle, new StringBuilder(), 1000, ref ovrErr);
             _name = sb.ToString();
 
-            SteamVR_NexHUD.OverlayManager.GetOverlayWidthInMeters(_handle, ref _width);
+            NexHudEngine.OverlayManager.GetOverlayWidthInMeters(_handle, ref _width);
 
-            SteamVR_NexHUD.OverlayManager.GetOverlayAlpha(_handle, ref _alpha);
+            NexHudEngine.OverlayManager.GetOverlayAlpha(_handle, ref _alpha);
         }
 
-        public Overlay(string key, string name, float width = 2.0f, bool isInGameOverlay = false, bool hasBackSide = false)
+        public OpenVrOverlay(string key, string name, float width = 2.0f, bool isInGameOverlay = false, bool hasBackSide = false)
         {
             _key = key;
             _name = name;
@@ -131,12 +131,12 @@ namespace NexHUDCore
 
         private void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
-            SteamVR_NexHUD.OverlayManager.DestroyOverlay(_handle);
-            SteamVR_NexHUD.OverlayManager.DestroyOverlay(_thumbnailHandle);
+            NexHudEngine.OverlayManager.DestroyOverlay(_handle);
+            NexHudEngine.OverlayManager.DestroyOverlay(_thumbnailHandle);
 
             if (_hasBackSide)
             {
-                SteamVR_NexHUD.OverlayManager.DestroyOverlay(_backSideHandle);
+                NexHudEngine.OverlayManager.DestroyOverlay(_backSideHandle);
             }
         }
 
@@ -155,7 +155,7 @@ namespace NexHUDCore
             //SetHighQuality();
 
             //SteamVR_NexHUD.OverlayManager.GetOverlayCurvature(_handle, ref pfCurvature);
-            SteamVR_NexHUD.OverlayManager.SetOverlayCurvature(_handle, pfCurvature);
+            NexHudEngine.OverlayManager.SetOverlayCurvature(_handle, pfCurvature);
             //SteamVR_NexHUD.OverlayManager.SetOverlayAutoCurveDistanceRangeInMeters(_handle, minDistance, maxDistance);
         }
 
@@ -186,7 +186,7 @@ namespace NexHUDCore
         public Matrix3x4 GetAttachmentTransform()
         {
             HmdMatrix34_t outMatrix = default;
-            SteamVR_NexHUD.OverlayManager.GetOverlayTransformOverlayRelative(Handle, ref _attachedToHandle, ref outMatrix);
+            NexHudEngine.OverlayManager.GetOverlayTransformOverlayRelative(Handle, ref _attachedToHandle, ref outMatrix);
 
             return TransformUtils.OpenVRMatrixToOpenTKMatrix(outMatrix);
         }
@@ -202,7 +202,7 @@ namespace NexHUDCore
             if (attachmentType == AttachmentType.Absolute)
             {
                 HmdMatrix34_t matrix = GetMatrixFromPositionAndRotation(position, rotation);
-                SteamVR_NexHUD.OverlayManager.SetOverlayTransformAbsolute(_handle, ETrackingUniverseOrigin.TrackingUniverseSeated, ref matrix);
+                NexHudEngine.OverlayManager.SetOverlayTransformAbsolute(_handle, ETrackingUniverseOrigin.TrackingUniverseSeated, ref matrix);
                 _sentAttachmentSuccess = true;
             }
             else if (attachmentType == AttachmentType.Hmd)
@@ -248,10 +248,10 @@ namespace NexHUDCore
 
             HmdMatrix34_t matrix = GetMatrixFromPositionAndRotation(position, rotation);
 
-            EVROverlayError err = SteamVR_NexHUD.OverlayManager.SetOverlayTransformTrackedDeviceRelative(_handle, index, ref matrix);
+            EVROverlayError err = NexHudEngine.OverlayManager.SetOverlayTransformTrackedDeviceRelative(_handle, index, ref matrix);
 
             if (err != EVROverlayError.None)
-                SteamVR_NexHUD.Log("Failed to attach " + Key + " to Device " + index + " failed: " + err.ToString());
+                NexHudEngine.Log("Failed to attach " + Key + " to Device " + index + " failed: " + err.ToString());
         }
 
         private void HandleDeviceRoleChanged(params object[] args)
@@ -261,7 +261,7 @@ namespace NexHUDCore
 
         void RefreshDevice()
         {
-            uint changedDeviceIndex = SteamVR_NexHUD.OVRSystem.GetTrackedDeviceIndexForControllerRole(_attachmentType == AttachmentType.LeftController ? ETrackedControllerRole.LeftHand : ETrackedControllerRole.RightHand);
+            uint changedDeviceIndex = NexHudEngine.OVRSystem.GetTrackedDeviceIndexForControllerRole(_attachmentType == AttachmentType.LeftController ? ETrackedControllerRole.LeftHand : ETrackedControllerRole.RightHand);
             if (changedDeviceIndex != OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 SetDeviceAttachment(changedDeviceIndex, _position, _rotation);
@@ -305,7 +305,7 @@ namespace NexHUDCore
 
             EVROverlayError err = EVROverlayError.None;
 
-            SteamVR_NexHUD.OverlayManager.SetOverlayFromFile(_thumbnailHandle, path);
+            NexHudEngine.OverlayManager.SetOverlayFromFile(_thumbnailHandle, path);
 
             if (err != EVROverlayError.None)
             {
@@ -317,41 +317,41 @@ namespace NexHUDCore
         {
             EVROverlayError ovrErr = EVROverlayError.None;
 
-            if (SteamVR_NexHUD.OverlayManager == null)
-                SteamVR_NexHUD.Init();
+            if (NexHudEngine.OverlayManager == null)
+                NexHudEngine.Init();
 
             if (_ingame)
             {
-                ovrErr = SteamVR_NexHUD.OverlayManager.CreateOverlay(Key, Name, ref _handle);
+                ovrErr = NexHudEngine.OverlayManager.CreateOverlay(Key, Name, ref _handle);
                 //   ToggleInput(false);
             }
             else
             {
-                ovrErr = SteamVR_NexHUD.OverlayManager.CreateDashboardOverlay(Key, Name, ref _handle, ref _thumbnailHandle);
+                ovrErr = NexHudEngine.OverlayManager.CreateDashboardOverlay(Key, Name, ref _handle, ref _thumbnailHandle);
                 //   ToggleInput(true);
             }
 
-            SteamVR_NexHUD.Log("Overlay Handle " + _handle + ", Thumbnail Handle: " + _thumbnailHandle);
+            NexHudEngine.Log("Overlay Handle " + _handle + ", Thumbnail Handle: " + _thumbnailHandle);
 
             if (ovrErr != EVROverlayError.None)
             {
                 throw new Exception("Failed to create overlay: " + ovrErr.ToString());
             }
 
-            SteamVR_NexHUD.OverlayManager.SetOverlayColor(_handle, 1.0f, 1.0f, 1.0f);
+            NexHudEngine.OverlayManager.SetOverlayColor(_handle, 1.0f, 1.0f, 1.0f);
 
             if (_hasBackSide)
             {
-                ovrErr = SteamVR_NexHUD.OverlayManager.CreateOverlay(Key + "_backside", Name, ref _backSideHandle);
+                ovrErr = NexHudEngine.OverlayManager.CreateOverlay(Key + "_backside", Name, ref _backSideHandle);
 
                 if (ovrErr != EVROverlayError.None)
                 {
                     throw new Exception("Failed to create backside of overlay: " + ovrErr.ToString());
                 }
-                SteamVR_NexHUD.OverlayManager.SetOverlayColor(_backSideHandle, 1.0f, 1.0f, 1.0f);
+                NexHudEngine.OverlayManager.SetOverlayColor(_backSideHandle, 1.0f, 1.0f, 1.0f);
 
                 HmdMatrix34_t matrix = GetMatrixFromPositionAndRotation(new Vector3(0, 0, 0), new Vector3(0, 180, 0));
-                SteamVR_NexHUD.OverlayManager.SetOverlayTransformOverlayRelative(_backSideHandle, _handle, ref matrix);
+                NexHudEngine.OverlayManager.SetOverlayTransformOverlayRelative(_backSideHandle, _handle, ref matrix);
             }
 
             Alpha = 1.0f;
@@ -365,12 +365,12 @@ namespace NexHUDCore
             bounds.uMin = 0;
             bounds.uMax = 1;
 
-            SteamVR_NexHUD.OverlayManager.SetOverlayTextureBounds(_handle, ref bounds);
+            NexHudEngine.OverlayManager.SetOverlayTextureBounds(_handle, ref bounds);
 
             if (_hasBackSide)
             {
                 bounds.uMin = 1; bounds.uMax = 0; // Flip the backside texture
-                SteamVR_NexHUD.OverlayManager.SetOverlayTextureBounds(_backSideHandle, ref bounds);
+                NexHudEngine.OverlayManager.SetOverlayTextureBounds(_backSideHandle, ref bounds);
             }
         }
 
@@ -379,10 +379,10 @@ namespace NexHUDCore
             HmdVector2_t scale;
             scale.v0 = width;
             scale.v1 = height;
-            SteamVR_NexHUD.OverlayManager.SetOverlayMouseScale(_handle, ref scale);
+            NexHudEngine.OverlayManager.SetOverlayMouseScale(_handle, ref scale);
 
             if (_hasBackSide)
-                SteamVR_NexHUD.OverlayManager.SetOverlayMouseScale(_backSideHandle, ref scale);
+                NexHudEngine.OverlayManager.SetOverlayMouseScale(_backSideHandle, ref scale);
         }
 
         public void SetThumbnail(string filePath)
@@ -392,84 +392,84 @@ namespace NexHUDCore
 
         void UpdateWidth()
         {
-            SteamVR_NexHUD.OverlayManager.SetOverlayWidthInMeters(_handle, _width);
+            NexHudEngine.OverlayManager.SetOverlayWidthInMeters(_handle, _width);
 
             if (_hasBackSide)
-                SteamVR_NexHUD.OverlayManager.SetOverlayWidthInMeters(_backSideHandle, _width);
+                NexHudEngine.OverlayManager.SetOverlayWidthInMeters(_backSideHandle, _width);
         }
 
         void UpdateAlpha()
         {
-            SteamVR_NexHUD.OverlayManager.SetOverlayAlpha(_handle, _alpha);
+            NexHudEngine.OverlayManager.SetOverlayAlpha(_handle, _alpha);
 
             if (_hasBackSide)
             {
-                SteamVR_NexHUD.OverlayManager.SetOverlayAlpha(_backSideHandle, _alpha);
+                NexHudEngine.OverlayManager.SetOverlayAlpha(_backSideHandle, _alpha);
             }
         }
 
         public void SetTexture(ref Texture_t texture)
         {
-            EVROverlayError err = SteamVR_NexHUD.OverlayManager.SetOverlayTexture(_handle, ref texture);
+            EVROverlayError err = NexHudEngine.OverlayManager.SetOverlayTexture(_handle, ref texture);
 
             if (err != EVROverlayError.None)
-                SteamVR_NexHUD.Log("Failed to send texture: " + err.ToString());
+                NexHudEngine.Log("Failed to send texture: " + err.ToString());
 
             if (_hasBackSide)
             {
-                err = SteamVR_NexHUD.OverlayManager.SetOverlayTexture(_backSideHandle, ref texture);
+                err = NexHudEngine.OverlayManager.SetOverlayTexture(_backSideHandle, ref texture);
 
                 if (err != EVROverlayError.None)
-                    SteamVR_NexHUD.Log("Failed to send texture: " + err.ToString());
+                    NexHudEngine.Log("Failed to send texture: " + err.ToString());
             }
         }
 
         public void Show()
         {
-            SteamVR_NexHUD.OverlayManager.ShowOverlay(_handle);
+            NexHudEngine.OverlayManager.ShowOverlay(_handle);
 
             if (_hasBackSide)
             {
-                SteamVR_NexHUD.OverlayManager.ShowOverlay(_backSideHandle);
+                NexHudEngine.OverlayManager.ShowOverlay(_backSideHandle);
             }
         }
 
         public void Hide()
         {
-            SteamVR_NexHUD.OverlayManager.HideOverlay(_handle);
+            NexHudEngine.OverlayManager.HideOverlay(_handle);
 
             if (_hasBackSide)
             {
-                SteamVR_NexHUD.OverlayManager.HideOverlay(_backSideHandle);
+                NexHudEngine.OverlayManager.HideOverlay(_backSideHandle);
             }
         }
 
         public void ForceShow()
         {
-            SteamVR_NexHUD.OverlayManager.ShowDashboard(_key);
+            NexHudEngine.OverlayManager.ShowDashboard(_key);
         }
 
         public void Destroy()
         {
-            SteamVR_NexHUD.OverlayManager.DestroyOverlay(_handle);
+            NexHudEngine.OverlayManager.DestroyOverlay(_handle);
 
             if (_hasBackSide)
             {
-                SteamVR_NexHUD.OverlayManager.DestroyOverlay(_backSideHandle);
+                NexHudEngine.OverlayManager.DestroyOverlay(_backSideHandle);
             }
 
             if (_thumbnailHandle > 0)
-                SteamVR_NexHUD.OverlayManager.DestroyOverlay(_thumbnailHandle);
+                NexHudEngine.OverlayManager.DestroyOverlay(_thumbnailHandle);
         }
 
         public bool IsVisible()
         {
-            return SteamVR_NexHUD.OverlayManager.IsOverlayVisible(_handle);
+            return NexHudEngine.OverlayManager.IsOverlayVisible(_handle);
         }
 
         public bool PollEvent(ref VREvent_t ovrEvent)
         {
-            return SteamVR_NexHUD.OverlayManager.PollNextOverlayEvent(_handle, ref ovrEvent, eventSize) || SteamVR_NexHUD.OverlayManager.PollNextOverlayEvent(_backSideHandle, ref ovrEvent, eventSize);
+            return NexHudEngine.OverlayManager.PollNextOverlayEvent(_handle, ref ovrEvent, eventSize) || NexHudEngine.OverlayManager.PollNextOverlayEvent(_backSideHandle, ref ovrEvent, eventSize);
         }
     }
 }

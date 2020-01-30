@@ -123,7 +123,7 @@ namespace NexHUD.UI
             base.Update();
             if (EDDatas.Instance.getCurrentSystem().receivedEddbInfos)
             {
-                infoCheck += SteamVR_NexHUD.deltaTime;
+                infoCheck += NexHudEngine.deltaTime;
                 if (infoCheck > 1)
                 {
                     infoCheck = 0;

@@ -55,10 +55,10 @@ namespace NexHUD.EDEngineer
             if (m_dataLoaded)
                 return;
 
-            SteamVR_NexHUD.Log("Loading blueprints datas...");
+            NexHudEngine.Log("Loading blueprints datas...");
             string _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "EDEngineer.Datas.blueprints.json");
             m_bpDatas = JsonConvert.DeserializeObject<BlueprintDatas[]>(_json);
-            SteamVR_NexHUD.Log(">>{0} blueprints loaded", m_bpDatas.Length);
+            NexHudEngine.Log(">>{0} blueprints loaded", m_bpDatas.Length);
 
             //Assigning categories
             foreach (BlueprintDatas d in m_bpDatas)
@@ -66,10 +66,10 @@ namespace NexHUD.EDEngineer
 
 
 
-            SteamVR_NexHUD.Log("Loading materials datas...");
+            NexHudEngine.Log("Loading materials datas...");
             _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "EDEngineer.Datas.entryData.json");
             m_matDatas = JsonConvert.DeserializeObject<MaterialDatas[]>(_json);
-            SteamVR_NexHUD.Log(">>{0} materials loaded", m_matDatas.Length);
+            NexHudEngine.Log(">>{0} materials loaded", m_matDatas.Length);
 
             fillAutosearchMaterials();
 
@@ -79,7 +79,7 @@ namespace NexHUD.EDEngineer
 
         private static void fillAutosearchMaterials()
         {
-            SteamVR_NexHUD.Log("Loading search for materials...");
+            NexHudEngine.Log("Loading search for materials...");
             string _path = Environment.CurrentDirectory + "\\Config\\MaterialsSearchs.json";
             string _json = "";
             NxSearchEntry[] _searchs = null;
@@ -92,7 +92,7 @@ namespace NexHUD.EDEngineer
                 }
                 catch (Exception ex)
                 {
-                    SteamVR_NexHUD.Log(ex.Message);
+                    NexHudEngine.Log(ex.Message);
                 }
             }
 
@@ -242,7 +242,7 @@ namespace NexHUD.EDEngineer
 
             int searchFoundAndCreated = m_matDatas.Where(x => x.nxSearch != null).Count();
 
-            SteamVR_NexHUD.Log("{0}/{1} materials with available searchs", searchFoundAndCreated, m_matDatas.Length);
+            NexHudEngine.Log("{0}/{1} materials with available searchs", searchFoundAndCreated, m_matDatas.Length);
         }
 
         public static int getCmdrMaterials(string name)

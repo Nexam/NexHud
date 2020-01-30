@@ -17,11 +17,11 @@ namespace NexHUD.UI
         public const int Width = 1024, Height = 630;
         public const float OverlayWidth = 2f;
 
-        private NexHUDOverlay m_frame;
+        private NexHudOverlay m_frame;
 
         private MenuState m_state = MenuState.Initialize;
 
-        public NexHUDOverlay frame { get { return m_frame; } }
+        public NexHudOverlay frame { get { return m_frame; } }
         //Top Infos panel
         public UiMainTopInfos m_uiTopInfos;
         //Player infos & main menu
@@ -37,7 +37,7 @@ namespace NexHUD.UI
             initMainFrame();
             initContent();
 
-            SteamVR_NexHUD.PostUpdateCallback += SteamVR_NexHUD_PostUpdateCallback;
+            NexHudEngine.PostUpdateCallback += SteamVR_NexHUD_PostUpdateCallback;
 
             changeState(MenuState.Main);
 
@@ -46,7 +46,7 @@ namespace NexHUD.UI
         }
         private void initMainFrame()
         {
-            m_frame = new NexHUDOverlay(Width, Height, "NxMenu", "NexHUD Menu");
+            m_frame = new NexHudOverlay(Width, Height, "NxMenu", "NexHUD Menu");
             m_frame.InGameOverlay.SetAttachment(AttachmentType.Absolute, new Vector3(0, 0, -3), new Vector3(0, 0, 0));
             m_frame.InGameOverlay.Alpha = 1f;
             m_frame.InGameOverlay.Width = OverlayWidth;
@@ -110,14 +110,14 @@ namespace NexHUD.UI
 
             if (Shortcuts.holdMode)
             {
-                if (SteamVR_NexHUD.isShortcutIsHold(Shortcuts.get(ShortcutId.menu)))
+                if (NexHudEngine.isShortcutIsHold(Shortcuts.get(ShortcutId.menu)))
                 {
                     if (!m_frame.RenderInGameOverlay)
                     {
                         m_frame.RenderInGameOverlay = true;
                     }
 
-                    if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
+                    if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
                     {
                         if (m_state != MenuState.Main && m_state != MenuState.Improve)
                             changeState(MenuState.Main);
@@ -134,7 +134,7 @@ namespace NexHUD.UI
             }
             else
             {
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.menu)))
+                if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.menu)))
                 {
                     if (m_frame.RenderInGameOverlay)
                     {
@@ -159,15 +159,15 @@ namespace NexHUD.UI
                 //MAIN MENU NAVIGATION
                 if (m_uiMainMenu.isVisible)
                 {
-                    if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.right)))
+                    if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right)))
                     {
                         m_uiMainMenu.selectNext();
                     }
-                    else if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.left)))
+                    else if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left)))
                     {
                         m_uiMainMenu.selectPrev();
                     }
-                    else if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
+                    else if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
                     {
                         if (m_uiMainMenu.isSelectedMenuActive())
                         {

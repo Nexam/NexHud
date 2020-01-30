@@ -55,11 +55,11 @@ namespace NexHUD.UI
                 return;
             }
 
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.right)) && m_CursorCoords.X < m_CursorMaxX)
+            if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right)) && m_CursorCoords.X < m_CursorMaxX)
                 m_CursorCoords.X++;
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.left)) && m_CursorCoords.X > 0)
+            if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left)) && m_CursorCoords.X > 0)
                 m_CursorCoords.X--;
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.down)))
+            if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.down)))
             {
                 if (m_CursorCoords.Y < m_CursorMaxY[m_CursorCoords.X])
                     m_CursorCoords.Y++;
@@ -69,7 +69,7 @@ namespace NexHUD.UI
                     m_CursorCoords.Y = 0;
                 }
             }
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up)))
+            if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up)))
             {
                 if (m_CursorCoords.Y > (m_CursorCoords.X == 0 ? 1 : 0))
                     m_CursorCoords.Y--;
@@ -87,7 +87,7 @@ namespace NexHUD.UI
                 _selected = m_Buttons.Where(x => x.Coords == m_CursorCoords).FirstOrDefault();
                 if (_selected != null && !_selected.isSelectable)
                 {
-                    if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up)))
+                    if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up)))
                         m_CursorCoords.Y--;
                     else
                         m_CursorCoords.Y++;
@@ -107,7 +107,7 @@ namespace NexHUD.UI
             foreach (NxButton b in m_Buttons)
                 b.Selected = b == _selected;
 
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select)) && _selected != null)
+            if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select)) && _selected != null)
             {
                 if (_selected.Obj is string)
                     m_TypeSelected = (string)_selected.Obj;

@@ -14,7 +14,7 @@ namespace NexHUD
     {
         public const string version = "0.0.1";
 
-        private static NexHUDOverlay m_vrConsoleOverlay;
+        private static NexHudOverlay m_vrConsoleOverlay;
         private static NxTextbox m_vrConsoleTb;
         private static EliteDangerousAPI m_eliteApi;
         public static EliteDangerousAPI eliteApi { get { return m_eliteApi; } }
@@ -32,7 +32,7 @@ namespace NexHUD
 
             new NxMenu();
 
-            SteamVR_NexHUD.RunOverlays(); // Runs update/draw calls for all active overlays. And yes, it's blocking.
+            NexHudEngine.RunOverlays(); // Runs update/draw calls for all active overlays. And yes, it's blocking.
         }
         private static void performTests()
         {
@@ -59,7 +59,7 @@ namespace NexHUD
         private static void initLogs()
         {
             //Core Log event
-            SteamVR_NexHUD.LogEvent += SteamVR_NexHUD_Log;
+            NexHudEngine.LogEvent += SteamVR_NexHUD_Log;
             //Create the vrConsole to register whatever happen before VR is initialized
             m_vrConsoleTb = new NxTextbox(0, 0, 700, 500, "", EDColors.ORANGE, 24);
             m_vrConsoleTb.reverseDrawing = true;
@@ -67,16 +67,16 @@ namespace NexHUD
         }
         private static void initVR()
         {
-            SteamVR_NexHUD.Log("VR Initilization...");
-            SteamVR_NexHUD.Init();
-            SteamVR_NexHUD.FPS = 30;
+            NexHudEngine.Log("VR Initilization...");
+            NexHudEngine.Init();
+            NexHudEngine.FPS = 30;
         }
 
         private static void initVRConsole()
         {
 
 
-            m_vrConsoleOverlay = new NexHUDOverlay(m_vrConsoleTb.width, m_vrConsoleTb.height, "Debug Console", "NexHUD Debug Console");
+            m_vrConsoleOverlay = new NexHudOverlay(m_vrConsoleTb.width, m_vrConsoleTb.height, "Debug Console", "NexHUD Debug Console");
             m_vrConsoleOverlay.InGameOverlay.SetAttachment(AttachmentType.Absolute, new Vector3(-1.1f, -1.1f, -.3f), new Vector3(45, -90, 0));// new Vector3(-5.5f,3f, -3.8f), new Vector3(-35, -85, 0));
             m_vrConsoleOverlay.InGameOverlay.Alpha = 1f;
             m_vrConsoleOverlay.InGameOverlay.Width = .9f;
@@ -88,17 +88,17 @@ namespace NexHUD
 
         private static void initElite()
         {
-            SteamVR_NexHUD.Log("Elite API Initilization...");
+            NexHudEngine.Log("Elite API Initilization...");
             m_eliteApi = new EliteDangerousAPI();
             m_eliteApi.Logger.AddHandler(new ConsoleHandler());
             m_eliteApi.Start(false);
 
             m_eliteApi.Events.AllEvent += Events_AllEvent;
-            SteamVR_NexHUD.Log("Welcome CMDR " + m_eliteApi.Commander.Commander);
-            SteamVR_NexHUD.Log("Current Star system: " + m_eliteApi.Location.StarSystem);
-            SteamVR_NexHUD.Log("Current Station: " + m_eliteApi.Location.Station);
-            SteamVR_NexHUD.Log("Current Body: " + m_eliteApi.Location.Body);
-            SteamVR_NexHUD.Log("Current Body type: " + m_eliteApi.Location.BodyType);
+            NexHudEngine.Log("Welcome CMDR " + m_eliteApi.Commander.Commander);
+            NexHudEngine.Log("Current Star system: " + m_eliteApi.Location.StarSystem);
+            NexHudEngine.Log("Current Station: " + m_eliteApi.Location.Station);
+            NexHudEngine.Log("Current Body: " + m_eliteApi.Location.Body);
+            NexHudEngine.Log("Current Body type: " + m_eliteApi.Location.BodyType);
 
         }
 
@@ -116,7 +116,7 @@ namespace NexHUD
                 }
                 catch (Exception ex)
                 {
-                    SteamVR_NexHUD.Log("ERROR Events_AllEvent: " + ex.Message.ToString());
+                    NexHudEngine.Log("ERROR Events_AllEvent: " + ex.Message.ToString());
                 }
             }
         }

@@ -10,7 +10,7 @@ using Valve.VR;
 
 namespace NexHUDCore
 {
-    public class SteamVR_NexHUD
+    public class NexHudEngine
     {
         public static float deltaTime;
         static CVRSystem _system;
@@ -37,11 +37,10 @@ namespace NexHUDCore
         public static bool PrefixOverlayType = true;
         internal const string DefaultFragmentShaderPath = "Resources.fragShader.frag";
 
-        public static NexHUDOverlay ActiveKeyboardOverlay = null;
-
+       
         public static bool Initialised { get { return _initialised; } }
 
-        public static List<NexHUDOverlay> Overlays;
+        public static List<NexHudOverlay> Overlays;
 
         public static void Stop()
         {
@@ -78,7 +77,7 @@ namespace NexHUDCore
 
         public static void Init()
         {
-            Overlays = new List<NexHUDOverlay>();
+            Overlays = new List<NexHudOverlay>();
 
             bool tryAgain = true;
 
@@ -109,9 +108,10 @@ namespace NexHUDCore
 
 
             gw = new GameWindow();
+            //gw.WindowInfo.Handle; IntPtr
             GL.Enable(EnableCap.Texture2D);
 
-            SteamVR_NexHUD.Log("NexHUDCore Initialised");
+            NexHudEngine.Log("NexHUDCore Initialised");
 
             _initialised = true;
 
@@ -152,7 +152,7 @@ namespace NexHUDCore
             _compositor.GetLastPoses(_poses, _gamePoses);
         }
 
-        private static NexHUDOverlay _introOverlay;
+        private static NexHudOverlay _introOverlay;
 
         private static float _introWidth = 1;
         private static float _introDelay = -1;
@@ -166,7 +166,7 @@ namespace NexHUDCore
         private static void createIntroOverlay()
         {
             int size = 512;
-            _introOverlay = new NexHUDOverlay(size, size, "introOverlay", "NxHUD VR");
+            _introOverlay = new NexHudOverlay(size, size, "introOverlay", "NxHUD VR");
 
             _introOverlay.InGameOverlay.SetAttachment(AttachmentType.Absolute, new Vector3(0.0f, .2f, -1.1f), new Vector3(0.0f, 0.0f, 0));
             _introOverlay.InGameOverlay.Alpha = 0f;
@@ -243,7 +243,7 @@ namespace NexHUDCore
                 {
 
                     PreUpdateCallback?.Invoke(null, null);
-                    foreach (NexHUDOverlay overlay in Overlays)
+                    foreach (NexHudOverlay overlay in Overlays)
                     {
                         overlay.Update();
                     }
@@ -252,7 +252,7 @@ namespace NexHUDCore
                     PostUpdateCallback?.Invoke(null, null);
 
                     PreDrawCallback?.Invoke(null, null);
-                    foreach (NexHUDOverlay overlay in Overlays)
+                    foreach (NexHudOverlay overlay in Overlays)
                     {
                         overlay.Draw();
                     }

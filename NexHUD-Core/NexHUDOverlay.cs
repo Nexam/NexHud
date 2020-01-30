@@ -7,11 +7,11 @@ using Valve.VR;
 
 namespace NexHUDCore
 {
-    public class NexHUDOverlay
+    public class NexHudOverlay
     {
         public const int SCROLL_AMOUNT_PER_SWIPE = 1500;
 
-        Overlay _inGameOverlay;
+        OpenVrOverlay _inGameOverlay;
         Texture_t _textureData;
         string _cachePath;
         double _zoomLevel;
@@ -52,7 +52,7 @@ namespace NexHUDCore
         string _overlayName;
 
 
-        public Overlay InGameOverlay
+        public OpenVrOverlay InGameOverlay
         {
             get { return _inGameOverlay; }
         }
@@ -102,10 +102,10 @@ namespace NexHUDCore
         public double ZoomLevel { get { return _zoomLevel; } set { _zoomLevel = value; } }
 
 
-        public NexHUDOverlay(int windowWidth, int windowHeight, string overlayKey, string overlayName)
+        public NexHudOverlay(int windowWidth, int windowHeight, string overlayKey, string overlayName)
         {
-            if (!SteamVR_NexHUD.Initialised)
-                SteamVR_NexHUD.Init();
+            if (!NexHudEngine.Initialised)
+                NexHudEngine.Init();
 
 
             _windowWidth = windowWidth;
@@ -121,7 +121,7 @@ namespace NexHUDCore
             CreateInGameOverlay();
 
 
-            SteamVR_NexHUD.Overlays.Add(this);
+            NexHudEngine.Overlays.Add(this);
 
             SetupTextures();
         }
@@ -135,7 +135,7 @@ namespace NexHUDCore
 
         public void CreateInGameOverlay(bool forcePrefix = false)
         {
-            _inGameOverlay = new Overlay((SteamVR_NexHUD.PrefixOverlayType || forcePrefix ? "ingame." : "") + _overlayKey, _overlayName, 2.0f, true);
+            _inGameOverlay = new OpenVrOverlay((NexHudEngine.PrefixOverlayType || forcePrefix ? "ingame." : "") + _overlayKey, _overlayName, 2.0f, true);
             _inGameOverlay.SetTextureSize(_windowWidth, _windowHeight);
             _inGameOverlay.Show();
         }
@@ -145,7 +145,7 @@ namespace NexHUDCore
             if (_inGameOverlay != null)
                 DestroyInGameOverlay();
 
-            SteamVR_NexHUD.Overlays.Remove(this);
+            NexHudEngine.Overlays.Remove(this);
 
         }
 
@@ -190,28 +190,28 @@ namespace NexHUDCore
             //nexam stuff
             CreateDefaultBitmap();
 
-            SteamVR_NexHUD.Log("Setting up texture for " + _overlayKey);
+            NexHudEngine.Log("Setting up texture for " + _overlayKey);
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
-            if (SteamVR_NexHUD.TraceLevel)
-                SteamVR_NexHUD.Log("BindTexture: " + GL.GetError());
+            if (NexHudEngine.TraceLevel)
+                NexHudEngine.Log("BindTexture: " + GL.GetError());
 
             _glInputTextureId = GL.GenTexture();
 
-            if (SteamVR_NexHUD.TraceLevel)
-                SteamVR_NexHUD.Log("GenTexture: " + GL.GetError());
+            if (NexHudEngine.TraceLevel)
+                NexHudEngine.Log("GenTexture: " + GL.GetError());
 
             GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
 
-            if (SteamVR_NexHUD.TraceLevel)
-                SteamVR_NexHUD.Log("TexParameter: " + GL.GetError());
+            if (NexHudEngine.TraceLevel)
+                NexHudEngine.Log("TexParameter: " + GL.GetError());
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
-            if (SteamVR_NexHUD.TraceLevel)
-                SteamVR_NexHUD.Log("TexParameter: " + GL.GetError());
+            if (NexHudEngine.TraceLevel)
+                NexHudEngine.Log("TexParameter: " + GL.GetError());
 
             _textureData = new Texture_t();
             _textureData.eColorSpace = EColorSpace.Linear;
@@ -238,22 +238,22 @@ namespace NexHUDCore
 
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
             {
-                SteamVR_NexHUD.Log("[OPENGL] Failed to setup frame buffer: " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer).ToString());
+                NexHudEngine.Log("[OPENGL] Failed to setup frame buffer: " + GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer).ToString());
             }
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-            if (SteamVR_NexHUD.DefaultFragmentShaderPath != null /*|| FragmentShaderPath != null*/)
+            if (NexHudEngine.DefaultFragmentShaderPath != null /*|| FragmentShaderPath != null*/)
             {
-                SteamVR_NexHUD.Log("[OPENGL] Using Fragment Shader : " + SteamVR_NexHUD.DefaultFragmentShaderPath);
+                NexHudEngine.Log("[OPENGL] Using Fragment Shader : " + NexHudEngine.DefaultFragmentShaderPath);
 
                 // string path = FragmentShaderPath != null ? FragmentShaderPath : SteamVR_NexHUD.DefaultFragmentShaderPath;
                 // CompileShader(path);
-                CompileShader(SteamVR_NexHUD.DefaultFragmentShaderPath);
+                CompileShader(NexHudEngine.DefaultFragmentShaderPath);
             }
 
 
-            SteamVR_NexHUD.Log("Texture Setup complete for " + _overlayKey);
+            NexHudEngine.Log("Texture Setup complete for " + _overlayKey);
         }
 
         void CompileShader(string path)
@@ -262,7 +262,7 @@ namespace NexHUDCore
 
             if (_fragShader == null || _fragShader == string.Empty)
             {
-                SteamVR_NexHUD.Log("[OPENGL] No Shader Found at " + path);
+                NexHudEngine.Log("[OPENGL] No Shader Found at " + path);
                 return;
             }
 
@@ -274,7 +274,7 @@ namespace NexHUDCore
             GL.AttachShader(_glFragmentShaderProgramId, fragShaderId);
             GL.LinkProgram(_glFragmentShaderProgramId);
 
-            SteamVR_NexHUD.Log("[OPENGL] Shader Result: " + GL.GetProgramInfoLog(_glFragmentShaderProgramId));
+            NexHudEngine.Log("[OPENGL] Shader Result: " + GL.GetProgramInfoLog(_glFragmentShaderProgramId));
 
             GL.DetachShader(_glFragmentShaderProgramId, fragShaderId);
             GL.DeleteShader(fragShaderId);
@@ -309,9 +309,9 @@ namespace NexHUDCore
             if (m_BMPGradient != null && GradientIntro && ((m_GradientValue < 1 && !m_HideRequest) || (m_GradientValue > 0 && m_HideRequest)))
             {
                 if (!m_HideRequest)
-                    m_GradientValue += SteamVR_NexHUD.deltaTime * 2f;
+                    m_GradientValue += NexHudEngine.deltaTime * 2f;
                 else
-                    m_GradientValue -= SteamVR_NexHUD.deltaTime * 4f;
+                    m_GradientValue -= NexHudEngine.deltaTime * 4f;
 
                 if (m_GradientValue <= 0 && m_HideRequest)
                 {
@@ -347,38 +347,6 @@ namespace NexHUDCore
 
                 }
             }
-            /* if (GradientIntro && m_GradientValue < 10)
-             {
-                 Stopwatch _watch = new Stopwatch();
-                 _watch.Start();
-                 Bitmap _alpha = new Bitmap(m_BMPGradient, new Size(_bitmap.Width, _bitmap.Height));
-                 float _alphaValue = 0;
-                 Color _color;
-                 for (int x = 0; x < _bitmap.Width; x++)
-                 {
-                     for (int y = 0; y < _bitmap.Height; y++)
-                     {
-                         _color = _bitmap.GetPixel(x, y);
-                         _alphaValue = ((float)_alpha.GetPixel(x, y).R)/255f;
-                         if (_alphaValue >= (1 - (m_GradientValue * .1f)))
-                             _alphaValue = 1;
-                         else
-                             _alphaValue = 0;
-                         _alphaValue = _color.A * _alphaValue;
-                         if (_alphaValue < 0)
-                             _alphaValue = 0;
-                         if (_alphaValue > 255)
-                             _alphaValue = 255;
-
-                        // _color = Color.FromArgb((int)_alphaValue, _color);
-                       //  _bitmap.SetPixel(x, y, _color);
-                     }
-                 }
-                 m_GradientValue += SteamVR_NexHUD.deltaTime;
-                 _watch.Stop();
-                 Console.WriteLine(this._overlayName + " Gradient intro operation. m_GradientValue=" + m_GradientValue + "  || Time operation: " + _watch.ElapsedMilliseconds + "ms");
-             }
-             */
 
             BitmapData bmpData = _bitmap.LockBits(
                 new Rectangle(0, 0, _bitmap.Width, _bitmap.Height),

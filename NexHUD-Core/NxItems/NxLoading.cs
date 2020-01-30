@@ -57,15 +57,15 @@ namespace NexHUDCore.NxItems
 
         public override void Update()
         {
-            _elapsed += SteamVR_NexHUD.deltaTime * speed;
+            _elapsed += NexHudEngine.deltaTime * speed;
 
             if (_elapsed > 3.14f)
                 _elapsed = -3.14f;
 
             if (incFreq)
-                freq += SteamVR_NexHUD.deltaTime * freqSpeed;
+                freq += NexHudEngine.deltaTime * freqSpeed;
             else
-                freq -= SteamVR_NexHUD.deltaTime * freqSpeed;
+                freq -= NexHudEngine.deltaTime * freqSpeed;
 
             if (freq < minFreq)
                 incFreq = true;

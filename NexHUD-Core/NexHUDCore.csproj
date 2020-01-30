@@ -197,12 +197,12 @@
     <Compile Include="NxItems\NxSimpleText.cs" />
     <Compile Include="NxItems\NxTextbox.cs" />
     <Compile Include="OpenVR\openvr_api.cs" />
-    <Compile Include="Overlay.cs" />
+    <Compile Include="OpenVrOverlay.cs" />
     <Compile Include="ResHelper.cs" />
     <Compile Include="ShortcutEntry.cs" />
-    <Compile Include="SteamVR_NexHUD.cs" />
+    <Compile Include="NexHudEngine.cs" />
     <Compile Include="TransformUtils.cs" />
-    <Compile Include="NexHUDOverlay.cs" />
+    <Compile Include="NexHudOverlay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

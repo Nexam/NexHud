@@ -90,7 +90,7 @@ namespace NexHUD.Elite
             m_lastSearchId++;
             m_lastUSRs.Add(m_lastSearchId, new UserSearchResult(_search, m_lastSearchId));
 
-            SteamVR_NexHUD.Log("New search for {0} id {1}", _search.searchType, m_lastSearchId);
+            NexHudEngine.Log("New search for {0} id {1}", _search.searchType, m_lastSearchId);
             m_lastSearchThread = new Thread(() => _startResearch(m_lastSearchId));
             m_lastSearchThread.Start();
 
@@ -145,7 +145,7 @@ namespace NexHUD.Elite
                             {
                                 EDSystem _system = new EDSystem();
                                 _system.updateEDSM(_edsmDatas);
-                                SteamVR_NexHUD.Log("(EDSM) Found system: " + _system.name);
+                                NexHudEngine.Log("(EDSM) Found system: " + _system.name);
                                 m_lastUSRs[_id].addSystem(_system);
                                 if (i < _namesNotes.Length)
                                     _system.Notes = _namesNotes[i];
@@ -220,7 +220,7 @@ namespace NexHUD.Elite
                                 }
                                 if (!m_systems[_sys].receivedEdsmInfos)
                                 {
-                                    SteamVR_NexHUD.Log("//WARNING// system {0} has not received informations datas. Retrieving...", _sys);
+                                    NexHudEngine.Log("//WARNING// system {0} has not received informations datas. Retrieving...", _sys);
                                     m_systems[_sys].updateEDSM(ExternalDBConnection.EDSMSystem(new ExternalDBConnection.EDSMSystemParameters() { name = _sys, showInformation = true }));
                                     m_systems[_sys].calculDistanceFromCurrent();
                                 }
@@ -257,7 +257,7 @@ namespace NexHUD.Elite
 
 
 
-                            SteamVR_NexHUD.Log("+ Search total result: {0} . Pass {1}", _ordered.Count(), _pass);
+                            NexHudEngine.Log("+ Search total result: {0} . Pass {1}", _ordered.Count(), _pass);
                             m_lastUSRs[_id].ResearchTime = _watch.ElapsedMilliseconds;
                             foreach (EDSystem x in _ordered)
                             {
@@ -355,19 +355,19 @@ namespace NexHUD.Elite
                 if (ex.InnerException is ThreadAbortException)
                 {
                     m_lastUSRs[_id].Error = UserSearchResult.UserSearchError.Aborted;
-                    SteamVR_NexHUD.Log("Aborting last search thread {0}. Last Id {1}", Thread.CurrentThread.Name, _id);
+                    NexHudEngine.Log("Aborting last search thread {0}. Last Id {1}", Thread.CurrentThread.Name, _id);
                 }
                 else
                 {
                     m_lastUSRs[_id].Error = UserSearchResult.UserSearchError.UnknowError;
-                    SteamVR_NexHUD.Log("ERROR: Search {0} reported an error: {1}", _id, ex.Message);
+                    NexHudEngine.Log("ERROR: Search {0} reported an error: {1}", _id, ex.Message);
                 }
 
             }
             finally
             {
                 _watch.Stop();
-                SteamVR_NexHUD.Log("Search was done in {0}ms. Error:{1} Added:{2} Updated:{3}", _watch.ElapsedMilliseconds, m_lastUSRs[_id].Error, _statAddedSystem, _statUpdatedSystem);
+                NexHudEngine.Log("Search was done in {0}ms. Error:{1} Added:{2} Updated:{3}", _watch.ElapsedMilliseconds, m_lastUSRs[_id].Error, _statAddedSystem, _statUpdatedSystem);
                 m_lastUSRs[_id].isDone = true;
                 m_lastUSRs[_id].ResearchTime = _watch.ElapsedMilliseconds;
             }
@@ -419,14 +419,14 @@ namespace NexHUD.Elite
                 return;
             Stopwatch _watch = new Stopwatch();
             _watch.Start();
-            SteamVR_NexHUD.Log(">> Retrieving current system {0} from EDSM", _systemName);
+            NexHudEngine.Log(">> Retrieving current system {0} from EDSM", _systemName);
             m_systems[_systemName].updateEDSM(ExternalDBConnection.EDSMSystemFullInfos(_systemName));
-            SteamVR_NexHUD.Log(">> Retrieving value for system {0} from EDSM", _systemName);
+            NexHudEngine.Log(">> Retrieving value for system {0} from EDSM", _systemName);
             m_systems[_systemName].updateEDSM(ExternalDBConnection.EDSMSystemValue(_systemName));
-            SteamVR_NexHUD.Log(">> Retrieving current system {0} from EDDB", _systemName);
+            NexHudEngine.Log(">> Retrieving current system {0} from EDDB", _systemName);
             m_systems[_systemName].updateEDDB(ExternalDBConnection.EDDBSystemComplementaryInfos(_systemName));
             _watch.Stop();
-            SteamVR_NexHUD.Log("--->> Update current system {0} took {1}ms", _systemName, _watch.ElapsedMilliseconds);
+            NexHudEngine.Log("--->> Update current system {0} took {1}ms", _systemName, _watch.ElapsedMilliseconds);
         }
     }
 }

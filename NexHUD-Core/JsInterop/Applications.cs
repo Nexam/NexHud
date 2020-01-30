@@ -41,7 +41,7 @@ namespace NexHUDCore.JsInterop
 
 #if DEBUG
                 if (err != EVRApplicationError.None)
-                    SteamVR_NexHUD.Log("EVRApplicationError on " + AppKey + " property " + prop.ToString() + ": " + err.ToString());
+                    NexHudEngine.Log("EVRApplicationError on " + AppKey + " property " + prop.ToString() + ": " + err.ToString());
 #endif
 
                 //NexHUDCore.Log(propertyBuffer.ToString());

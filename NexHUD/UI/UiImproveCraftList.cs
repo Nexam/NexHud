@@ -33,7 +33,7 @@ namespace NexHUD.UI
                 return;
             }
 
-            if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
+            if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
                 m_uiImprove.changeState(UiImprove.UiImproveState.Blueprints);
         }
     }

@@ -60,7 +60,7 @@ namespace NexHUD
             }
             catch (Exception ex)
             {
-                SteamVR_NexHUD.Log(ex.Message);
+                NexHudEngine.Log(ex.Message);
                 _alive = false;
             }
 
@@ -189,8 +189,8 @@ namespace NexHUD
             }
             catch (Exception ex)
             {
-                SteamVR_NexHUD.Log(ex.Message);
-                SteamVR_NexHUD.Log(json);
+                NexHudEngine.Log(ex.Message);
+                NexHudEngine.Log(json);
             }
 
             return null;
@@ -205,7 +205,7 @@ namespace NexHUD
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas>(_json); }
             catch (Exception ex)
             {
-                SteamVR_NexHUD.Log(ex.Message);
+                NexHudEngine.Log(ex.Message);
             }
             return null;
         }
@@ -222,7 +222,7 @@ namespace NexHUD
             string _json = requestGETFromURL(url_EDSMSystems, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas[]>(_json); }
-            catch (Exception ex) { SteamVR_NexHUD.Log(ex.Message); }
+            catch (Exception ex) { NexHudEngine.Log(ex.Message); }
             return null;
         }
         public static EDSMSystemDatas[] EDSMSystemsInSphereRadius(string _originSystem, int _minRadius, int _radius, bool _showInformation = true)
@@ -234,7 +234,7 @@ namespace NexHUD
             string _json = requestGETFromURL(url_SystemsInSphere, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas[]>(_json); }
-            catch (Exception ex) { SteamVR_NexHUD.Log(ex.Message); }
+            catch (Exception ex) { NexHudEngine.Log(ex.Message); }
             return null;
         }
 
@@ -272,7 +272,7 @@ namespace NexHUD
             string _json = requestGETFromURL(url_EDSMSystem, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas>(_json); }
-            catch (Exception ex) { SteamVR_NexHUD.Log(ex.Message); }
+            catch (Exception ex) { NexHudEngine.Log(ex.Message); }
             return null;
         }
 
@@ -286,7 +286,7 @@ namespace NexHUD
             string _json = requestGETFromURL(url_EDSMSystemValue, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas>(_json); }
-            catch (Exception ex) { SteamVR_NexHUD.Log("ERROR. System name={0}. message:{1}", _systemName, ex.Message); }
+            catch (Exception ex) { NexHudEngine.Log("ERROR. System name={0}. message:{1}", _systemName, ex.Message); }
             return null;
         }
 
@@ -297,7 +297,7 @@ namespace NexHUD
         /// <returns></returns>
         public static EDDBSystemDatas EDDBSystemComplementaryInfos(string _systemName)
         {
-            SteamVR_NexHUD.Log("Search complementary information EDDB for System: " + _systemName);
+            NexHudEngine.Log("Search complementary information EDDB for System: " + _systemName);
 
             string _json = requestGETFromURL(url_EDDBSystems, string.Format("name={0}", _systemName));
 
@@ -311,7 +311,7 @@ namespace NexHUD
             }
             catch (Exception ex)
             {
-                SteamVR_NexHUD.Log(ex.Message);
+                NexHudEngine.Log(ex.Message);
             }
             return null;
         }
@@ -338,7 +338,7 @@ namespace NexHUD
             }
             catch (Exception ex)
             {
-                SteamVR_NexHUD.Log(ex.Message);
+                NexHudEngine.Log(ex.Message);
             }
             return "Error in requestPOSTFromURL";
         }
@@ -364,7 +364,7 @@ namespace NexHUD
             }
             catch (Exception ex)
             {
-                SteamVR_NexHUD.Log(ex.Message);
+                NexHudEngine.Log(ex.Message);
             }
             return _json;
         }

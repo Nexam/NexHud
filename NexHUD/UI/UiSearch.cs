@@ -338,9 +338,9 @@ namespace NexHUD.UI
         public override void Update()
         {
             base.Update();
-            _updateMessageResearchDelay += SteamVR_NexHUD.deltaTime;
+            _updateMessageResearchDelay += NexHudEngine.deltaTime;
             if (m_messageLifeTime < 10)
-                m_messageLifeTime += SteamVR_NexHUD.deltaTime;
+                m_messageLifeTime += NexHudEngine.deltaTime;
             if (isVisible)
             {
                 //Message display
@@ -359,13 +359,13 @@ namespace NexHUD.UI
                     m_firstUpdateSkipped = true;
                     return;
                 }
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.right)) && m_CursorX < m_CursorMaxX)
+                if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right)) && m_CursorX < m_CursorMaxX)
                     m_CursorX++;
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.left)) && m_CursorX > 0)
+                if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left)) && m_CursorX > 0)
                     m_CursorX--;
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.down)) && m_CursorY < m_CursorMaxY)
+                if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.down)) && m_CursorY < m_CursorMaxY)
                     m_CursorY++;
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.up)) && m_CursorY > 0)
+                if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up)) && m_CursorY > 0)
                     m_CursorY--;
 
                 int _buttonSelectedId = m_CursorX + (m_CursorY * m_buttonPerRow);
@@ -467,7 +467,7 @@ namespace NexHUD.UI
                     m_CursorMaxY = m_buttonRow - 1;
 
 
-                if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
+                if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
                 {
                     if (_searchSelected != null)
                     {

@@ -78,8 +78,8 @@ namespace NexHUD
                 }
                 catch (Exception ex)
                 {
-                    SteamVR_NexHUD.Log("ERROR while reading Shortcuts.json");
-                    SteamVR_NexHUD.Log(ex.Message);
+                    NexHudEngine.Log("ERROR while reading Shortcuts.json");
+                    NexHudEngine.Log(ex.Message);
                     Console.WriteLine("Type any key to exist...");
                     Console.ReadKey();
                     return false;
@@ -87,7 +87,7 @@ namespace NexHUD
             }
             else
             {
-                SteamVR_NexHUD.Log("ERROR: {0} is missing !", _path);
+                NexHudEngine.Log("ERROR: {0} is missing !", _path);
                 Console.WriteLine("Type any key to exist...");
                 Console.ReadKey();
                 return false;

@@ -8,7 +8,7 @@ namespace NexHUDCore.NxItems
     public class NxOverlay : NxItem
     {
         private bool m_drawDefaultBackground;
-        private NexHUDOverlay m_parent;
+        private NexHudOverlay m_parent;
 
         private List<NxItem> m_nxItems = new List<NxItem>();
 
@@ -19,7 +19,7 @@ namespace NexHUDCore.NxItems
 
         public bool LogRenderTime = true;
 
-        public NxOverlay(NexHUDOverlay _parent, bool _drawDefaultBackground = true)
+        public NxOverlay(NexHudOverlay _parent, bool _drawDefaultBackground = true)
         {
             m_parent = _parent;
             m_drawDefaultBackground = _drawDefaultBackground;
@@ -59,7 +59,7 @@ namespace NexHUDCore.NxItems
             _watch.Stop();
 
             if (LogRenderTime && _watch.ElapsedMilliseconds > 100)
-                SteamVR_NexHUD.Log("NxOverlay " + m_parent.InGameOverlay.Name + " rendered in " + _watch.ElapsedMilliseconds + "ms");
+                NexHudEngine.Log("NxOverlay " + m_parent.InGameOverlay.Name + " rendered in " + _watch.ElapsedMilliseconds + "ms");
         }
 
         public override void Update()
