@@ -41,23 +41,9 @@ namespace NexHUD
         public static bool loadShortcuts()
         {
             string _path = Environment.CurrentDirectory + "\\Config\\Shortcuts.json";
-
-            //write keys & modifiers
-            /*
-            StreamWriter writer = File.CreateText("\\Config\\keys.txt");
-            writer.WriteLine("===== KEY LIST =====");
-            string[] _keynames = Enum.GetNames(typeof(Key));
-            foreach (string k in _keynames)
-                writer.WriteLine(k + ",");
-
-            writer.WriteLine("");
-            writer.WriteLine("===== MODIFIERS LIST =====");
-            string[] _modifiersNames = Enum.GetNames(typeof(KeyModifiers));
-            foreach (string m in _modifiersNames)
-                writer.WriteLine(m + ",");
-            writer.Close();
-            writer.Dispose();
-            */
+            if( NexHudEngine.engineMode == NexHudEngineMode.WindowDebug )
+                _path = Environment.CurrentDirectory + "\\Config\\Shortcuts-debug.json";
+           
 
             if (File.Exists(_path))
             {

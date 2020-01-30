@@ -318,7 +318,7 @@ namespace NexHUDCore
             EVROverlayError ovrErr = EVROverlayError.None;
 
             if (NexHudEngine.OverlayManager == null)
-                NexHudEngine.Init();
+                throw new Exception("NexHud Engine is not started");
 
             if (_ingame)
             {

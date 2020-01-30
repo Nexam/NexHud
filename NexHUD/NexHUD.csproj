@@ -199,6 +199,9 @@
     <Content Include="manifest.vrmanifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Config\Shortcuts-debug.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Config\Shortcuts-Save.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -240,7 +243,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
+      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

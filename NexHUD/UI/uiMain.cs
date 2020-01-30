@@ -42,15 +42,14 @@ namespace NexHUD.UI
             changeState(MenuState.Main);
 
 
-            frame.InGameOverlay.Hide();
+            frame.renderVrOverlay = false;
         }
         private void initMainFrame()
         {
             m_frame = new NexHudOverlay(Width, Height, "NxMenu", "NexHUD Menu");
-            m_frame.InGameOverlay.SetAttachment(AttachmentType.Absolute, new Vector3(0, 0, -3), new Vector3(0, 0, 0));
-            m_frame.InGameOverlay.Alpha = 1f;
-            m_frame.InGameOverlay.Width = OverlayWidth;
-            m_frame.UpdateEveryFrame = true;
+            m_frame.setVRPosition(new Vector3(0, 0, -3), new Vector3(0, 0, 0));
+            m_frame.Alpha = 1f;
+            m_frame.setVRWidth(OverlayWidth);
             m_frame.NxOverlay.dirtyCheckFreq = TimeSpan.FromSeconds(0.1);
         }
 
@@ -112,9 +111,9 @@ namespace NexHUD.UI
             {
                 if (NexHudEngine.isShortcutIsHold(Shortcuts.get(ShortcutId.menu)))
                 {
-                    if (!m_frame.RenderInGameOverlay)
+                    if (!m_frame.renderVrOverlay)
                     {
-                        m_frame.RenderInGameOverlay = true;
+                        m_frame.renderVrOverlay = true;
                     }
 
                     if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
@@ -125,9 +124,9 @@ namespace NexHUD.UI
                 }
                 else
                 {
-                    if (m_frame.RenderInGameOverlay)
+                    if (m_frame.renderVrOverlay)
                     {
-                        m_frame.RenderInGameOverlay = false;
+                        m_frame.renderVrOverlay = false;
                     }
                     return;
                 }
@@ -136,7 +135,7 @@ namespace NexHUD.UI
             {
                 if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.menu)))
                 {
-                    if (m_frame.RenderInGameOverlay)
+                    if (m_frame.renderVrOverlay)
                     {
                         if (m_state != MenuState.Main)
                         {
@@ -144,17 +143,17 @@ namespace NexHUD.UI
                                 changeState(MenuState.Main);
                         }
                         else
-                            m_frame.RenderInGameOverlay = false;
+                            m_frame.renderVrOverlay = false;
                     }
                     else
                     {
                         changeState(MenuState.Main);
-                        m_frame.RenderInGameOverlay = true;
+                        m_frame.renderVrOverlay = true;
                     }
                 }
             }
 
-            if (m_frame.RenderInGameOverlay)
+            if (m_frame.renderVrOverlay)
             {
                 //MAIN MENU NAVIGATION
                 if (m_uiMainMenu.isVisible)

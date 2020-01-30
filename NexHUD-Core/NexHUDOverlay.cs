@@ -1,4 +1,5 @@
 ﻿using NexHUDCore.NxItems;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
@@ -9,9 +10,8 @@ namespace NexHUDCore
 {
     public class NexHudOverlay
     {
-        public const int SCROLL_AMOUNT_PER_SWIPE = 1500;
 
-        OpenVrOverlay _inGameOverlay;
+        OpenVrOverlay m_vrOverlay;
         Texture_t _textureData;
         string _cachePath;
         double _zoomLevel;
@@ -19,8 +19,14 @@ namespace NexHUDCore
         int _windowHeight;
         bool _isRendering = false;
         bool _wasVisible = false;
-        bool _renderInGameOverlay = true;
+        bool _renderVrOverlay = true;
         VREvent_t eventData = new VREvent_t();
+
+        private Graphics m_graphics;
+        private NxOverlay m_nxOverlay;
+        public NxOverlay NxOverlay { get { return m_nxOverlay; } }
+        public Graphics NxGraphics { get { return m_graphics; } }
+
 
         public int WindowWidth { get { return _windowWidth; } }
         public int WindowHeight { get { return _windowHeight; } }
@@ -43,7 +49,6 @@ namespace NexHUDCore
         #endregion
 
 
-        public bool UpdateEveryFrame { get; set; }
 
         bool _dirtySize = true;
 
@@ -52,10 +57,10 @@ namespace NexHUDCore
         string _overlayName;
 
 
-        public OpenVrOverlay InGameOverlay
+        /*public OpenVrOverlay vrOverlay
         {
-            get { return _inGameOverlay; }
-        }
+            get { return _vrOverlay; }
+        }*/
 
         public bool IsRendering
         {
@@ -68,34 +73,48 @@ namespace NexHUDCore
         }
 
         private bool m_HideRequest = false;
-        public bool RenderInGameOverlay
+        public bool renderVrOverlay
         {
-            get { return _renderInGameOverlay; }
+            get { return _renderVrOverlay; }
             set
             {
-                _renderInGameOverlay = value;
-                if (InGameOverlay != null)
+                _renderVrOverlay = value;
+                if (m_vrOverlay != null)
                 {
-                    if (_renderInGameOverlay)
+                    if (_renderVrOverlay)
                     {
                         m_HideRequest = false;
-                        if (!InGameOverlay.IsVisible())
+                        if (!m_vrOverlay.IsVisible())
                         {
                             m_GradientValue = 0;
-                            InGameOverlay.Show();
+                            m_vrOverlay.Show();
                         }
-                        //InGameOverlay.Show();
+                        //_vrOverlay.Show();
                     }
                     else
                     {
                         m_HideRequest = true;
-                        //InGameOverlay.Hide();
+                        //_vrOverlay.Hide();
                         //m_GradientValue = 0;
                     }
                 }
             }
         }
-
+        public float Alpha
+        {
+            get
+            {
+                if (m_vrOverlay != null)
+                    return m_vrOverlay.Alpha;
+                else
+                    return 1;
+            }
+            set
+            {
+                if (m_vrOverlay != null)
+                    m_vrOverlay.Alpha = value;
+            }
+        }
         public string CachePath { get { return _cachePath; } set { _cachePath = value; } }
 
 
@@ -105,7 +124,7 @@ namespace NexHUDCore
         public NexHudOverlay(int windowWidth, int windowHeight, string overlayKey, string overlayName)
         {
             if (!NexHudEngine.Initialised)
-                NexHudEngine.Init();
+                throw new Exception("NexHud Engine is not started");
 
 
             _windowWidth = windowWidth;
@@ -117,51 +136,63 @@ namespace NexHUDCore
 
             CheckGradient();
 
-
-            CreateInGameOverlay();
-
-
+            if (NexHudEngine.engineMode == NexHudEngineMode.Vr)
+                createVROverlay();
             NexHudEngine.Overlays.Add(this);
 
-            SetupTextures();
+            setupOpenGl();
         }
 
         private void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
             if (_glFragmentShaderProgramId > 0)
-                GL.DeleteProgram(_glFragmentShaderProgramId);
+            {
+                try
+                {
+                    GL.DeleteProgram(_glFragmentShaderProgramId);
+                }
+                catch(Exception ex)
+                {
+                    NexHudEngine.Log(ex.Message);
+                }
+            }
         }
 
-
-        public void CreateInGameOverlay(bool forcePrefix = false)
+        public void setVRPosition(Vector3 _position, Vector3 _rotation)
         {
-            _inGameOverlay = new OpenVrOverlay((NexHudEngine.PrefixOverlayType || forcePrefix ? "ingame." : "") + _overlayKey, _overlayName, 2.0f, true);
-            _inGameOverlay.SetTextureSize(_windowWidth, _windowHeight);
-            _inGameOverlay.Show();
+            if (m_vrOverlay != null)
+            {
+                m_vrOverlay.SetAttachment(AttachmentType.Absolute, _position, _rotation);
+                m_vrOverlay.Alpha = 1;
+            }
+        }
+        public void setVRWidth(float _witdh)
+        {
+            if (m_vrOverlay != null)
+                m_vrOverlay.Width = _witdh;
+        }
+        private void createVROverlay(bool forcePrefix = false)
+        {
+            m_vrOverlay = new OpenVrOverlay( _overlayKey, _overlayName, 2.0f, true);
+            m_vrOverlay.SetTextureSize(_windowWidth, _windowHeight);
+            m_vrOverlay.Show();
         }
 
         public void Destroy()
         {
-            if (_inGameOverlay != null)
-                DestroyInGameOverlay();
+            if (m_vrOverlay != null)
+                destroyVrOverlay();
 
             NexHudEngine.Overlays.Remove(this);
 
         }
 
-        public void DestroyInGameOverlay()
+        public void destroyVrOverlay()
         {
-            _inGameOverlay.Destroy();
-            _inGameOverlay = null;
+            m_vrOverlay.Destroy();
+            m_vrOverlay = null;
         }
 
-
-        private Graphics m_graphics;
-
-        private NxOverlay m_nxOverlay;
-
-        public NxOverlay NxOverlay { get { return m_nxOverlay; } }
-        public Graphics NxGraphics { get { return m_graphics; } }
 
 
         private void CheckGradient()
@@ -185,7 +216,7 @@ namespace NexHUDCore
 
 
         }
-        protected virtual void SetupTextures()
+        protected virtual void setupOpenGl()
         {
             //nexam stuff
             CreateDefaultBitmap();
@@ -218,7 +249,7 @@ namespace NexHUDCore
             _textureData.eType = ETextureType.OpenGL;
             _textureData.handle = (IntPtr)_glInputTextureId;
 
-
+            
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             _glFrameBufferId = GL.GenFramebuffer();
@@ -284,12 +315,41 @@ namespace NexHUDCore
             GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
         }
 
-
-
-        public virtual void UpdateTexture()
+        private void openGlWindowRender()
         {
-            if (!UpdateEveryFrame /*|| !(GradientIntro && m_GradientValue < 10)*/ )
-                return;
+            if (m_nxOverlay != null)
+            {
+                if (m_nxOverlay.isDirty)
+                {
+                    m_graphics.Clear(Color.Transparent);
+                    m_nxOverlay.Render(m_graphics);
+
+                    GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
+                    BitmapData data = BMPTexture.LockBits(new Rectangle(0, 0, BMPTexture.Width, BMPTexture.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, BMPTexture.Width, BMPTexture.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                    BMPTexture.UnlockBits(data);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+
+                }
+            }
+
+            GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
+
+            GL.Begin(PrimitiveType.Quads);
+            float _scale = 0.9f;
+            GL.TexCoord2(0, 0); GL.Vertex2(-_scale, _scale); //top left
+            GL.TexCoord2(1, 0); GL.Vertex2(_scale, _scale); //top right
+            GL.TexCoord2(1, 1); GL.Vertex2(_scale, -_scale); //bottom right
+            GL.TexCoord2(0, 1); GL.Vertex2(-_scale, -_scale); //bottom left
+            GL.End();
+
+        }
+
+        private void openGlVrRender()
+        {
 
             if (BMPTexture == null)
                 return;
@@ -315,7 +375,8 @@ namespace NexHUDCore
 
                 if (m_GradientValue <= 0 && m_HideRequest)
                 {
-                    InGameOverlay.Hide();
+                    if (m_vrOverlay != null)
+                        m_vrOverlay.Hide();
                     return;
                 }
 
@@ -375,9 +436,13 @@ namespace NexHUDCore
             GL.BlendFunc(BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, _glFrameBufferId);
-            GL.Viewport(0, 0, _bitmap.Width, _bitmap.Height);
-            GL.ClearColor(0, 0, 0, 0);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+
+          
+                GL.Viewport(0, 0, _bitmap.Width, _bitmap.Height);
+                GL.ClearColor(0, 0, 0, 0);
+
+                GL.Clear(ClearBufferMask.ColorBufferBit);
+         
 
             if (_glAlphaMaskTextureId > 0 && _glFragmentShaderProgramId > 0)
             {
@@ -408,6 +473,7 @@ namespace NexHUDCore
 
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
+            
         }
 
 
@@ -425,42 +491,31 @@ namespace NexHUDCore
         bool CanDoUpdates()
         {
             //This prevents Draw() from failing on get of bitmap when attachment is delayed for controllers
-            if (InGameOverlay != null && !InGameOverlay.AttachmentSuccess)
+            if (NexHudEngine.engineMode == NexHudEngineMode.Vr)
+            {
+                if (m_vrOverlay != null && !m_vrOverlay.AttachmentSuccess)
+                    return false;
+
+                if (m_vrOverlay != null && m_vrOverlay.IsVisible())
+                    return true;
+
                 return false;
-
-            if (InGameOverlay != null && InGameOverlay.IsVisible())
+            }
+            else
                 return true;
-
-            return false;
         }
 
 
 
         public virtual void Update()
         {
-
             if (m_nxOverlay != null)
                 m_nxOverlay.Update();
 
             if (!_isRendering)
                 return;
 
-            // Mouse inputs are for dashboards only right now.
-
-            if (InGameOverlay != null)
-            {
-                while (InGameOverlay.PollEvent(ref eventData))
-                {
-                    EVREventType type = (EVREventType)eventData.eventType;
-
-                    // HandleEvent(type, eventData);
-                }
-            }
-
-
             _wasVisible = true;
-
-
         }
 
 
@@ -469,14 +524,16 @@ namespace NexHUDCore
             if (!CanDoUpdates())
                 return;
 
+            if (NexHudEngine.engineMode == NexHudEngineMode.Vr)
+                openGlVrRender();
+            else
+                openGlWindowRender();
 
-            UpdateTexture();
 
-
-            if (InGameOverlay != null && InGameOverlay.IsVisible())
+            if (m_vrOverlay != null && m_vrOverlay.IsVisible())
             {
-                InGameOverlay.SetTexture(ref _textureData);
-                //InGameOverlay.Show();
+                m_vrOverlay.SetTexture(ref _textureData);
+                //m_vrOverlay.Show();
             }
 
 

@@ -1,0 +1,27 @@
+﻿[
+	{
+		id : "right",
+		key : "Right",
+	},
+	{
+		id : "left",
+		key : "Left",
+	},
+	{
+		id : "down",
+		key : "Down",
+	},
+	{
+		id : "up",
+		key : "Up",
+	},
+	{
+		id : "select",
+		key : "Enter",
+	},
+	{
+		id : "menu",
+		menuMode : "press",
+		key : "Escape"
+	},
+]

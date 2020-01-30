@@ -24,15 +24,17 @@ namespace NexHUD
         {
             initLogs();
             //performTests();
-            loadConfigs();
             initElite();
 
-            initVR();
+            initEngine(NexHudEngineMode.WindowDebug);
+
+            loadConfigs();
+
             initVRConsole();
 
             new NxMenu();
 
-            NexHudEngine.RunOverlays(); // Runs update/draw calls for all active overlays. And yes, it's blocking.
+            NexHudEngine.Run(); // Runs update/draw calls for all active overlays. And yes, it's blocking.
         }
         private static void performTests()
         {
@@ -65,10 +67,10 @@ namespace NexHUD
             m_vrConsoleTb.reverseDrawing = true;
             m_vrConsoleTb.reverseLineOrder = true;
         }
-        private static void initVR()
+        private static void initEngine(NexHudEngineMode _mode)
         {
-            NexHudEngine.Log("VR Initilization...");
-            NexHudEngine.Init();
+            NexHudEngine.Log("Engine Initilization...");
+            NexHudEngine.Init(_mode);
             NexHudEngine.FPS = 30;
         }
 
@@ -77,10 +79,9 @@ namespace NexHUD
 
 
             m_vrConsoleOverlay = new NexHudOverlay(m_vrConsoleTb.width, m_vrConsoleTb.height, "Debug Console", "NexHUD Debug Console");
-            m_vrConsoleOverlay.InGameOverlay.SetAttachment(AttachmentType.Absolute, new Vector3(-1.1f, -1.1f, -.3f), new Vector3(45, -90, 0));// new Vector3(-5.5f,3f, -3.8f), new Vector3(-35, -85, 0));
-            m_vrConsoleOverlay.InGameOverlay.Alpha = 1f;
-            m_vrConsoleOverlay.InGameOverlay.Width = .9f;
-            m_vrConsoleOverlay.UpdateEveryFrame = true;
+            m_vrConsoleOverlay.setVRPosition(new Vector3(-1.1f, -1.1f, -.3f), new Vector3(45, -90, 0));
+            //m_vrConsoleOverlay.Alpha = 1f;
+            m_vrConsoleOverlay.setVRWidth(.9f);
             m_vrConsoleOverlay.NxOverlay.dirtyCheckFreq = TimeSpan.FromSeconds(0.1);
             m_vrConsoleOverlay.NxOverlay.LogRenderTime = false;
             m_vrConsoleOverlay.NxOverlay.Add(m_vrConsoleTb);

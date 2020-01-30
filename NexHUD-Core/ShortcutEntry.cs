@@ -23,8 +23,8 @@ namespace NexHUDCore
                     return false;
             }
 
-            OpenTkModifiers = new Key[modifiers.Length];
-            for (int i = 0; i < modifiers.Length; i++)
+            OpenTkModifiers = modifiers != null ? new Key[modifiers.Length] : new Key[0];
+            for (int i = 0; i < OpenTkModifiers.Length; i++)
             {
                 Key _m;
                 if (Enum.TryParse(modifiers[i], true, out _m))

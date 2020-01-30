@@ -183,6 +183,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NexHudEngineMode.cs" />
+    <Compile Include="NxGameWindow.cs" />
     <Compile Include="NxItems\NxGroup.cs" />
     <Compile Include="NxItems\NxImage.cs" />
     <Compile Include="NxItems\NxLoading.cs" />

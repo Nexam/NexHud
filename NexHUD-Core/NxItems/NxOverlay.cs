@@ -59,7 +59,7 @@ namespace NexHUDCore.NxItems
             _watch.Stop();
 
             if (LogRenderTime && _watch.ElapsedMilliseconds > 100)
-                NexHudEngine.Log("NxOverlay " + m_parent.InGameOverlay.Name + " rendered in " + _watch.ElapsedMilliseconds + "ms");
+                NexHudEngine.Log("NxOverlay " + this + " rendered in " + _watch.ElapsedMilliseconds + "ms");
         }
 
         public override void Update()
