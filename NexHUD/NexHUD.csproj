@@ -122,6 +122,7 @@
     <None Include="Config\MaterialsSearchs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Audio\RadioPlayer.cs" />
     <Compile Include="EDDB\EDDBSystemPage.cs" />
     <Compile Include="EDEngineer\BlueprintCategorie.cs" />
     <Compile Include="EDEngineer\BlueprintDatas.cs" />

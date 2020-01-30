@@ -33,13 +33,23 @@ namespace NexHUD.EDEngineer
                 d.Categorie = getCategorie(d);
 
 
+
             SteamVR_NexHUD.Log("Loading materials datas...");
             _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "EDEngineer.Datas.entryData.json");
             m_matDatas = JsonConvert.DeserializeObject<MaterialDatas[]>(_json);
             SteamVR_NexHUD.Log(">>{0} materials loaded", m_matDatas.Length);
 
+            fillAutosearchMaterials();
+
+
+            m_dataLoaded = true;
+        }
+
+        private static void fillAutosearchMaterials()
+        {
             SteamVR_NexHUD.Log("Loading search for materials...");
             string _path = Environment.CurrentDirectory + "\\Config\\MaterialsSearchs.json";
+            string _json = "";
             NxSearchEntry[] _searchs = null;
             if (File.Exists(_path))
             {
@@ -54,9 +64,9 @@ namespace NexHUD.EDEngineer
                 }
             }
 
-            if( _searchs != null )
+            if (_searchs != null)
             {
-                foreach(NxSearchEntry s in _searchs)
+                foreach (NxSearchEntry s in _searchs)
                 {
                     s.format();
                     MaterialDatas md = m_matDatas.Where(x => x.Name.ToLower() == s.searchName.ToLower()).FirstOrDefault();
@@ -65,15 +75,16 @@ namespace NexHUD.EDEngineer
                 }
             }
 
-            foreach(MaterialDatas md in m_matDatas.Where(x => x.Kind == "Material" && x.Subkind == "Raw" && x.Name != "Boron" && x.Name != "Lead" && x.Name != "Rhenium") )
+            //Materials raw
+            foreach (MaterialDatas md in m_matDatas.Where(x => x.Kind == "Material" && x.Subkind == "Raw" && x.Name != "Boron" && x.Name != "Lead" && x.Name != "Rhenium"))
             {
-                if( md.nxSearch == null)
+                if (md.nxSearch == null)
                 {
                     NxSearchEntry _newSearch = new NxSearchEntry()
                     {
                         searchName = md.Name,
                         searchType = NxSearchType.body,
-                        searchDisplay = new string[] {"materials","threat", "distanceToArrival" },
+                        searchDisplay = new string[] { "materials", "threat", "distanceToArrival" },
                         searchMaxRadius = 0, //default
                         searchParams = new string[][] { new string[] { "isLandable", "true" }, new string[] { "rawMaterial", md.Name } }
                     };
@@ -82,11 +93,66 @@ namespace NexHUD.EDEngineer
                 }
             }
 
+            //Pre made searchs
+            NxSearchEntry _sysBoomState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "boom" } }
+            };
+            NxSearchEntry _sysBoomElectionState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "boom;election" }, }
+            };
+            NxSearchEntry _sysElectionCivilwarState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "election;civil war" }, }
+            };
+            NxSearchEntry _sysBoomRetreatState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "boom;retreat" }, }
+            };
+            //Materials other
+            foreach (MaterialDatas md in m_matDatas.Where(x => x.nxSearch == null))
+            {
+                switch (md.Name)
+                {
+                    case "Aberrant Shield Pattern Analysis":
+                    case "Atypical Disrupted Wake Echoes":
+                    case "Classified Scan Fragment":
+                    case "Unidentified Scan Archives":
+                    case "Irregular Emission Data":
+                    case "Tagged Encryption Codes":
+                    case "Unusual Encrypted Files":
+                        md.nxSearch = _sysBoomState;
+                        break;
+                    case "Unexpected Emission Data":
+                        md.nxSearch = _sysBoomElectionState;
+                        break;
+                    case "Modified Consumer Firmware":
+                        md.nxSearch = _sysElectionCivilwarState;
+                        break;
+                    case "Security Firmware Patch":
+                        md.nxSearch = _sysBoomRetreatState;
+                        break;
+                }
+                if (md.nxSearch != null)
+                    md.nxSearch.format();
+            }
+
             int searchFoundAndCreated = m_matDatas.Where(x => x.nxSearch != null).Count();
 
             SteamVR_NexHUD.Log("{0}/{1} materials with available searchs", searchFoundAndCreated, m_matDatas.Length);
-           
-            m_dataLoaded = true;
         }
 
         public static BlueprintCategorie getCategorie(BlueprintDatas _datas)

@@ -8,75 +8,14 @@
     ]
   },
   {
-    "searchName": "Atypical Disrupted Wake Echoes",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
+    "searchName": "Arsenic",
+    "searchType": "body",
+    "searchMaxRadius": 20,
+    "searchDisplay": [ "materials", "security", "distanceToArrival" ],
     "searchParams": [
-      [ "state", "boom" ]
+      [ "isLandable", "true" ],
+      [ "rawMaterial", "Arsenic" ]
     ]
-  },
-  {
-    "searchName": "Classified Scan Fragment",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "boom" ]
-    ]
-  },
-  {
-    "searchName": "Unidentified Scan Archives",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "boom" ]
-    ]
-  },
-  {
-    "searchName": "Irregular Emission Data",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "boom" ]
-    ]
-  },
-  {
-    "searchName": "Unexpected Emission Data",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "boom;election" ]
-    ]
-  },
-  {
-    "searchName": "Modified Consumer Firmware",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "election;civil war" ]
-    ]
-  },
-  {
-    "searchName": "Security Firmware Patch",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "boom;retreat" ]
-    ]
-  },
-  {
-    "searchName": "Tagged Encryption Codes",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "boom" ]
-    ]
-  },
-  {
-    "searchName": "Unusual Encrypted Files",
-    "searchType": "system",
-    "searchDisplay": [ "state", "security", "threat" ],
-    "searchParams": [
-      [ "state", "boom" ]
-    ]
-  },
+
+  }
 ]

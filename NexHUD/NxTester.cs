@@ -1,8 +1,10 @@
 ﻿using NAudio.Wave;
+using NexHUD.Audio;
 using NexHUD.Spansh;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace NexHUD
 {
@@ -11,6 +13,17 @@ namespace NexHUD
     /// </summary>
     public class NxTester
     {
+        public static void RadioTester()
+        {
+            Console.WriteLine("play radio... " + RadioPlayer.Instance.getRadioInfos().name);
+            RadioPlayer.Instance.Play();
+            while (RadioPlayer.Instance.isPlaying)
+            {
+                Thread.Sleep(5000);
+                RadioPlayer.Instance.Prev();
+                Console.WriteLine("new radio: " + RadioPlayer.Instance.getRadioInfos().name);
+            }
+        }
         public static void AudioTester()
         {
             var url = "http://radiosidewinder.out.airtime.pro:8000/radiosidewinder_b";

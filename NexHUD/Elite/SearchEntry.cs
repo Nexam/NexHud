@@ -15,6 +15,7 @@ namespace NexHUD.Elite
         public int searchMaxRadius = 0;
 
         private Dictionary<NxSearchParam, string[]> m_searchParamFormated;
+        private bool m_formated = false;
 
         public Dictionary<NxSearchParam, string[]> searchParamsFormated { get { return m_searchParamFormated; } }
 
@@ -24,6 +25,9 @@ namespace NexHUD.Elite
 
         public void format()
         {
+            if (m_formated)
+                return;
+
             m_searchParamFormated = new Dictionary<NxSearchParam, string[]>();
 
             if (searchParams != null)
@@ -57,6 +61,8 @@ namespace NexHUD.Elite
                     break;
             }
             m_searchDisplayFormated = _sdf.ToArray();
+
+            m_formated = true;
         }
     }
     public enum NxSearchType

@@ -40,7 +40,8 @@ namespace NexHUD
             //NxTester.BodyTester();
 
             //Test NAudio for playing radios. EQ and Reverb later
-            NxTester.AudioTester();
+            // NxTester.AudioTester();
+            NxTester.RadioTester();
             Environment.Exit(0);
         }
         private static void loadConfigs()
