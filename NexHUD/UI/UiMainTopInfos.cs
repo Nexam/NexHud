@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace NexHUD.UI
 {
-    public class NxMainPanelTopInfos : NxGroup
+    public class UiMainTopInfos : NxGroup
     {
         public const int HEIGHT = 66;
         NxMenu m_menu;
@@ -33,7 +33,7 @@ namespace NexHUD.UI
         int Column1 = 0;
         int decal_x = 50;
         private float infoCheck = 0;
-        public NxMainPanelTopInfos(NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public UiMainTopInfos(NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
             m_menu = _menu;
             //Loading & Content;

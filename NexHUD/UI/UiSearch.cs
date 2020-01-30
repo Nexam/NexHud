@@ -238,7 +238,7 @@ namespace NexHUD.UI
             return 100;
         }
     }
-    public class NxMainPanelSearch : NxGroup
+    public class UiSearch : NxGroup
     {
         public const int MAX_LINE_RESULT = 11;
         NxMenu m_menu;
@@ -265,11 +265,11 @@ namespace NexHUD.UI
 
         private uint _currentSearchId = 0;
 
-        public NxMainPanelSearch(NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public UiSearch(NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
             m_menu = _menu;
             //Title
-            Add(new NxSimpleText(0, NxMainPanelTopInfos.HEIGHT, "Search...", EDColors.ORANGE, 24, NxFonts.EuroCapital));
+            Add(new NxSimpleText(0, UiMainTopInfos.HEIGHT, "Search...", EDColors.ORANGE, 24, NxFonts.EuroCapital));
 
             //Initialize buttons           
             int _buttonId = 0;
@@ -286,7 +286,7 @@ namespace NexHUD.UI
                 for (int b = 0; b < m_buttonPerRow; b++)
                 {
                     int _bx = _buttonSpacing + b * _buttonSpacing + b * _buttonWidth;
-                    _by = (a * _buttonSpacing) + (a * NxMainPanelSearchButton.Height) + NxMainPanelTopInfos.HEIGHT + 30;
+                    _by = (a * _buttonSpacing) + (a * NxMainPanelSearchButton.Height) + UiMainTopInfos.HEIGHT + 30;
                     m_buttons[_buttonId] = new NxMainPanelSearchButton(_bx, _by, _buttonWidth, m_menu);
                     Add(m_buttons[_buttonId]);
 

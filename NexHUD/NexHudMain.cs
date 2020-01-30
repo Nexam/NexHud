@@ -10,7 +10,7 @@ using System;
 
 namespace NexHUD
 {
-    public class NexHudCore
+    public class NexHudMain
     {
         public const string version = "0.0.1";
 

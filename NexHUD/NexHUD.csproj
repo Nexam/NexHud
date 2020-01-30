@@ -152,14 +152,17 @@
     <Compile Include="Spansh\SpanshBodiesResult.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="UI\NxButton.cs" />
-    <Compile Include="UI\NxMainPanelBlueprints.cs" />
-    <Compile Include="UI\NxMainPanelSearch.cs" />
-    <Compile Include="UI\NxMainPanelMenu.cs" />
-    <Compile Include="UI\NxMainPanelMenuButton.cs" />
-    <Compile Include="UI\NxMainPanelPlayerInfos.cs" />
-    <Compile Include="UI\NxMainPanelTopInfos.cs" />
-    <Compile Include="UI\NxMainPanel.cs" />
-    <Compile Include="NexHudCore.cs" />
+    <Compile Include="UI\UiImproveBlueprintDetails.cs" />
+    <Compile Include="UI\UiImproveBlueprints.cs" />
+    <Compile Include="UI\UiImprove.cs" />
+    <Compile Include="UI\UiImproveCraftlist.cs" />
+    <Compile Include="UI\UiSearch.cs" />
+    <Compile Include="UI\UiMainMenu.cs" />
+    <Compile Include="UI\UiMainMenuButton.cs" />
+    <Compile Include="UI\UiMainPlayerInfos.cs" />
+    <Compile Include="UI\UiMainTopInfos.cs" />
+    <Compile Include="UI\UiMain.cs" />
+    <Compile Include="NexHudMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

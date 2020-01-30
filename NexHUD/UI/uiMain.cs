@@ -23,12 +23,14 @@ namespace NexHUD.UI
 
         public NexHUDOverlay frame { get { return m_frame; } }
         //Top Infos panel
-        public NxMainPanelTopInfos m_topPanel;
-        public NxMainPanelMenu m_menuPanel;
-        public NxMainPanelPlayerInfos m_playerInfosPanel;
-        public NxMainPanelSearch m_searchPanel;
+        public UiMainTopInfos m_uiTopInfos;
+        //Player infos & main menu
+        public UiMainPlayerInfos m_uiPlayerInfos;
+        public UiMainMenu m_uiMainMenu;
+        //Search
+        public UiSearch m_searchPanel;
         //Improve
-        public NxMainPanelBlueprints m_bluePrintPanel;
+        public UiImprove m_uiImprove;
         public NxMenu()
         {
 
@@ -54,23 +56,23 @@ namespace NexHUD.UI
 
         private void initContent()
         {
-            m_topPanel = new NxMainPanelTopInfos(this);
-            m_frame.NxOverlay.Add(m_topPanel);
+            m_uiTopInfos = new UiMainTopInfos(this);
+            m_frame.NxOverlay.Add(m_uiTopInfos);
 
-            m_menuPanel = new NxMainPanelMenu(this);
-            m_frame.NxOverlay.Add(m_menuPanel);
+            m_uiMainMenu = new UiMainMenu(this);
+            m_frame.NxOverlay.Add(m_uiMainMenu);
             //Desactivate unavailable buttons
             //m_menuPanel.setActive(NxMainPanelMenuButton.MenuButtonType.Improve, false);
-            m_menuPanel.setActive(NxMainPanelMenuButton.MenuButtonType.Trade, false);
+            m_uiMainMenu.setActive(UiMainMenuButton.MenuButtonType.Trade, false);
 
-            m_playerInfosPanel = new NxMainPanelPlayerInfos(this);
-            m_frame.NxOverlay.Add(m_playerInfosPanel);
+            m_uiPlayerInfos = new UiMainPlayerInfos(this);
+            m_frame.NxOverlay.Add(m_uiPlayerInfos);
 
-            m_searchPanel = new NxMainPanelSearch(this);
+            m_searchPanel = new UiSearch(this);
             m_frame.NxOverlay.Add(m_searchPanel);
 
-            m_bluePrintPanel = new NxMainPanelBlueprints(this);
-            m_frame.NxOverlay.Add(m_bluePrintPanel);
+            m_uiImprove = new UiImprove(this);
+            m_frame.NxOverlay.Add(m_uiImprove);
 
         }
 
@@ -81,21 +83,21 @@ namespace NexHUD.UI
             m_state = _newState;
 
             m_searchPanel.isVisible = false;
-            m_bluePrintPanel.isVisible = false;
-            m_menuPanel.isVisible = false;
-            m_playerInfosPanel.isVisible = false;
+            m_uiImprove.isVisible = false;
+            m_uiMainMenu.isVisible = false;
+            m_uiPlayerInfos.isVisible = false;
 
             switch (m_state)
             {
                 case MenuState.Main:
-                    m_menuPanel.isVisible = true;
-                    m_playerInfosPanel.isVisible = true;
+                    m_uiMainMenu.isVisible = true;
+                    m_uiPlayerInfos.isVisible = true;
                     break;
                 case MenuState.Search:
                     m_searchPanel.isVisible = true;
                     break;
                 case MenuState.Improve:
-                    m_bluePrintPanel.isVisible = true;
+                    m_uiImprove.isVisible = true;
                     break;
             }
         }
@@ -117,7 +119,7 @@ namespace NexHUD.UI
 
                     if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
                     {
-                        if (m_state != MenuState.Main)
+                        if (m_state != MenuState.Main && m_state != MenuState.Improve)
                             changeState(MenuState.Main);
                     }
                 }
@@ -137,7 +139,10 @@ namespace NexHUD.UI
                     if (m_frame.RenderInGameOverlay)
                     {
                         if (m_state != MenuState.Main)
-                            changeState(MenuState.Main);
+                        {
+                            if( m_state != MenuState.Improve)
+                                changeState(MenuState.Main);
+                        }
                         else
                             m_frame.RenderInGameOverlay = false;
                     }
@@ -152,29 +157,29 @@ namespace NexHUD.UI
             if (m_frame.RenderInGameOverlay)
             {
                 //MAIN MENU NAVIGATION
-                if (m_menuPanel.isVisible)
+                if (m_uiMainMenu.isVisible)
                 {
                     if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.right)))
                     {
-                        m_menuPanel.selectNext();
+                        m_uiMainMenu.selectNext();
                     }
                     else if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.left)))
                     {
-                        m_menuPanel.selectPrev();
+                        m_uiMainMenu.selectPrev();
                     }
                     else if (SteamVR_NexHUD.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
                     {
-                        if (m_menuPanel.isSelectedMenuActive())
+                        if (m_uiMainMenu.isSelectedMenuActive())
                         {
-                            switch (m_menuPanel.SelectedMenu)
+                            switch (m_uiMainMenu.SelectedMenu)
                             {
-                                case NxMainPanelMenuButton.MenuButtonType.Search:
+                                case UiMainMenuButton.MenuButtonType.Search:
                                     changeState(MenuState.Search);
                                     break;
-                                case NxMainPanelMenuButton.MenuButtonType.Improve:
+                                case UiMainMenuButton.MenuButtonType.Improve:
                                     changeState(MenuState.Improve);
                                     break;
-                                case NxMainPanelMenuButton.MenuButtonType.Trade:
+                                case UiMainMenuButton.MenuButtonType.Trade:
                                     changeState(MenuState.Trade);
                                     break;
                             }

@@ -98,29 +98,64 @@ namespace NexHUD.EDEngineer
             {
                 searchName = "auto search",
                 searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "security", "threat" },
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
                 searchParams = new string[][] { new string[] { "state", "boom" } }
             };
             NxSearchEntry _sysBoomElectionState = new NxSearchEntry()
             {
                 searchName = "auto search",
                 searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "security", "threat" },
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
                 searchParams = new string[][] { new string[] { "state", "boom;election" }, }
             };
             NxSearchEntry _sysElectionCivilwarState = new NxSearchEntry()
             {
                 searchName = "auto search",
                 searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "security", "threat" },
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
                 searchParams = new string[][] { new string[] { "state", "election;civil war" }, }
             };
             NxSearchEntry _sysBoomRetreatState = new NxSearchEntry()
             {
                 searchName = "auto search",
                 searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "security", "threat" },
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
                 searchParams = new string[][] { new string[] { "state", "boom;retreat" }, }
+            };
+            NxSearchEntry _sysElectionState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "election" }, }
+            };
+            NxSearchEntry _sysBoomOutbreakWarsEmpFedState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "boom;outbreak;war;civil war;civil unrest" }, new string[] { "allegiance", "empire;federation" } }
+            };
+            NxSearchEntry _sysBoomOutbreakWarsFedState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "boom;outbreak;war;civil war;civil unrest" }, new string[] { "allegiance", "federation" } }
+            };
+            NxSearchEntry _sysOutbreakState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "outbreak" }, }
+            };
+            NxSearchEntry _sysAnarchyOutbreakState = new NxSearchEntry()
+            {
+                searchName = "auto search",
+                searchType = NxSearchType.system,
+                searchDisplay = new string[] { "state", "government", "security", "threat" },
+                searchParams = new string[][] { new string[] { "state", "outbreak" }, new string[] { "government", "anarchy" }, }
             };
             //Materials other
             foreach (MaterialDatas md in m_matDatas.Where(x => x.nxSearch == null))
@@ -134,6 +169,9 @@ namespace NexHUD.EDEngineer
                     case "Irregular Emission Data":
                     case "Tagged Encryption Codes":
                     case "Unusual Encrypted Files":
+                    case "Inconsistent Shield Soak Analysis":
+                    case "Strange Wake Solutions":
+                    case "Phase Alloys":
                         md.nxSearch = _sysBoomState;
                         break;
                     case "Unexpected Emission Data":
@@ -145,6 +183,26 @@ namespace NexHUD.EDEngineer
                     case "Security Firmware Patch":
                         md.nxSearch = _sysBoomRetreatState;
                         break;
+                    case "Galvanising Alloys":
+                        md.nxSearch = _sysElectionState;
+                        break;
+                    case "Proto Light Alloys":
+                    case "Proto Radiolic Alloys":
+                    case "Military Supercapacitors":
+                        md.nxSearch = _sysBoomOutbreakWarsEmpFedState;
+                        break;
+                    case "Polymer Capacitors":
+                    case "Pharmaceutical Isolators":
+                        md.nxSearch = _sysOutbreakState;
+                        break;
+                    case "Chemical Manipulators":
+                        md.nxSearch = _sysAnarchyOutbreakState;
+                        break;
+                    case "Core Dynamics Composites":
+                    case "Proprietary Composites": //last entry
+                        md.nxSearch = _sysBoomOutbreakWarsFedState;
+                        break;
+
                 }
                 if (md.nxSearch != null)
                     md.nxSearch.format();
@@ -153,6 +211,17 @@ namespace NexHUD.EDEngineer
             int searchFoundAndCreated = m_matDatas.Where(x => x.nxSearch != null).Count();
 
             SteamVR_NexHUD.Log("{0}/{1} materials with available searchs", searchFoundAndCreated, m_matDatas.Length);
+        }
+
+        public static int getCmdrMaterials(string name)
+        {
+            int _count = 0;
+
+            _count += NexHudMain.eliteApi.Materials.Encoded.Where(x => x.Name == name).Count();
+            _count += NexHudMain.eliteApi.Materials.Manufactured.Where(x => x.Name == name).Count();
+            _count += NexHudMain.eliteApi.Materials.Raw.Where(x => x.Name == name).Count();            
+
+            return _count;
         }
 
         public static BlueprintCategorie getCategorie(BlueprintDatas _datas)

@@ -8,13 +8,14 @@ using System.Linq;
 
 namespace NexHUD.UI
 {
-    public class NxMainPanelBlueprints : NxGroup
+    public class UiImproveBlueprints : NxGroup
     {
         private const int HEIGHT_CAT = 35;
         private const int HEIGHT_TYPE = 30;
         private const int HEIGHT_NAME = 25;
         private const int BUTTON_WIDTH = 250;
 
+        UiImprove m_uiImprove;
         private bool m_firstUpdateSkipped = false;
 
         public List<NxButton> m_Buttons = new List<NxButton>();
@@ -26,12 +27,15 @@ namespace NexHUD.UI
 
         private string m_TypeSelected = "";
         private BlueprintDatas m_NameSelected = null;
-        public NxMainPanelBlueprints(NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public UiImproveBlueprints(UiImprove _uiImprove) : base(_uiImprove.Menu.frame.NxOverlay)
         {
+            m_uiImprove = _uiImprove;
+            //Titre
+            Add(new NxSimpleText(5, 70, "PICK A BLUEPRINT...", EDColors.YELLOW, 24, NxFonts.EuroCapital));
             //create Buttons
             for (int i = 0; i < 54; i++)
             {
-                m_Buttons.Add(new NxButton(200, 200 + i * 20, BUTTON_WIDTH, HEIGHT_CAT, "Blueprint " + i, _menu));
+                m_Buttons.Add(new NxButton(200, 200 + i * 20, BUTTON_WIDTH, HEIGHT_CAT, "Blueprint " + i, m_uiImprove.Menu));
                 m_Buttons[i].isVisible = false;
                 Add(m_Buttons[i]);
             }
@@ -108,7 +112,10 @@ namespace NexHUD.UI
                 if (_selected.Obj is string)
                     m_TypeSelected = (string)_selected.Obj;
                 else if (_selected.Obj is BlueprintDatas)
-                    SteamVR_NexHUD.Log("TODO: Display blueprint: {0} / {1}", ((BlueprintDatas)_selected.Obj).Type, ((BlueprintDatas)_selected.Obj).Name);
+                {
+                    m_uiImprove.BlueprintDetails.setBlueprint((BlueprintDatas)_selected.Obj);
+                    m_uiImprove.changeState(UiImprove.UiImproveState.BlueprintDetail);
+                }
                 refresh();
             }
         }

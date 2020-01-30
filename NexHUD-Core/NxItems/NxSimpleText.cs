@@ -11,6 +11,7 @@ namespace NexHUDCore.NxItems
         private bool m_centerHorizontal = false;
         private bool m_centerVertical = false;
         private NxFonts m_font = NxFonts.EuroStile;
+        private bool m_vertical = false;
 
         public SizeF sizeF { get { return m_sizeF; } }
 
@@ -19,6 +20,8 @@ namespace NexHUDCore.NxItems
         public bool centerHorizontal { get { return m_centerHorizontal; } set { if (m_centerHorizontal != value) makeItDirty(); m_centerHorizontal = value; } }
         public bool centerVertical { get { return m_centerVertical; } set { if (m_centerVertical != value) makeItDirty(); m_centerVertical = value; } }
         public NxFonts font { get { return m_font; } set { if (m_font != value) makeItDirty(); m_font = value; } }
+
+        public bool vertical { get { return m_vertical; } set { if (m_vertical != value) makeItDirty(); m_vertical = value; } }
 
 
 
@@ -34,9 +37,22 @@ namespace NexHUDCore.NxItems
         public override void Render(Graphics _g)
         {
             m_sizeF = _g.MeasureString(text, NxFont.getFont(font, size));
-            _g.DrawString(text, NxFont.getFont(font, size), SolidBrush,
-                m_centerHorizontal ? x - (sizeF.Width / 2) : x,
-               m_centerVertical ? y - (sizeF.Height / 2) : y);
+            if (m_vertical)
+            {
+                _g.RotateTransform(-90);
+                _g.DrawString(text, NxFont.getFont(font, size), SolidBrush,
+                   -(m_centerVertical ? y - (sizeF.Height / 2) : y),
+                   m_centerHorizontal ? x - (sizeF.Width / 2) : x);
+                _g.RotateTransform(90);
+            }
+            else
+            {
+                _g.DrawString(text, NxFont.getFont(font, size), SolidBrush,
+                 m_centerHorizontal ? x - (sizeF.Width / 2) : x,
+                m_centerVertical ? y - (sizeF.Height / 2) : y);
+
+            }
+
         }
 
         public override void Update()

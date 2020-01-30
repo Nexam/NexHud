@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace NexHUD.UI
 {
-    public class NxMainPanelMenu : NxGroup
+    public class UiMainMenu : NxGroup
     {
         /// <summary>
         /// Spacing between two buttons
@@ -14,7 +14,7 @@ namespace NexHUD.UI
         /// <summary>
         /// The array of the Buttons generated from the enum NxMainPanelMenuButton.MenuButtonType
         /// </summary>
-        NxMainPanelMenuButton[] m_buttons;
+        UiMainMenuButton[] m_buttons;
 
         private int m_selectedId = 0;
         public int SelectedId
@@ -31,7 +31,7 @@ namespace NexHUD.UI
 
         }
 
-        public NxMainPanelMenuButton.MenuButtonType SelectedMenu
+        public UiMainMenuButton.MenuButtonType SelectedMenu
         {
             get
             {
@@ -48,31 +48,31 @@ namespace NexHUD.UI
         /// The main menu group (with the button Search, Improve, Trade....)
         /// </summary>
         /// <param name="_menu"></param>
-        public NxMainPanelMenu(NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public UiMainMenu(NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
             /**
              * There is no need to change this code to add a Menu Button
              * Simply add an entry in the enum NxMainPanelMenuButton.MenuButtonType
              * 
              * */
-            int ButtonY = (_menu.frame.WindowHeight / 2) + (NxMainPanelTopInfos.HEIGHT / 2);
-            int _number = Enum.GetNames(typeof(NxMainPanelMenuButton.MenuButtonType)).Length;
-            m_buttons = new NxMainPanelMenuButton[_number];
+            int ButtonY = (_menu.frame.WindowHeight / 2) + (UiMainTopInfos.HEIGHT / 2);
+            int _number = Enum.GetNames(typeof(UiMainMenuButton.MenuButtonType)).Length;
+            m_buttons = new UiMainMenuButton[_number];
             bool _pair = _number % 2 == 0;
             for (int i = 0; i < _number; i++)
             {
-                m_buttons[i] = new NxMainPanelMenuButton(
+                m_buttons[i] = new UiMainMenuButton(
                     _pair ?
                     (
-                        (i - (_number / 2)) * (NxMainPanelMenuButton.WIDTH + Spacing) + _menu.frame.WindowWidth / 2 + (NxMainPanelMenuButton.WIDTH / 2) + (Spacing / 2)
+                        (i - (_number / 2)) * (UiMainMenuButton.WIDTH + Spacing) + _menu.frame.WindowWidth / 2 + (UiMainMenuButton.WIDTH / 2) + (Spacing / 2)
                     )
                     :
                     (
-                        (i - (_number / 2)) * (NxMainPanelMenuButton.WIDTH + Spacing) + _menu.frame.WindowWidth / 2
+                        (i - (_number / 2)) * (UiMainMenuButton.WIDTH + Spacing) + _menu.frame.WindowWidth / 2
                     )
                     ,
                     ButtonY,
-                    (NxMainPanelMenuButton.MenuButtonType)i, Parent
+                    (UiMainMenuButton.MenuButtonType)i, Parent
                     );
 
 
@@ -101,7 +101,7 @@ namespace NexHUD.UI
                 SelectedId--;
         }
 
-        public void setActive(NxMainPanelMenuButton.MenuButtonType _type, bool _isActive)
+        public void setActive(UiMainMenuButton.MenuButtonType _type, bool _isActive)
         {
             for (int i = 0; i < m_buttons.Length; i++)
             {

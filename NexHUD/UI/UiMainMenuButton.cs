@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace NexHUD.UI
 {
-    public class NxMainPanelMenuButton : NxGroup
+    public class UiMainMenuButton : NxGroup
     {
         public enum MenuButtonType
         {
@@ -67,7 +67,7 @@ namespace NexHUD.UI
         /// The button is centered on the position;
         /// </summary>
         /// <param name="_parent"></param>
-        public NxMainPanelMenuButton(int _x, int _y, MenuButtonType _type, NxOverlay _parent) : base(_parent)
+        public UiMainMenuButton(int _x, int _y, MenuButtonType _type, NxOverlay _parent) : base(_parent)
         {
             x = _x;
             y = _y;

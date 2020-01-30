@@ -12,7 +12,7 @@
 
         public BlueprintCategorie Categorie { get; internal set; }
 
-        public bool IsExperimental { get { return Grade == 0; } }
+        public bool IsExperimental { get { return Grade <= 0; } }
     }
     public class BlueprintIngredient
     {
