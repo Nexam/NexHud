@@ -23,5 +23,7 @@ namespace NexHUD.EDEngineer
         public string Group;
 
         public NxSearchEntry nxSearch;
+
+        public int Quantity = 1; //for crafting
     }
 }

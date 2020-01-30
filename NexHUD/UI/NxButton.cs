@@ -40,6 +40,7 @@ namespace NexHUD.UI
         }
         public int Height { get { return Selected ? (int)(m_height * HeightInc) : m_height; } set { m_height = value; repos(); } }
         public int Width { get { return m_width; } set { m_width = value; repos(); } }
+        public NxSimpleText labelST { get => m_buttonName; }
         public void resetColors()
         {
             ColorLabel = EDColors.YELLOW;

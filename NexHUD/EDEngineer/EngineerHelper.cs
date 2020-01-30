@@ -2,6 +2,7 @@
 using NexHUD.Elite;
 using NexHUDCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,9 +15,40 @@ namespace NexHUD.EDEngineer
 
         private static BlueprintDatas[] m_bpDatas;
         private static MaterialDatas[] m_matDatas;
+        private static int[] m_rollPerGrade = new int[] { 0, 3, 4, 5, 6, 7 };
 
         public static BlueprintDatas[] blueprints { get { loadDatas(); return m_bpDatas; } }
         public static MaterialDatas[] materials { get { loadDatas(); return m_matDatas; } }
+        public static int[] rollPerGrade { get => m_rollPerGrade; }
+
+        public static MaterialDatas[] getAllCraftMaterials(string _blueprintType, string _blueprintName, string _experimental, int _grade)
+        {
+            Dictionary<string, MaterialDatas> _materials = new Dictionary<string, MaterialDatas>();
+            for (int g = 1; g < _grade+1; g++)
+            {
+                BlueprintDatas d = null;
+                if( g < _grade )
+                    d = blueprints.Where(x => x.Type == _blueprintType && x.Name == _blueprintName && x.Grade == g).FirstOrDefault();
+                else if( !string.IsNullOrEmpty(_experimental) )
+                    d = blueprints.Where(x => x.Type == _blueprintType && x.Name == _experimental && x.IsExperimental).FirstOrDefault();
+
+                if (d != null)
+                {
+                    foreach (BlueprintIngredient i in d.Ingredients)
+                    {
+                        if (!_materials.ContainsKey(i.Name))
+                        {
+                            MaterialDatas m = materials.Where(x => x.Name == i.Name).FirstOrDefault();
+                            m.Quantity = i.Size * ( d.IsExperimental ? 1 : rollPerGrade[_grade] );
+                            _materials.Add(i.Name, m);
+                        }
+                        else
+                            _materials[i.Name].Quantity += i.Size;
+                    }
+                }
+            }
+            return _materials.Values.ToArray();
+        }
 
         public static void loadDatas()
         {
@@ -219,7 +251,7 @@ namespace NexHUD.EDEngineer
 
             _count += NexHudMain.eliteApi.Materials.Encoded.Where(x => x.Name == name).Count();
             _count += NexHudMain.eliteApi.Materials.Manufactured.Where(x => x.Name == name).Count();
-            _count += NexHudMain.eliteApi.Materials.Raw.Where(x => x.Name == name).Count();            
+            _count += NexHudMain.eliteApi.Materials.Raw.Where(x => x.Name == name).Count();
 
             return _count;
         }
