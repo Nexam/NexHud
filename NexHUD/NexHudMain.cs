@@ -22,15 +22,22 @@ namespace NexHUD
         [STAThreadAttribute]
         public static void Main(string[] args)
         {
+            bool _debugMode = false;
+            foreach(string a in args)
+            {
+                if (a == "debug")
+                    _debugMode = true;
+            }
             initLogs();
             //performTests();
             initElite();
 
-            initEngine(NexHudEngineMode.WindowDebug);
+            initEngine(_debugMode ? NexHudEngineMode.WindowDebug: NexHudEngineMode.Auto);
 
             loadConfigs();
 
-            initVRConsole();
+            if( NexHudEngine.engineMode == NexHudEngineMode.Vr)
+                initVRConsole();
 
             new NxMenu();
 
@@ -76,12 +83,12 @@ namespace NexHUD
 
         private static void initVRConsole()
         {
-
-
             m_vrConsoleOverlay = new NexHudOverlay(m_vrConsoleTb.width, m_vrConsoleTb.height, "Debug Console", "NexHUD Debug Console");
             m_vrConsoleOverlay.setVRPosition(new Vector3(-1.1f, -1.1f, -.3f), new Vector3(45, -90, 0));
-            //m_vrConsoleOverlay.Alpha = 1f;
             m_vrConsoleOverlay.setVRWidth(.9f);
+
+            m_vrConsoleOverlay.setWMPosition(new Vector2(-.75f, 0.1f), 0.2f);
+            //m_vrConsoleOverlay.Alpha = 1f;
             m_vrConsoleOverlay.NxOverlay.dirtyCheckFreq = TimeSpan.FromSeconds(0.1);
             m_vrConsoleOverlay.NxOverlay.LogRenderTime = false;
             m_vrConsoleOverlay.NxOverlay.Add(m_vrConsoleTb);

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NexHUDCore
 {
-    public class NxGameWindow : GameWindow
+    public class NxTransparentGameWindow : GameWindow
     {
         private Margins marg;
 
@@ -20,15 +20,12 @@ namespace NexHUDCore
         }
 
         [DllImport("user32.dll", SetLastError = true)]
-
         private static extern UInt32 GetWindowLong(IntPtr hWnd, int nIndex);
 
         [DllImport("user32.dll")]
-
         static extern int SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
         [DllImport("user32.dll")]
-
         static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
 
         public const int GWL_EXSTYLE = -20;
@@ -44,7 +41,16 @@ namespace NexHUDCore
         [DllImport("dwmapi.dll")]
         static extern void DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMargins);
 
-     
+        //Always on top 
+        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private const UInt32 SWP_NOSIZE = 0x0001;
+        private const UInt32 SWP_NOMOVE = 0x0002;
+        private const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
         private void init()
         {
             this.WindowBorder = WindowBorder.Hidden;
@@ -55,6 +61,11 @@ namespace NexHUDCore
 
             //Set the Alpha on the Whole Window to 255 (solid)
             SetLayeredWindowAttributes(this.WindowInfo.Handle, 0, 255, LWA_ALPHA);
+        }
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            SetWindowPos(this.WindowInfo.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -73,49 +84,51 @@ namespace NexHUDCore
             DwmExtendFrameIntoClientArea(this.WindowInfo.Handle, ref marg);
         }
 
-        public NxGameWindow()
+        #region constructors
+        public NxTransparentGameWindow()
         {
             init();
         }
 
-        public NxGameWindow(int width, int height) : base(width, height)
+        public NxTransparentGameWindow(int width, int height) : base(width, height)
         {
             init();
         }
 
-        public NxGameWindow(int width, int height, GraphicsMode mode) : base(width, height, mode)
+        public NxTransparentGameWindow(int width, int height, GraphicsMode mode) : base(width, height, mode)
         {
             init();
         }
 
-        public NxGameWindow(int width, int height, GraphicsMode mode, string title) : base(width, height, mode, title)
+        public NxTransparentGameWindow(int width, int height, GraphicsMode mode, string title) : base(width, height, mode, title)
         {
             init();
         }
 
-        public NxGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options) : base(width, height, mode, title, options)
+        public NxTransparentGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options) : base(width, height, mode, title, options)
         {
             init();
         }
 
-        public NxGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device) : base(width, height, mode, title, options, device)
+        public NxTransparentGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device) : base(width, height, mode, title, options, device)
         {
             init();
         }
 
-        public NxGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device, int major, int minor, GraphicsContextFlags flags) : base(width, height, mode, title, options, device, major, minor, flags)
+        public NxTransparentGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device, int major, int minor, GraphicsContextFlags flags) : base(width, height, mode, title, options, device, major, minor, flags)
         {
             init();
         }
 
-        public NxGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device, int major, int minor, GraphicsContextFlags flags, IGraphicsContext sharedContext) : base(width, height, mode, title, options, device, major, minor, flags, sharedContext)
+        public NxTransparentGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device, int major, int minor, GraphicsContextFlags flags, IGraphicsContext sharedContext) : base(width, height, mode, title, options, device, major, minor, flags, sharedContext)
         {
             init();
         }
 
-        public NxGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device, int major, int minor, GraphicsContextFlags flags, IGraphicsContext sharedContext, bool isSingleThreaded) : base(width, height, mode, title, options, device, major, minor, flags, sharedContext, isSingleThreaded)
+        public NxTransparentGameWindow(int width, int height, GraphicsMode mode, string title, GameWindowFlags options, DisplayDevice device, int major, int minor, GraphicsContextFlags flags, IGraphicsContext sharedContext, bool isSingleThreaded) : base(width, height, mode, title, options, device, major, minor, flags, sharedContext, isSingleThreaded)
         {
             init();
         }
+        #endregion
     }
 }

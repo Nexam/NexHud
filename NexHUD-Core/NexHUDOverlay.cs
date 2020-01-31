@@ -38,6 +38,13 @@ namespace NexHUDCore
 
         public bool GradientIntro = true;
 
+        private float m_wmSize = 0.3f;
+
+        private Vector2 m_wmPosition;
+        private bool m_wmDraw = true;
+
+
+
 
         #region OGL Stuff
         int _glInputTextureId = 0;
@@ -73,30 +80,37 @@ namespace NexHUDCore
         }
 
         private bool m_HideRequest = false;
-        public bool renderVrOverlay
+        public bool renderOverlay
         {
-            get { return _renderVrOverlay; }
+            get { return NexHudEngine.engineMode == NexHudEngineMode.Vr ? _renderVrOverlay : m_wmDraw; }
             set
             {
-                _renderVrOverlay = value;
-                if (m_vrOverlay != null)
+                if (NexHudEngine.engineMode == NexHudEngineMode.Vr)
                 {
-                    if (_renderVrOverlay)
+                    _renderVrOverlay = value;
+                    if (m_vrOverlay != null)
                     {
-                        m_HideRequest = false;
-                        if (!m_vrOverlay.IsVisible())
+                        if (_renderVrOverlay)
                         {
-                            m_GradientValue = 0;
-                            m_vrOverlay.Show();
+                            m_HideRequest = false;
+                            if (!m_vrOverlay.IsVisible())
+                            {
+                                m_GradientValue = 0;
+                                m_vrOverlay.Show();
+                            }
+                            //_vrOverlay.Show();
                         }
-                        //_vrOverlay.Show();
+                        else
+                        {
+                            m_HideRequest = true;
+                            //_vrOverlay.Hide();
+                            //m_GradientValue = 0;
+                        }
                     }
-                    else
-                    {
-                        m_HideRequest = true;
-                        //_vrOverlay.Hide();
-                        //m_GradientValue = 0;
-                    }
+                }
+                else
+                {
+                    m_wmDraw = value;
                 }
             }
         }
@@ -107,7 +121,7 @@ namespace NexHUDCore
                 if (m_vrOverlay != null)
                     return m_vrOverlay.Alpha;
                 else
-                    return 1;
+                    return m_wmDraw ? 1 : 0;
             }
             set
             {
@@ -120,6 +134,8 @@ namespace NexHUDCore
 
         public double ZoomLevel { get { return _zoomLevel; } set { _zoomLevel = value; } }
 
+        public float WmSize { get => m_wmSize; set => m_wmSize = value; }
+        public Vector2 WmPosition { get => m_wmPosition; set => m_wmPosition = value; }
 
         public NexHudOverlay(int windowWidth, int windowHeight, string overlayKey, string overlayName)
         {
@@ -145,13 +161,17 @@ namespace NexHUDCore
 
         private void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
+            deleteGlFragProgram();
+        }
+        internal void deleteGlFragProgram()
+        {
             if (_glFragmentShaderProgramId > 0)
             {
                 try
                 {
                     GL.DeleteProgram(_glFragmentShaderProgramId);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     NexHudEngine.Log(ex.Message);
                 }
@@ -165,6 +185,11 @@ namespace NexHUDCore
                 m_vrOverlay.SetAttachment(AttachmentType.Absolute, _position, _rotation);
                 m_vrOverlay.Alpha = 1;
             }
+        }
+        public void setWMPosition(Vector2 _position, float _size )
+        {
+            WmPosition = _position;
+            WmSize = _size;
         }
         public void setVRWidth(float _witdh)
         {
@@ -274,14 +299,12 @@ namespace NexHUDCore
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-            if (NexHudEngine.DefaultFragmentShaderPath != null /*|| FragmentShaderPath != null*/)
-            {
-                NexHudEngine.Log("[OPENGL] Using Fragment Shader : " + NexHudEngine.DefaultFragmentShaderPath);
+            if( NexHudEngine.engineMode == NexHudEngineMode.Vr)
+                CompileShader("Resources.fragShader.frag");
+            else
+                CompileShader("Resources.fragShaderWm.frag");
 
-                // string path = FragmentShaderPath != null ? FragmentShaderPath : SteamVR_NexHUD.DefaultFragmentShaderPath;
-                // CompileShader(path);
-                CompileShader(NexHudEngine.DefaultFragmentShaderPath);
-            }
+
 
 
             NexHudEngine.Log("Texture Setup complete for " + _overlayKey);
@@ -296,6 +319,8 @@ namespace NexHUDCore
                 NexHudEngine.Log("[OPENGL] No Shader Found at " + path);
                 return;
             }
+            else
+                NexHudEngine.Log("Loading Shader: " + path);
 
             int fragShaderId = GL.CreateShader(ShaderType.FragmentShader);
             GL.ShaderSource(fragShaderId, _fragShader);// File.ReadAllText(path));
@@ -315,8 +340,22 @@ namespace NexHUDCore
             GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
         }
 
+        internal void rebindTexture()
+        {
+            GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
+            BitmapData data = BMPTexture.LockBits(new Rectangle(0, 0, BMPTexture.Width, BMPTexture.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, BMPTexture.Width, BMPTexture.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+            BMPTexture.UnlockBits(data);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+        }
         private void openGlWindowRender()
         {
+            if (!m_wmDraw)
+                return;
+            
             if (m_nxOverlay != null)
             {
                 if (m_nxOverlay.isDirty)
@@ -324,26 +363,35 @@ namespace NexHUDCore
                     m_graphics.Clear(Color.Transparent);
                     m_nxOverlay.Render(m_graphics);
 
-                    GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
-                    BitmapData data = BMPTexture.LockBits(new Rectangle(0, 0, BMPTexture.Width, BMPTexture.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, BMPTexture.Width, BMPTexture.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                    BMPTexture.UnlockBits(data);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
-                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+                    rebindTexture();
 
                 }
             }
-
             GL.BindTexture(TextureTarget.Texture2D, _glInputTextureId);
 
             GL.Begin(PrimitiveType.Quads);
-            float _scale = 0.9f;
-            GL.TexCoord2(0, 0); GL.Vertex2(-_scale, _scale); //top left
-            GL.TexCoord2(1, 0); GL.Vertex2(_scale, _scale); //top right
-            GL.TexCoord2(1, 1); GL.Vertex2(_scale, -_scale); //bottom right
-            GL.TexCoord2(0, 1); GL.Vertex2(-_scale, -_scale); //bottom left
+
+            float ux = 1;
+            float uy = 1;
+            if (BMPTexture.Width > BMPTexture.Height)
+            {
+                uy = (float)BMPTexture.Height / (float)BMPTexture.Width;
+                uy *= (float)NexHudEngine.gameWindow.Width / (float)NexHudEngine.gameWindow.Height;
+            }
+            else
+            {
+                ux = (float)BMPTexture.Width / (float)BMPTexture.Height;
+                ux *= (float)NexHudEngine.gameWindow.Height / (float)NexHudEngine.gameWindow.Width;
+            }
+
+
+            ux *= m_wmSize;
+            uy *= m_wmSize;
+
+            GL.TexCoord2(0, 0); GL.Vertex2(-ux + WmPosition.X,  uy + WmPosition.Y); //top left
+            GL.TexCoord2(1, 0); GL.Vertex2( ux + WmPosition.X,  uy + WmPosition.Y); //top right
+            GL.TexCoord2(1, 1); GL.Vertex2( ux + WmPosition.X, -uy + WmPosition.Y); //bottom right
+            GL.TexCoord2(0, 1); GL.Vertex2(-ux + WmPosition.X, -uy + WmPosition.Y); //bottom left
             GL.End();
 
         }

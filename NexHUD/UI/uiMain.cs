@@ -42,12 +42,13 @@ namespace NexHUD.UI
             changeState(MenuState.Main);
 
 
-            frame.renderVrOverlay = false;
+            frame.renderOverlay = false;
         }
         private void initMainFrame()
         {
             m_frame = new NexHudOverlay(Width, Height, "NxMenu", "NexHUD Menu");
             m_frame.setVRPosition(new Vector3(0, 0, -3), new Vector3(0, 0, 0));
+            m_frame.setWMPosition(new Vector2(0, 0.2f), 0.4f);
             m_frame.Alpha = 1f;
             m_frame.setVRWidth(OverlayWidth);
             m_frame.NxOverlay.dirtyCheckFreq = TimeSpan.FromSeconds(0.1);
@@ -111,9 +112,9 @@ namespace NexHUD.UI
             {
                 if (NexHudEngine.isShortcutIsHold(Shortcuts.get(ShortcutId.menu)))
                 {
-                    if (!m_frame.renderVrOverlay)
+                    if (!m_frame.renderOverlay)
                     {
-                        m_frame.renderVrOverlay = true;
+                        m_frame.renderOverlay = true;
                     }
 
                     if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
@@ -124,9 +125,9 @@ namespace NexHUD.UI
                 }
                 else
                 {
-                    if (m_frame.renderVrOverlay)
+                    if (m_frame.renderOverlay)
                     {
-                        m_frame.renderVrOverlay = false;
+                        m_frame.renderOverlay = false;
                     }
                     return;
                 }
@@ -135,7 +136,7 @@ namespace NexHUD.UI
             {
                 if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.menu)))
                 {
-                    if (m_frame.renderVrOverlay)
+                    if (m_frame.renderOverlay)
                     {
                         if (m_state != MenuState.Main)
                         {
@@ -143,17 +144,17 @@ namespace NexHUD.UI
                                 changeState(MenuState.Main);
                         }
                         else
-                            m_frame.renderVrOverlay = false;
+                            m_frame.renderOverlay = false;
                     }
                     else
                     {
                         changeState(MenuState.Main);
-                        m_frame.renderVrOverlay = true;
+                        m_frame.renderOverlay = true;
                     }
                 }
             }
 
-            if (m_frame.renderVrOverlay)
+            if (m_frame.renderOverlay)
             {
                 //MAIN MENU NAVIGATION
                 if (m_uiMainMenu.isVisible)

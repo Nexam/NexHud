@@ -22,6 +22,11 @@ namespace NexHUDCore
         /// <summary>
         /// OpenGL Window (debug)
         /// </summary>
-        WindowDebug = 2
+        WindowDebug = 2,
+
+        /// <summary>
+        /// Detect if Vr is running and set the proper Engine mode
+        /// </summary>
+        Auto = 3,
     }
 }

@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 using Valve.VR;
 
 namespace NexHUDCore
@@ -42,7 +43,8 @@ namespace NexHUDCore
         public static event EventHandler PostDrawCallback;
 
         public static bool TraceLevel = true;
-        internal const string DefaultFragmentShaderPath = "Resources.fragShader.frag";
+        //internal const string DefaultFragmentShaderPath = "Resources.fragShader.frag";
+        private static int m_cockpitTextureId = 0;
 
 
         public static bool Initialised { get { return _initialised; } }
@@ -80,18 +82,34 @@ namespace NexHUDCore
             get { return _applications; }
         }
 
-        public static GameWindow m_gameWindow;
+        private static GameWindow m_gameWindow;
+
+        public static GameWindow gameWindow { get => m_gameWindow; }
 
         public static void Init(NexHudEngineMode _engineMode)
         {
+            if (_engineMode == NexHudEngineMode.Auto)
+            {
+                if (isVrEnvironmentRunning())
+                {
+                    Log("Auto mode: Steam VR Detected !");
+                    _engineMode = NexHudEngineMode.Vr;
+                }
+                else
+                {
+                    Log("Auto mode: No Steam VR detected, running classic overlay");
+                    _engineMode = NexHudEngineMode.WindowOverlay;
+                }
+            }
+
             m_engineMode = _engineMode;
             Overlays = new List<NexHudOverlay>();
             switch (m_engineMode)
             {
-                case NexHudEngineMode.Vr: 
-                    initEngineVR(); 
+                case NexHudEngineMode.Vr:
+                    initEngineVR();
                     break;
-                case NexHudEngineMode.WindowOverlay: 
+                case NexHudEngineMode.WindowOverlay:
                 case NexHudEngineMode.WindowDebug:
                     initEngineWindow();
                     break;
@@ -101,10 +119,37 @@ namespace NexHUDCore
             NexHudEngine.Log("NexHUDCore Initialised ({0})", m_engineMode);
             _initialised = true;
         }
+
+        private static bool isVrEnvironmentRunning()
+        {
+            bool _vrServerFound = false;
+            string[] processNames = new string[] { "vrserver" };
+
+            foreach( string n in processNames)
+            {
+                Process[] _process = Process.GetProcessesByName(n);
+                Console.WriteLine("list of process for \"{0}\": ", n);
+                foreach (Process p in _process)
+                {
+                    _vrServerFound = true;
+                    Console.WriteLine("- Process: {0} ({1})", p.ProcessName, p.Id);
+                }
+            }
+
+            return _vrServerFound;
+        }
         private static void initEngineWindow()
         {
+            if (m_engineMode == NexHudEngineMode.WindowOverlay)
+            {
+                Rectangle resolution = Screen.PrimaryScreen.Bounds;
+                m_gameWindow = new NxTransparentGameWindow(resolution.Width, resolution.Height); //TODO: auto size
+                
+            }
+            else
+                m_gameWindow = new GameWindow(1440, 900);
 
-            m_gameWindow = new NxGameWindow(1024,630);
+            
             m_gameWindow.Title = "NexHud Engine - " + m_engineMode;
             m_gameWindow.X = 50;
             m_gameWindow.Y = 50;
@@ -112,7 +157,7 @@ namespace NexHUDCore
             GL.Enable(EnableCap.Texture2D);
         }
         private static void initEngineVR()
-        { 
+        {
             bool tryAgain = true;
 
             while (tryAgain && !_doStop)
@@ -187,6 +232,8 @@ namespace NexHUDCore
         private static float _introWidth = 1;
         private static float _introDelay = -1;
         private static float _introTotalTime = 4f;
+        private static float _introWmWidth = 0.5f;
+
         private static DateTime _introStart;
 
         public static bool isIntroFinished()
@@ -198,19 +245,21 @@ namespace NexHUDCore
             int size = 512;
             _introOverlay = new NexHudOverlay(size, size, "introOverlay", "NxHUD VR");
 
-            _introOverlay.setVRPosition( new Vector3(0.0f, .2f, -1.1f), new Vector3(0.0f, 0.0f, 0));
+            _introOverlay.setVRPosition(new Vector3(0.0f, .2f, -1.1f), new Vector3(0.0f, 0.0f, 0));
             _introOverlay.Alpha = 0f;
             _introOverlay.setVRWidth(_introWidth);
+            _introOverlay.setWMPosition(new Vector2(), _introWmWidth);
 
             _introOverlay.GradientIntro = false;
 
             _introOverlay.BMPTexture = ResHelper.GetResourceImage("Resources.Logo.png");
 
+            _introOverlay.rebindTexture();
             // _introOverlay.BMPTexture = (Bitmap)Image.FromFile(Environment.CurrentDirectory + "\\Resources\\Logo.png");
 
             //_introOverlay.BMPTexture.MakeTransparent();
         }
-        
+
 
         private static Stopwatch internalWatch;
         public static void Run()
@@ -220,7 +269,7 @@ namespace NexHUDCore
 
             createIntroOverlay();
 
-            if( m_engineMode == NexHudEngineMode.Vr)
+            if (m_engineMode == NexHudEngineMode.Vr)
             {
                 while (!_doStop)
                 {
@@ -240,15 +289,32 @@ namespace NexHUDCore
             {
                 m_gameWindow.UpdateFrame += onGameWindowUpdate;
                 m_gameWindow.RenderFrame += onGameWindowRender;
-                m_gameWindow.Load += M_gameWindow_Load;
+                m_gameWindow.Load += onGameWindowLoad;
                 m_gameWindow.Resize += onGameWindowResize;
                 m_gameWindow.Run(FPS);
             }
 
         }
 
-        private static void M_gameWindow_Load(object sender, EventArgs e)
-        {           
+        private static void onGameWindowLoad(object sender, EventArgs e)
+        {
+            if( m_engineMode == NexHudEngineMode.WindowDebug )
+            {
+                m_cockpitTextureId = GL.GenTexture();
+                GL.BindTexture(TextureTarget.Texture2D, m_cockpitTextureId);
+
+                Bitmap _cockpitTex = ResHelper.GetResourceImage("Resources.cockpit.png");
+
+                BitmapData data = _cockpitTex.LockBits(new Rectangle(0, 0, _cockpitTex.Width, _cockpitTex.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, _cockpitTex.Width, _cockpitTex.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                _cockpitTex.UnlockBits(data);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Linear);
+
+            }
+           
         }
 
         private static void onGameWindowResize(object sender, EventArgs e)
@@ -260,10 +326,21 @@ namespace NexHUDCore
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.ClearColor(0, 0, 0, 0);
-
             GL.Enable(EnableCap.Texture2D);
+            if (m_engineMode == NexHudEngineMode.WindowDebug)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, m_cockpitTextureId);
+                GL.Begin(PrimitiveType.Quads);
+                GL.TexCoord2(0, 0); GL.Vertex2(-1, 1); //top left
+                GL.TexCoord2(1, 0); GL.Vertex2(1, 1); //top right
+                GL.TexCoord2(1, 1); GL.Vertex2(1, -1); //bottom right
+                GL.TexCoord2(0, 1); GL.Vertex2(-1, -1); //bottom left
+                GL.End();
+            }
+
 
             drawEngine();
+
             GL.Disable(EnableCap.Texture2D);
             //
             m_gameWindow.SwapBuffers();
@@ -273,15 +350,14 @@ namespace NexHUDCore
         {
             m_deltaTime = (float)e.Time;
             updateEngine();
-            
+
         }
 
         private static void drawEngine()
         {
             if (!isIntroFinished())
             {
-                if (m_engineMode == NexHudEngineMode.Vr)
-                    _introOverlay.Draw();
+                 _introOverlay.Draw();
             }
             else
             {
@@ -309,7 +385,8 @@ namespace NexHUDCore
 
 
 
-                _introOverlay.setVRWidth( (0.5f + (_introDelay / _introTotalTime) * 0.05f) * _introWidth);
+                _introOverlay.setVRWidth((0.5f + (_introDelay / _introTotalTime) * 0.05f) * _introWidth);
+                _introOverlay.WmSize = (0.5f + (_introDelay / _introTotalTime) * 0.05f) * _introWmWidth;
 
                 if (_introDelay < 1)
                     _introOverlay.Alpha = MathHelper.Clamp(_introDelay, 0, 1f);
@@ -320,9 +397,9 @@ namespace NexHUDCore
 
                 _introOverlay.Update();
 
-                if( m_engineMode == NexHudEngineMode.Vr)
+                if (m_engineMode == NexHudEngineMode.Vr)
                     drawEngine();
-              
+
 
                 if (_introDelay > _introTotalTime)
                 {
@@ -343,15 +420,15 @@ namespace NexHUDCore
 
                 PostUpdateCallback?.Invoke(null, null);
 
-                if( m_engineMode == NexHudEngineMode.Vr )
+                if (m_engineMode == NexHudEngineMode.Vr)
                 {
                     drawEngine();
                 }
-              
+
             }
 
 
-      
+
         }
 
         private static List<Key> m_KeyPressedBefore = new List<Key>();

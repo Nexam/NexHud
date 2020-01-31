@@ -211,12 +211,14 @@
     <None Include="app.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\fragShaderWm.frag" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="openvr_api.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Resources\Gradient.png" />
+    <EmbeddedResource Include="Resources\cockpit.png" />
     <Content Include="Resources\EUROCAPS.TTF">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
