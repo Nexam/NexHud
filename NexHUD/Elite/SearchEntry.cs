@@ -20,6 +20,7 @@ namespace NexHUD.Elite
         public Dictionary<NxSearchParam, string[]> searchParamsFormated { get { return m_searchParamFormated; } }
 
         private NxSearchDisplay[] m_searchDisplayFormated;
+        internal string Description;
 
         public NxSearchDisplay[] searchDisplayFormated { get { return m_searchDisplayFormated; } }
 
@@ -61,10 +62,69 @@ namespace NexHUD.Elite
                     break;
             }
             m_searchDisplayFormated = _sdf.ToArray();
-
+            generateDescription();
             m_formated = true;
         }
+        private void generateDescription()
+        {
+            Description = string.Format("Search '{0}': {1}", searchName, searchType);
+            foreach(NxSearchParam p in m_searchParamFormated.Keys)
+            {
+                switch (p)
+                {
+                    case NxSearchParam.name:
+                        Description += " is called ";
+                        break;
+                    case NxSearchParam.allegiance:
+                        Description += " from ";
+                        break;
+                    case NxSearchParam.government:
+                        Description += " ruled by ";
+                        break;
+                    case NxSearchParam.state:
+                        Description += " in ";
+                        break;
+                    case NxSearchParam.economy:
+                        Description += " living for ";
+                        break;
+                    case NxSearchParam.rawMaterial:
+                        Description += " with ";
+                        break;
+                }
+                for(int i = 0; i < m_searchParamFormated[p].Length; i++)
+                {
+                    if( p == NxSearchParam.isLandable && m_searchParamFormated[p][i] == "true" )
+                    {
+                        Description += " landable";
+                        continue;
+                    }
+                    bool last = i == m_searchParamFormated[p].Length - 1;
+                    Description += m_searchParamFormated[p][i];
+                    if (!last)
+                    {
+                        if (p != NxSearchParam.rawMaterial)
+                            Description += " or ";
+                        else
+                            Description += " and ";
+                    }
+                }
+                switch (p)
+                {
+                    case NxSearchParam.reserve:
+                        Description += " reserve";
+                        break;
+                    case NxSearchParam.security:
+                        Description += " security";
+                        break;
+                    case NxSearchParam.threat:
+                        Description += " threat";
+                        break;
+                }
+            }
+        }
     }
+
+
     public enum NxSearchType
     {
         none,

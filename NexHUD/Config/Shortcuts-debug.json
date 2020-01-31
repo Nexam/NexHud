@@ -23,5 +23,9 @@
 		id : "menu",
 		menuMode : "press",
 		key : "Escape"
+	},	
+	{
+		id : "back",
+		key : "Escape"
 	},
 ]

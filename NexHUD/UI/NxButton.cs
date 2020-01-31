@@ -18,18 +18,28 @@ namespace NexHUD.UI
         private NxSimpleText m_buttonName;
 
         public bool Selected = false;
-        public bool isSelectable = true;
+        private bool m_isSelectable = true;
 
         public Color ColorLabel;
         public Color ColorLabelSelected;
         public Color ColorLabelDisable;
+        public Color ColorLabelDisableSelected;
 
         public Color ColorBack;
         public Color ColorBackSelected;
         public Color ColorBackDisable;
+        public Color ColorBackDisableSelected;
+
 
         public Color ColorLines;
 
+        private int m_labelTextSize = 16;
+
+        public int LabelTextSize
+        {
+            get => m_labelTextSize;
+            set => m_labelTextSize = value;
+        }
 
         private NxRectangle[] Lines = new NxRectangle[2];
 
@@ -41,15 +51,19 @@ namespace NexHUD.UI
         public int Height { get { return Selected ? (int)(m_height * HeightInc) : m_height; } set { m_height = value; repos(); } }
         public int Width { get { return m_width; } set { m_width = value; repos(); } }
         public NxSimpleText labelST { get => m_buttonName; }
+        public bool isSelectable { get => m_isSelectable; set { if (m_isSelectable != value) makeItDirty();  m_isSelectable = value; } }
+
         public void resetColors()
         {
             ColorLabel = EDColors.YELLOW;
             ColorLabelSelected = EDColors.WHITE;
-            ColorLabelDisable = EDColors.GRAY;
+            ColorLabelDisable = EDColors.getColor(EDColors.WHITE, 0.3f);
+            ColorLabelDisableSelected = EDColors.getColor(EDColors.WHITE, 0.5f);
 
             ColorBack = EDColors.getColor(EDColors.ORANGE, 0.1f);
             ColorBackSelected = EDColors.getColor(EDColors.ORANGE, 0.8f);
             ColorBackDisable = EDColors.getColor(EDColors.WHITE, 0.1f);
+            ColorBackDisableSelected = EDColors.getColor(EDColors.WHITE, 0.2f);
             ColorLines = EDColors.YELLOW;
         }
 
@@ -100,26 +114,26 @@ namespace NexHUD.UI
             if (Selected && isSelectable)
                 m_buttonName.Color = ColorLabelSelected;
             else if (!isSelectable)
-                m_buttonName.Color = ColorLabelDisable;
+                m_buttonName.Color = Selected ? ColorLabelDisableSelected : ColorLabelDisable;
             else
                 m_buttonName.Color = ColorLabel;
 
             if (isSelectable)
                 m_background.Color = Selected ? ColorBackSelected : ColorBack;
             else
-                m_background.Color = ColorBackDisable;
+                m_background.Color = Selected ? ColorBackDisableSelected : ColorBackDisable;
 
             if (Selected)
             {
                 m_background.height = (int)(m_height * HeightInc);
                 m_background.y = y - (m_background.height - m_height) / 2;
-                m_buttonName.size = 20;
+                m_buttonName.size = m_labelTextSize+4;
             }
             else
             {
                 m_background.height = (m_height);
                 m_background.y = y;
-                m_buttonName.size = 16;
+                m_buttonName.size = m_labelTextSize;
             }
 
 

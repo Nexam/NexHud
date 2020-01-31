@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EliteAPI.Events;
+using Newtonsoft.Json;
 using NexHUD.Elite;
 using NexHUDCore;
 using System;
@@ -15,19 +16,28 @@ namespace NexHUD.EDEngineer
 
         private static BlueprintDatas[] m_bpDatas;
         private static MaterialDatas[] m_matDatas;
+        private static Dictionary<string, List<BlueprintDatas>> m_experimentals = new Dictionary<string, List<BlueprintDatas>>();
         private static int[] m_rollPerGrade = new int[] { 0, 3, 4, 5, 6, 7 };
 
         public static BlueprintDatas[] blueprints { get { loadDatas(); return m_bpDatas; } }
         public static MaterialDatas[] materials { get { loadDatas(); return m_matDatas; } }
         public static int[] rollPerGrade { get => m_rollPerGrade; }
+        
+        public static BlueprintDatas[] getExperimentals(string _blueprintType)
+        {
+            if (m_experimentals.ContainsKey(_blueprintType))
+                return m_experimentals[_blueprintType].ToArray();
+            else
+                return null;
+        }
 
         public static MaterialDatas[] getAllCraftMaterials(string _blueprintType, string _blueprintName, string _experimental, int _grade)
         {
             Dictionary<string, MaterialDatas> _materials = new Dictionary<string, MaterialDatas>();
-            for (int g = 1; g < _grade+1; g++)
+            for (int g = 1; g <= _grade+1; g++)
             {
                 BlueprintDatas d = null;
-                if( g < _grade )
+                if( g <= _grade)
                     d = blueprints.Where(x => x.Type == _blueprintType && x.Name == _blueprintName && x.Grade == g).FirstOrDefault();
                 else if( !string.IsNullOrEmpty(_experimental) )
                     d = blueprints.Where(x => x.Type == _blueprintType && x.Name == _experimental && x.IsExperimental).FirstOrDefault();
@@ -39,11 +49,11 @@ namespace NexHUD.EDEngineer
                         if (!_materials.ContainsKey(i.Name))
                         {
                             MaterialDatas m = materials.Where(x => x.Name == i.Name).FirstOrDefault();
-                            m.Quantity = i.Size * ( d.IsExperimental ? 1 : rollPerGrade[_grade] );
+                            m.Quantity = i.Size * ( d.IsExperimental ? 1 : rollPerGrade[g] );
                             _materials.Add(i.Name, m);
                         }
                         else
-                            _materials[i.Name].Quantity += i.Size;
+                            _materials[i.Name].Quantity += i.Size * (d.IsExperimental ? 1 : rollPerGrade[g]);
                     }
                 }
             }
@@ -60,13 +70,29 @@ namespace NexHUD.EDEngineer
             m_bpDatas = JsonConvert.DeserializeObject<BlueprintDatas[]>(_json);
             NexHudEngine.Log(">>{0} blueprints loaded", m_bpDatas.Length);
 
+
             //Assigning categories
             foreach (BlueprintDatas d in m_bpDatas)
+            {
                 d.Categorie = getCategorie(d);
+                if(d.IsExperimental)
+                {
+                    if (!m_experimentals.ContainsKey(d.Type))
+                        m_experimentals.Add(d.Type, new List<BlueprintDatas>() );
+                    m_experimentals[d.Type].Add(d);
+                }
+                //max grade
+                if( !d.IsExperimental && !d.IsUnlock)
+                {
+                    d.MaxGrade = m_bpDatas.Where(x => x.Type == d.Type && x.Name == d.Name && x.Grade > 0).Count();
+                    if (d.MaxGrade > 5 || d.MaxGrade < 0)
+                        throw new Exception("Something is wrong....");
+                }
+            }
 
 
 
-            NexHudEngine.Log("Loading materials datas...");
+                NexHudEngine.Log("Loading materials datas...");
             _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "EDEngineer.Datas.entryData.json");
             m_matDatas = JsonConvert.DeserializeObject<MaterialDatas[]>(_json);
             NexHudEngine.Log(">>{0} materials loaded", m_matDatas.Length);
@@ -247,13 +273,19 @@ namespace NexHUD.EDEngineer
 
         public static int getCmdrMaterials(string name)
         {
-            int _count = 0;
+            long _count = 0;
 
-            _count += NexHudMain.eliteApi.Materials.Encoded.Where(x => x.Name == name).Count();
-            _count += NexHudMain.eliteApi.Materials.Manufactured.Where(x => x.Name == name).Count();
-            _count += NexHudMain.eliteApi.Materials.Raw.Where(x => x.Name == name).Count();
+            Encoded e = NexHudMain.eliteApi.Materials.Encoded.Where(x => x.NameLocalised == name).FirstOrDefault();
+            if (e != null)
+                _count += e.Count;
+            Encoded m = NexHudMain.eliteApi.Materials.Manufactured.Where(x => x.NameLocalised == name).FirstOrDefault();
+            if( m != null)
+                _count += m.Count;
+            Raw r = NexHudMain.eliteApi.Materials.Raw.Where(x => x.Name == name.ToLower() ).FirstOrDefault();
+            if (r != null)
+                _count += r.Count;
 
-            return _count;
+            return (int)_count;
         }
 
         public static BlueprintCategorie getCategorie(BlueprintDatas _datas)

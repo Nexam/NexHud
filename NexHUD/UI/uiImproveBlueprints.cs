@@ -113,7 +113,9 @@ namespace NexHUD.UI
                     m_TypeSelected = (string)_selected.Obj;
                 else if (_selected.Obj is BlueprintDatas)
                 {
-                    m_uiImprove.BlueprintDetails.setBlueprint((BlueprintDatas)_selected.Obj);
+                    BlueprintDatas d = (BlueprintDatas)_selected.Obj;
+                    BlueprintDatas _maxGrade = EngineerHelper.blueprints.Where(x => x.Type == d.Type && x.Name == d.Name &&  x.Grade == d.MaxGrade ).FirstOrDefault();
+                    m_uiImprove.BlueprintDetails.setBlueprint(_maxGrade);
                     m_uiImprove.changeState(UiImprove.UiImproveState.BlueprintDetail);
                 }
                 refresh();
@@ -153,7 +155,7 @@ namespace NexHUD.UI
 
                 List<string> _typeAdded = new List<string>();
                 List<string> _nameAdded = new List<string>();
-                foreach (BlueprintDatas _data in EngineerHelper.blueprints.Where(x => x.Categorie == _categorie))
+                foreach (BlueprintDatas _data in EngineerHelper.blueprints.Where(x => x.Categorie == _categorie ))
                 {
                     if (_typeAdded.Contains(_data.Type))
                         continue;
@@ -196,7 +198,7 @@ namespace NexHUD.UI
                         m_Buttons[_btnId - 1].ColorBack = EDColors.getColor(EDColors.ORANGE, 0.3f);
                         m_Buttons[_btnId - 1].ColorLabel = EDColors.YELLOW;
 
-                        foreach (BlueprintDatas _data2 in EngineerHelper.blueprints.Where(x => x.Type == m_TypeSelected && !x.IsExperimental))
+                        foreach (BlueprintDatas _data2 in EngineerHelper.blueprints.Where(x => x.Type == m_TypeSelected && !x.IsExperimental && !x.IsSynthesis))
                         {
                             if (_nameAdded.Contains(_data2.Name))
                                 continue;

@@ -1,4 +1,6 @@
-﻿namespace NexHUD.EDEngineer
+﻿using System.Linq;
+
+namespace NexHUD.EDEngineer
 {
     public class BlueprintDatas
     {
@@ -13,6 +15,10 @@
         public BlueprintCategorie Categorie { get; internal set; }
 
         public bool IsExperimental { get { return Grade <= 0; } }
+        public bool IsSynthesis { get { return Engineers.Contains("@Synthesis"); } }
+        public bool IsUnlock { get { return Type == "Unlock"; } }
+
+        public int MaxGrade = 0;
     }
     public class BlueprintIngredient
     {
