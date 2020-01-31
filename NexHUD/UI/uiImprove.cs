@@ -14,20 +14,23 @@ namespace NexHUD.UI
         {
             CraftList,
             Blueprints,
-            BlueprintDetail
+            BlueprintDetail,
+            Search,
         }
         private NxMenu m_menu;
-        private UiImproveState m_state = UiImproveState.CraftList;
+        private UiImproveState m_state = UiImproveState.Search;
         private UiImproveState m_previousState = UiImproveState.CraftList;
 
         private UiImproveCraftlist m_craftlist;
         private UiImproveBlueprints m_blueprints;
         private UiImproveBlueprintDetails m_blueprintDetails;
+        private UiSearch m_search;
 
         public NxMenu Menu { get => m_menu;  }
         internal UiImproveCraftlist Craftlist { get => m_craftlist; }
         public UiImproveBlueprints Blueprints { get => m_blueprints;  }
         public UiImproveBlueprintDetails BlueprintDetails { get => m_blueprintDetails;  }
+        public UiSearch search { get => m_search; }
 
         public UiImprove(NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
@@ -36,10 +39,12 @@ namespace NexHUD.UI
             m_craftlist = new UiImproveCraftlist(this);
             m_blueprints = new UiImproveBlueprints(this);
             m_blueprintDetails = new UiImproveBlueprintDetails(this);
+            m_search = new UiSearch(m_menu, true);
 
             Add(m_craftlist);
             Add(m_blueprints);
             Add(m_blueprintDetails);
+            Add(m_search);
 
             changeState(UiImproveState.CraftList);
         }
@@ -47,15 +52,18 @@ namespace NexHUD.UI
         {
             if (_newState == m_state)
                 return;
-            m_previousState = m_state;
+            if( m_state != UiImproveState.Search )
+                m_previousState = m_state;
             m_state = _newState;
             m_craftlist.isVisible = false;
             m_blueprints.isVisible = false;
             m_blueprintDetails.isVisible = false;
+            m_search.isVisible = false;
             switch (m_state)
             {
                 case UiImproveState.CraftList:
                     m_craftlist.isVisible = true;
+                    m_craftlist.refresh();
                     break;
                 case UiImproveState.Blueprints:
                     m_blueprints.isVisible = true;
@@ -63,15 +71,27 @@ namespace NexHUD.UI
                 case UiImproveState.BlueprintDetail:
                     m_blueprintDetails.isVisible = true;
                     break;
+                case UiImproveState.Search:
+                    m_search.isVisible = true;
+                    break;
             }
         }
+        private bool _skipUpdate = true;
         public override void Update()
         {
             base.Update();
             if (!isVisible)
+            {
+                _skipUpdate = true;
                 return;
+            }
+            else if (_skipUpdate)
+            {
+                _skipUpdate = false;
+                return;
+            }
 
-            if( NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back) ) )
+            if ( NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back) ) )
             {
                 if (m_state == UiImproveState.BlueprintDetail && m_previousState == UiImproveState.CraftList)
                     changeState(UiImproveState.CraftList);
@@ -79,8 +99,13 @@ namespace NexHUD.UI
                     changeState(UiImproveState.Blueprints);
                 else if (m_state == UiImproveState.Blueprints)
                     changeState(UiImproveState.CraftList);
+                else if (m_state == UiImproveState.Search)
+                    changeState(UiImproveState.BlueprintDetail);
                 else
+                {
+                    changeState(UiImproveState.CraftList);
                     m_menu.changeState(NxMenu.MenuState.Main);
+                }
             }
         }
     }

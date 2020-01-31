@@ -16,8 +16,6 @@ namespace NexHUD.UI
         private const int BUTTON_WIDTH = 250;
 
         UiImprove m_uiImprove;
-        private bool m_firstUpdateSkipped = false;
-
         public List<NxButton> m_Buttons = new List<NxButton>();
 
         private Point m_CursorCoords = new Point();
@@ -42,16 +40,18 @@ namespace NexHUD.UI
             refresh();
         }
 
+        private bool _skipUpdate = true;
         public override void Update()
         {
             base.Update();
-
             if (!isVisible)
-                return;
-
-            if (!m_firstUpdateSkipped)
             {
-                m_firstUpdateSkipped = true;
+                _skipUpdate = true;
+                return;
+            }
+            else if (_skipUpdate)
+            {
+                _skipUpdate = false;
                 return;
             }
 

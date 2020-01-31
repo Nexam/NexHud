@@ -1,6 +1,7 @@
 ﻿using EliteAPI;
 using NexHUD.EDEngineer;
 using NexHUD.Elite;
+using NexHUD.Elite.Craftlist;
 using NexHUD.UI;
 using NexHUDCore;
 using NexHUDCore.NxItems;
@@ -35,6 +36,7 @@ namespace NexHUD
             initEngine(_debugMode ? NexHudEngineMode.WindowDebug: NexHudEngineMode.Auto);
 
             loadConfigs();
+            
 
             if( NexHudEngine.engineMode == NexHudEngineMode.Vr)
                 initVRConsole();
@@ -62,6 +64,9 @@ namespace NexHUD
 
             //User params
             UserSearchs.readConfigFile();
+
+            //craft list
+            Craftlist.load();
 
         }
 

@@ -248,10 +248,16 @@ namespace NexHUD.UI
         private int m_CursorMaxX = 0;
         private int m_CursorMaxY = 0;
 
-        /* Top Section */
-        NxMainPanelSearchButton[] m_buttons;
+        public NxSimpleText m_title;
+
+        /* Top Section */ // Normal Search
+        NxMainPanelSearchButton[] m_buttons = new NxMainPanelSearchButton[0];
         private int m_buttonPerRow = 6;
         private int m_buttonRow = 2;
+
+        /* Top Section */ // Auto search
+        private NxSimpleText m_SearchTips;
+        private NxSimpleText m_SearchDescription;
 
         /* Search Result */
         private NxMainPanelSearchResult[] m_searchResults;
@@ -265,38 +271,57 @@ namespace NexHUD.UI
 
         private uint _currentSearchId = 0;
 
-        public UiSearch(NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public UiSearch(NxMenu _menu, bool AutoSearch = false) : base(_menu.frame.NxOverlay)
         {
             m_menu = _menu;
             //Title
-            Add(new NxSimpleText(0, UiMainTopInfos.HEIGHT, "Search...", EDColors.ORANGE, 24, NxFonts.EuroCapital));
+            m_title = new NxSimpleText(0, UiMainTopInfos.HEIGHT, AutoSearch ? "Auto-search..." : "Search...", EDColors.ORANGE, 24, NxFonts.EuroCapital);
+            Add(m_title);
 
-            //Initialize buttons           
-            int _buttonId = 0;
-            int _buttonSpacing = 5;
             int _by = 0;
-            m_buttons = new NxMainPanelSearchButton[m_buttonPerRow * m_buttonRow];
-
-            m_CursorMaxX = m_buttonPerRow - 1;
-            m_CursorMaxY = m_buttonRow - 1;
-
-            int _buttonWidth = (NxMenu.Width - (m_buttonPerRow + 1) * _buttonSpacing) / m_buttonPerRow;
-            for (int a = 0; a < m_buttonRow; a++)
+            //Initialize buttons
+            if (!AutoSearch)
             {
-                for (int b = 0; b < m_buttonPerRow; b++)
+                int _buttonId = 0;
+                int _buttonSpacing = 5;
+              
+                m_buttons = new NxMainPanelSearchButton[m_buttonPerRow * m_buttonRow];
+
+                m_CursorMaxX = m_buttonPerRow - 1;
+                m_CursorMaxY = m_buttonRow - 1;
+
+                int _buttonWidth = (NxMenu.Width - (m_buttonPerRow + 1) * _buttonSpacing) / m_buttonPerRow;
+                for (int a = 0; a < m_buttonRow; a++)
                 {
-                    int _bx = _buttonSpacing + b * _buttonSpacing + b * _buttonWidth;
-                    _by = (a * _buttonSpacing) + (a * NxMainPanelSearchButton.Height) + UiMainTopInfos.HEIGHT + 30;
-                    m_buttons[_buttonId] = new NxMainPanelSearchButton(_bx, _by, _buttonWidth, m_menu);
-                    Add(m_buttons[_buttonId]);
+                    for (int b = 0; b < m_buttonPerRow; b++)
+                    {
+                        int _bx = _buttonSpacing + b * _buttonSpacing + b * _buttonWidth;
+                        _by = (a * _buttonSpacing) + (a * NxMainPanelSearchButton.Height) + UiMainTopInfos.HEIGHT + 30;
+                        m_buttons[_buttonId] = new NxMainPanelSearchButton(_bx, _by, _buttonWidth, m_menu);
+                        Add(m_buttons[_buttonId]);
 
-                    if (_buttonId < UserSearchs.userSearchEntrys.Length)
-                        m_buttons[_buttonId].searchName.text = UserSearchs.userSearchEntrys[_buttonId].searchName;
+                        if (_buttonId < UserSearchs.userSearchEntrys.Length)
+                            m_buttons[_buttonId].searchName.text = UserSearchs.userSearchEntrys[_buttonId].searchName;
 
-                    _buttonId++;
+                        _buttonId++;
 
+                    }
                 }
             }
+            else
+            {
+                m_buttonRow = 0;
+                m_buttonPerRow = 0;
+                _by = UiMainTopInfos.HEIGHT + 33;
+                Add(new NxRectangle(5, _by, NxMenu.Width-10, 55, EDColors.getColor(EDColors.WHITE, 0.1f)));
+                m_SearchTips = new NxSimpleText(10, _by, "Search tips", EDColors.BLUE, 18);
+                Add(m_SearchTips);
+                _by += 25;
+                m_SearchDescription = new NxSimpleText(10, _by, "Search description", EDColors.YELLOW, 19);
+                Add(m_SearchDescription);
+                _by += 5;
+            }
+
             //Title
             _by += 30;
             Add(new NxSimpleText(0, _by, "Search Result...", EDColors.ORANGE, 24, NxFonts.EuroCapital));
@@ -335,6 +360,14 @@ namespace NexHUD.UI
         }
 
         private float _updateMessageResearchDelay = 0;
+
+        public void processSearch(NxSearchEntry _search, string tips, string material )
+        {
+            m_title.text = "Search for: " + material;
+            m_SearchTips.text = "Tips: "+ tips;
+            m_SearchDescription.text = _search.Description;
+            _currentSearchId = EDDatas.Instance.processUserSearch(_search);
+        }
         public override void Update()
         {
             base.Update();

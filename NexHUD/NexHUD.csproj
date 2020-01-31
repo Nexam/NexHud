@@ -151,6 +151,8 @@
     <Compile Include="EDEngineer\EngineerHelper.cs" />
     <Compile Include="EDEngineer\MaterialDatas.cs" />
     <Compile Include="EDSM\EDSMSystemDatas.cs" />
+    <Compile Include="Elite\Craftlist\Craftlist.cs" />
+    <Compile Include="Elite\Craftlist\CraftlistItem.cs" />
     <Compile Include="Elite\EDBody.cs" />
     <Compile Include="Elite\Enums\EDEnumHelper.cs" />
     <Compile Include="Elite\Enums\EliteEconomy.cs" />

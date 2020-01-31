@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NexHUD.EDEngineer;
+using NexHUD.Elite.Craftlist;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 
@@ -37,7 +38,7 @@ namespace NexHUD.UI
             m_uiBlueprintsDetails = _uiBlueprintsDetails;
             y = 105;
             m_isExperimental = _isExperimetal;
-            x = IsExperimental ? (NxMenu.Width / 2) - (Width / 2) - 50  : 5;
+            x = IsExperimental ? (NxMenu.Width / 2) - (Width / 2) - 50 : 5;
 
             Add(new NxRectangle(x, y, Width, Height, EDColors.getColor(EDColors.WHITE, .05f)));
             m_gradeText = new NxSimpleText(x + 5, y + 2, "GRADE / EXP NAME.", EDColors.YELLOW, 20, NxFonts.EuroCapital);// { vertical = true };
@@ -83,7 +84,6 @@ namespace NexHUD.UI
                 return;
             }
             else if (_skipUpdate)
-            
             {
                 _skipUpdate = false;
                 return;
@@ -106,7 +106,7 @@ namespace NexHUD.UI
                     if (m_nextButton.Selected && m_nextButton.isSelectable)
                         m_uiBlueprintsDetails.nexGrade();
                 }
-                else if(m_experimentals != null)
+                else if (m_experimentals != null)
                 {
                     if (m_prevButton.Selected && m_prevButton.isSelectable)
                         m_uiBlueprintsDetails.changeExperimental(m_prevButton.Obj as BlueprintDatas);
@@ -150,7 +150,7 @@ namespace NexHUD.UI
                             if (m_experimentals[i].Name == m_datas.Name && i < m_experimentals.Length - 1)
                             {
                                 m_nextButton.isSelectable = true;
-                                if( i > 0 )
+                                if (i > 0)
                                     m_prevButton.Obj = m_experimentals[i - 1];
                                 m_nextButton.Obj = m_experimentals[i + 1];
                             }
@@ -301,7 +301,7 @@ namespace NexHUD.UI
         public void setBlueprint(BlueprintDatas _blueprint)
         {
             m_blueprint = _blueprint;
-            if( m_experimental != null )
+            if (m_experimental != null)
             {
                 if (m_blueprint == null || (m_experimental.Type != m_blueprint.Type))
                     m_experimental = null;
@@ -374,7 +374,7 @@ namespace NexHUD.UI
                     m_materials[i].isVisible = false;
                     m_cargos[i].isVisible = false;
                 }
-                }
+            }
 
             m_updatePositions = true;
         }
@@ -511,12 +511,21 @@ namespace NexHUD.UI
             //Mat tools tips
             if (_materialBtnSelected != null && _materialBtnSelected.Obj != null)
             {
-                m_Tips.text = "";
+                string _tips = "";
                 foreach (string tip in ((MaterialDatas)_materialBtnSelected.Obj).OriginDetails)
-                    m_Tips.text += tip + " . ";
+                    _tips += tip + " |";
+                _tips = _tips.Substring(0, _tips.Length - 1).Trim();
+                m_Tips.text = _tips;
 
                 if (((MaterialDatas)_materialBtnSelected.Obj).nxSearch != null)
+                {
                     m_NxSeachDescription.text = ((MaterialDatas)_materialBtnSelected.Obj).nxSearch.Description;
+                    if (select)
+                    {
+                        m_uiImprove.changeState(UiImprove.UiImproveState.Search);
+                        m_uiImprove.search.processSearch(((MaterialDatas)_materialBtnSelected.Obj).nxSearch, _tips, ((MaterialDatas)_materialBtnSelected.Obj).Name);
+                    }
+                }
                 else
                     m_NxSeachDescription.text = string.Empty;
             }
@@ -526,6 +535,14 @@ namespace NexHUD.UI
                 m_NxSeachDescription.text = string.Empty;
             }
 
+            //Pin that!
+            if( m_ButtonPin.Selected && select)
+            {
+                CraftlistItem craftItem = CraftlistItem.create(m_blueprint, m_experimental, m_pinCount);
+                Craftlist.Add(craftItem);
+                m_uiImprove.changeState(UiImprove.UiImproveState.CraftList);
+
             }
+        }
     }
 }
