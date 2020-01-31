@@ -6,6 +6,9 @@ namespace NexHUDCore.NxItems
     {
         private Color m_Color;
         private Brush m_Brush;
+
+        public NxGroup group;
+
         public Color Color
         {
             get { return m_Color; }
@@ -32,10 +35,12 @@ namespace NexHUDCore.NxItems
 
         private bool m_isVisible = true;
         internal bool visIsUptodate = true;
-        public bool isVisible
+        public virtual bool isVisible
         {
             get
             {
+                if (group != null && !group.isVisible)
+                        return false;
                 return m_isVisible;
             }
             set

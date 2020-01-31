@@ -11,6 +11,8 @@ namespace NexHUDCore.NxItems
         public int width { get => m_w; set { m_w = value; makeItDirty(); } }
         public int height { get => m_h; set { m_h = value; makeItDirty(); } }
 
+      
+
 
         public Bitmap Image
         {

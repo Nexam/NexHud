@@ -18,12 +18,23 @@ namespace NexHUDCore.NxItems
         public void Add(NxItem _item)
         {
             m_nxItems.Add(_item);
+            _item.group = this;
             makeItDirty();
         }
         public void Remove(NxItem _item)
         {
             m_nxItems.Remove(_item);
+            _item.group = null;
             makeItDirty();
+        }
+
+        public override bool isVisible 
+        { 
+            get => base.isVisible;
+            set
+            {
+                base.isVisible = value;
+            }
         }
 
         public override void Render(Graphics _g)

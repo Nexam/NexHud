@@ -41,13 +41,43 @@ namespace NexHUD.Elite.Craftlist
         internal BlueprintDatas experimentBlueprint { get => m_experimentBlueprint; }
         internal bool isValid { get => m_isValid; }
 
+
         /// <summary>
         /// whe you got everything...
         /// </summary>
-        /// <returns></returns>
-        public bool canCraft()
+        /// <returns>number of craft available</returns>
+        public int canCraft()
         {
-            return false;
+            Dictionary<string, int> one = new Dictionary<string, int>();
+            Dictionary<string, int> cmdr = new Dictionary<string, int>();
+
+            MaterialDatas[] _needed = EngineerHelper.getAllCraftMaterials(type, name, experimental, grade);
+            foreach (MaterialDatas m in _needed)
+            {
+                if (!one.ContainsKey(m.Name))
+                    one.Add(m.Name, m.Quantity);
+                else
+                    one[m.Name] += m.Quantity;
+
+                if (!cmdr.ContainsKey(m.Name))
+                    cmdr.Add(m.Name, EngineerHelper.getCmdrMaterials(m.Name));
+            }
+
+            int _canCraft = count;
+
+            foreach (string m in one.Keys)
+            {
+                for (int i = 1; i <= count; i++)
+                {
+                    if (cmdr[m] < one[m] * i)
+                    {
+                        _canCraft = Math.Min(i-1, _canCraft);
+                        if (_canCraft == 0)
+                            return 0;
+                    }
+                }
+            }
+            return _canCraft;
         }
 
         public void compile()

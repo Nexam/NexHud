@@ -67,7 +67,7 @@ namespace NexHUD.UI
             ColorLines = EDColors.YELLOW;
         }
 
-        private void repos()
+        public void repos()
         {
             m_background.x = x;
             m_background.y = y;

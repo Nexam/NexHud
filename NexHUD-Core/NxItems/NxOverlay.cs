@@ -19,6 +19,15 @@ namespace NexHUDCore.NxItems
 
         public bool LogRenderTime = true;
 
+        public override bool isVisible
+        {
+            get => base.isVisible;
+            set
+            {
+                base.isVisible = value;
+            }
+        }
+
         public NxOverlay(NexHudOverlay _parent, bool _drawDefaultBackground = true)
         {
             m_parent = _parent;

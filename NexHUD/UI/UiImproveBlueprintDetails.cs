@@ -167,13 +167,13 @@ namespace NexHUD.UI
             }
             else
             {
-                m_gradeText.text = string.Format("Grade {0}", _datas.Grade);
-                if (_datas.Grade <= 1)
+                m_gradeText.text = string.Format("Grade {0}", m_datas.Grade);
+                if (m_datas.Grade <= 1)
                     m_prevButton.isSelectable = false;
                 else
                     m_prevButton.isSelectable = true;
 
-                if (_datas.Grade >= _datas.MaxGrade)
+                if (m_datas.Grade >= m_datas.MaxGrade)
                     m_nextButton.isSelectable = false;
                 else
                     m_nextButton.isSelectable = true;
@@ -235,6 +235,7 @@ namespace NexHUD.UI
         NxSimpleText m_NxSeachDescription;
 
         NxButton m_ButtonPin;
+        NxButton m_ButtonDelete;
 
         public Point cursor = new Point();
 
@@ -244,6 +245,11 @@ namespace NexHUD.UI
         public UiImprove uiImprove { get => m_uiImprove; }
 
         private BlueprintDatas m_experimental = null;
+
+        private bool m_fromCraftList = false;
+        private CraftlistItem m_displayedCraft = null;
+
+        public CraftlistItem displayedCraft { get => m_displayedCraft; set => m_displayedCraft = value; }
         public UiImproveBlueprintDetails(UiImprove _uiImprove) : base(_uiImprove.Menu.frame.NxOverlay)
         {
             m_uiImprove = _uiImprove;
@@ -296,8 +302,28 @@ namespace NexHUD.UI
             m_ButtonPin.LabelTextSize = 22;
             m_ButtonPin.Coords = new Point(0, 100);
             Add(m_ButtonPin);
+
+            m_ButtonDelete = new NxButton(5, NxMenu.Height - 50, NxMenu.Width - 10, 40, "/!\\ DELETE /!\\", m_uiImprove.Menu);
+            m_ButtonDelete.ColorBack = EDColors.getColor(EDColors.RED, 0.1f);
+            m_ButtonDelete.ColorBackSelected = EDColors.getColor(EDColors.RED, 0.8f);
+            m_ButtonDelete.ColorLines = EDColors.getColor(EDColors.RED, 0.5f);
+            m_ButtonDelete.LabelTextSize = 22;
+            m_ButtonDelete.ColorLabel = EDColors.RED;
+            m_ButtonDelete.ColorLabelSelected = EDColors.WHITE;
+            m_ButtonDelete.Coords = new Point(0, 101);
+            Add(m_ButtonDelete);
         }
 
+        public void setBlueprint(CraftlistItem _item)
+        {
+            m_blueprint = _item.blueprint;
+            m_experimental = _item.experimentBlueprint;
+            m_fromCraftList = true;
+            m_pinCount = _item.count;
+            m_displayedCraft = _item;
+            cursor = new Point();
+            updateContent();
+        }
         public void setBlueprint(BlueprintDatas _blueprint)
         {
             m_blueprint = _blueprint;
@@ -306,6 +332,10 @@ namespace NexHUD.UI
                 if (m_blueprint == null || (m_experimental.Type != m_blueprint.Type))
                     m_experimental = null;
             }
+            m_fromCraftList = false;
+            m_displayedCraft = null;
+            m_pinCount = 1;
+            cursor = new Point();
             updateContent();
         }
         private void updateContent()
@@ -376,6 +406,21 @@ namespace NexHUD.UI
                 }
             }
 
+            if( m_fromCraftList )
+            {
+                m_ButtonDelete.isVisible = true;
+                m_ButtonPin.y = NxMenu.Height - 105;
+                m_ButtonPin.repos();
+
+               
+            }
+            else
+            {
+                m_ButtonDelete.isVisible = false;
+                m_ButtonPin.y = NxMenu.Height - 50;
+                m_ButtonPin.repos();
+            }
+
             m_updatePositions = true;
         }
         private void updatePositions()
@@ -414,11 +459,34 @@ namespace NexHUD.UI
         {
             BlueprintDatas _newdatas = EngineerHelper.blueprints.Where(x => x.Type == m_blueprint.Type && x.Name == m_blueprint.Name && x.Grade == _newGrade).FirstOrDefault();
             if (_newdatas != null)
-                setBlueprint(_newdatas);
+            {
+                m_blueprint = _newdatas;
+                if (m_experimental != null)
+                {
+                    if (m_blueprint == null || (m_experimental.Type != m_blueprint.Type))
+                        m_experimental = null;
+                }
+
+                if( m_displayedCraft != null )
+                {
+                    m_displayedCraft.grade = m_blueprint.Grade;
+                }
+               
+
+                updateContent();
+            }
         }
         public void changeExperimental(BlueprintDatas _newExperimental)
         {
             m_experimental = _newExperimental;
+
+            if (m_displayedCraft != null)
+            {
+                m_displayedCraft.grade = m_blueprint.Grade;
+                m_displayedCraft.experimental = m_experimental != null ? m_experimental.Name : string.Empty;
+                m_displayedCraft.compile();
+            }
+
             updateContent();
         }
 
@@ -459,7 +527,7 @@ namespace NexHUD.UI
                     }
                 }
                 else if (down)
-                {
+                {                   
                     cursor.Y = m_ButtonPin.Coords.Y;
                 }
             }
@@ -479,23 +547,39 @@ namespace NexHUD.UI
                     cursor.Y--;
 
             }
-            //Cursor on pin button
+            //Cursor on pin/delete button
             else
             {
                 if (up)
                 {
-                    if (cursor.X <= 3)
-                        cursor.Y = 0;
+                    if (cursor.Y < 100)
+                        cursor.Y++;
                     else
-                        cursor.Y = m_materialEntrys - 1;
+                    {
+                        if (cursor.X <= 3)
+                            cursor.Y = 0;
+                        else
+                            cursor.Y = m_materialEntrys - 1;
+                    }
                 }
-                else if (right && m_pinCount < 10)
-                    m_pinCount++;
-                else if (left && m_pinCount > 1)
+                else if (right && m_pinCount < 10 && cursor.Y == m_ButtonPin.Coords.Y)
+                {                 
+                    m_pinCount++; 
+                    if (m_displayedCraft != null) m_displayedCraft.count = m_pinCount;
+                }
+                else if (left && m_pinCount > 1 && cursor.Y == m_ButtonPin.Coords.Y)
+                {
                     m_pinCount--;
+                    if (m_displayedCraft != null) m_displayedCraft.count = m_pinCount;
+                }
+                else if (down && m_fromCraftList)
+                {
+                    cursor.Y = m_ButtonDelete.Coords.Y;
+                }
 
-                m_ButtonPin.Label = string.Format(PIN_LABEL, m_pinCount);
             }
+
+            m_ButtonPin.Label = string.Format(PIN_LABEL, m_pinCount);
 
             NxButton _materialBtnSelected = null;
             ////SELECTEDS
@@ -506,7 +590,9 @@ namespace NexHUD.UI
                     _materialBtnSelected = b;
             }
 
-            m_ButtonPin.Selected = cursor.Y >= m_ButtonPin.Coords.Y;
+            m_ButtonPin.Selected = cursor.Y == m_ButtonPin.Coords.Y;
+
+            m_ButtonDelete.Selected = cursor.Y == m_ButtonDelete.Coords.Y;
 
             //Mat tools tips
             if (_materialBtnSelected != null && _materialBtnSelected.Obj != null)
@@ -536,12 +622,18 @@ namespace NexHUD.UI
             }
 
             //Pin that!
-            if( m_ButtonPin.Selected && select)
+            if( m_ButtonPin.Selected && select && !m_fromCraftList)
             {
                 CraftlistItem craftItem = CraftlistItem.create(m_blueprint, m_experimental, m_pinCount);
                 Craftlist.Add(craftItem);
                 m_uiImprove.changeState(UiImprove.UiImproveState.CraftList);
 
+            }
+            //Delete that !
+            if( m_ButtonDelete.Selected && select && m_fromCraftList )
+            {
+                Craftlist.Delete(m_displayedCraft);
+                m_uiImprove.changeState(UiImprove.UiImproveState.CraftList);
             }
         }
     }

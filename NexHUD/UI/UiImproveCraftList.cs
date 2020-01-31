@@ -19,6 +19,10 @@ namespace NexHUD.UI
         private NxSimpleText m_bpName;
         private NxSimpleText m_bpExp;
         private NxSimpleText m_materials;
+
+        private CraftlistItem m_item;
+
+        public CraftlistItem item { get => m_item; }
         public UiCraftListItem(int _x, int _y, UiImproveCraftlist _parent) : base( _x,_y, width, height, "Pin", _parent.UiImprove.Menu )
         {
             x = _x;
@@ -28,9 +32,9 @@ namespace NexHUD.UI
 
             this.labelST.isVisible = false;
 
-            m_bpType = new NxSimpleText(x + width / 2, y + 2, "5 x BEAM LASER", EDColors.YELLOW, 18, NxFonts.EuroCapital) { centerHorizontal = true };
+            m_bpType = new NxSimpleText(x + width / 2, y + 2, "5 x BEAM LASER", EDColors.ORANGE, 18, NxFonts.EuroCapital) { centerHorizontal = true };
             m_bpName = new NxSimpleText(x + width / 2, y + 22, "> Long range G5 <", EDColors.LIGHTBLUE, 18, NxFonts.EuroStile) { centerHorizontal = true };
-            m_bpExp = new NxSimpleText(x + width / 2, y + 45, ">> Thermal vent <<", EDColors.BLUE, 16, NxFonts.EuroStile) { centerHorizontal = true };
+            m_bpExp = new NxSimpleText(x + width / 2, y + 42, "[ Thermal vent ]", EDColors.YELLOW, 16, NxFonts.EuroStile) { centerHorizontal = true };
             m_materials = new NxSimpleText(x + width / 2, y + 60, "All materials!", EDColors.GREEN, 16, NxFonts.EuroCapital) { centerHorizontal = true };
 
             Add(m_bpType);
@@ -39,21 +43,44 @@ namespace NexHUD.UI
             Add(m_materials);
 
             ColorBack = EDColors.getColor(EDColors.WHITE, 0.05f);
-            ColorBackSelected = EDColors.getColor(EDColors.LIGHTBLUE, 0.3f);
+            ColorBackSelected = EDColors.getColor(EDColors.ORANGE, 0.2f);
         }
-        public void set(CraftlistItem item)
+        public void set(CraftlistItem _item)
         {
-            if (item != null && item.isValid)
+            m_item = _item;
+            if (m_item != null && m_item.isValid)
             {
-                m_bpType.text = string.Format("{0} x {1}", item.count, item.type);
-                m_bpName.text = string.Format("> {0} {1} <", item.name, item.grade);
-                m_bpExp.text = string.Format(">> {0} <<", string.IsNullOrEmpty(item.experimental) ? "no experimental" : item.experimental);
-                m_materials.text = string.Format("{0}", (item.canCraft() ? "All materials" : "Missing materials"));
+                m_bpType.text = string.Format("{0} x {1}", m_item.count, m_item.type);
+                m_bpName.text = string.Format("> {0} G{1} <", m_item.name, m_item.grade);
+                m_bpName.Color = EDColors.LIGHTBLUE;
+                m_bpExp.text = string.Format("[ {0} ]", string.IsNullOrEmpty(m_item.experimental) ? "no experimental" : m_item.experimental);
+                int craftNbr = m_item.canCraft();
+                if (craftNbr == m_item.count)
+                {
+                    m_materials.text = "All materials!";
+                    m_materials.Color = EDColors.GREEN;
+                    ColorLines = EDColors.GREEN;
+                }
+                else if( craftNbr > 0)
+                {
+                    m_materials.text = string.Format("Can craft {0}x", craftNbr);
+                    m_materials.Color = EDColors.YELLOW;
+                    ColorLines = EDColors.YELLOW;
+                }
+                else
+                {
+                    m_materials.text = string.Format("Missing materials!");
+                    m_materials.Color = EDColors.RED;
+                    ColorLines = EDColors.RED;
+                }
+                
             }
             else
             {
                 m_bpType.text = "";
                 m_bpName.text = "Explore blueprints";
+                m_bpName.Color = EDColors.GRAY;
+                ColorLines = EDColors.BLACK;
                 m_bpExp.text = "";
                 m_materials.text = "";
 
@@ -139,14 +166,26 @@ namespace NexHUD.UI
             if (right && cursor.X < 3 && cursor.Y != m_blueprintsBtn.Coords.Y)
                 cursor.X++;
 
-            foreach (UiCraftListItem i in m_Pins)
+            UiCraftListItem _pinSelected = null;
+            foreach (UiCraftListItem i in m_Pins) {
                 i.Selected = i.Coords == cursor;
+                if (i.Selected)
+                    _pinSelected = i;
+            }
 
             m_blueprintsBtn.Selected = m_blueprintsBtn.Coords.Y == cursor.Y;
 
-
-            if (select && m_blueprintsBtn.Selected )
-                m_uiImprove.changeState(UiImprove.UiImproveState.Blueprints);
+            if( select)
+            {
+                if (m_blueprintsBtn.Selected)
+                    m_uiImprove.changeState(UiImprove.UiImproveState.Blueprints);
+                else if (_pinSelected != null && _pinSelected.item != null)
+                {
+                    m_uiImprove.changeState(UiImprove.UiImproveState.BlueprintDetail);
+                    m_uiImprove.BlueprintDetails.setBlueprint(_pinSelected.item);
+                }
+            }
+           
         }
     }
 }
