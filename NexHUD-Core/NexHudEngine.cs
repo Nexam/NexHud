@@ -522,10 +522,12 @@ namespace NexHUDCore
 
         public static void Log(string message)
         {
+            NxLog.log(message);
             LogEvent?.Invoke(message);
         }
         public static void Log(string message, params object[] _params)
         {
+            NxLog.log(message, _params);
             message = string.Format(message, _params);
             LogEvent?.Invoke(message);
         }
