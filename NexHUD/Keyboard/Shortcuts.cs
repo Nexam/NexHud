@@ -18,9 +18,18 @@ namespace NexHUD
     }
     public class Shortcuts
     {
+        public const string autoPath = "\\Config\\Shortcuts.json";
+        public const string classicPath = "\\Config\\Shortcuts-classic.json";
+        public const string debugPath = "\\Config\\Shortcuts-debug.json";
 
         private static Dictionary<string, ShortcutEntry> m_entrys = new Dictionary<string, ShortcutEntry>();
 
+        public static ShortcutEntry[] getShortcuts()
+        {
+            ShortcutEntry[] _array = new ShortcutEntry[m_entrys.Values.Count];
+            m_entrys.Values.CopyTo(_array, 0);
+            return _array;
+        }
         public static bool holdMode
         {
             get
@@ -78,6 +87,15 @@ namespace NexHUD
                 Console.ReadKey();
                 return false;
             }
+        }
+
+        public static void saveShortcuts()
+        {
+           /* using (StreamWriter file = File.CreateText(path))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, _listArray);
+            } */
         }
     }
 }

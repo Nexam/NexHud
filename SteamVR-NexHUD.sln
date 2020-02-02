@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexHUDCore", "NexHUD-Core\N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexHUD", "NexHUD\NexHUD.csproj", "{84136FD2-EC75-43AB-8039-EB391AD7D3DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexHudLauncher", "NexHudLauncher\NexHudLauncher.csproj", "{3EA0D9E3-035D-43E3-A00F-847335283CF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Window|Any CPU = Debug Window|Any CPU
@@ -41,6 +43,18 @@ Global
 		{84136FD2-EC75-43AB-8039-EB391AD7D3DE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84136FD2-EC75-43AB-8039-EB391AD7D3DE}.Release|x64.ActiveCfg = Release|x64
 		{84136FD2-EC75-43AB-8039-EB391AD7D3DE}.Release|x64.Build.0 = Release|x64
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug Window|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug Window|Any CPU.Build.0 = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug Window|x64.ActiveCfg = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug Window|x64.Build.0 = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Debug|x64.Build.0 = Debug|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Release|x64.ActiveCfg = Release|Any CPU
+		{3EA0D9E3-035D-43E3-A00F-847335283CF3}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
