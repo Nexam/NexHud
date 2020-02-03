@@ -19,6 +19,7 @@ namespace NexHudLauncher
     public partial class Launcher : Form
     {
         private bool m_isLoadingSetting = false;
+        private Process m_autoLaunchedProcess = null;
         public Launcher()
         {
             InitializeComponent();
@@ -40,6 +41,8 @@ namespace NexHudLauncher
                     //case 3: NexHudSettings.get().nexHudMode = NexHudEngineMode.WindowDebug; break;
             }
             NexHudSettings.GetInstance().launchWithElite = autoLaunch.Checked;
+
+            EliteCheckTimer.Enabled = autoLaunch.Checked;
 
             NexHudSettings.save();
         }
@@ -92,6 +95,7 @@ namespace NexHudLauncher
                     b.Text = bText;
             }
 
+            EliteCheckTimer.Enabled = autoLaunch.Checked;
             m_isLoadingSetting = false;
         }
 
@@ -253,24 +257,48 @@ namespace NexHudLauncher
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            launchNexHud();
+            launchNexHud(false);
         }
-        private void launchNexHud()
+        private void launchNexHud(bool auto)
         {
-            string args = "";
-            Process.Start(Environment.CurrentDirectory + "\\NexHud.exe");
-            WindowState = FormWindowState.Minimized;
-            Hide();
+            Process[] process = Process.GetProcessesByName("NexHUD");
+            if (process.Length == 0 && m_autoLaunchedProcess == null)
+            {
+                if (auto)
+                    m_autoLaunchedProcess = Process.Start(Environment.CurrentDirectory + "\\NexHud.exe");
+                else
+                    Process.Start(Environment.CurrentDirectory + "\\NexHud.exe");
+                WindowState = FormWindowState.Minimized;
+                Hide();
+            }
         }
 
         private void button11_Click(object sender, EventArgs e)
         {
-            launchNexHud();
+            launchNexHud(false);
         }
 
         private void EliteCheckTimer_Tick(object sender, EventArgs e)
         {
-            //Process.GetProcessesByName();
+            if (NexHudSettings.GetInstance().launchWithElite)
+            {
+                //EDLauncher : EDLaunch.exe
+                //ED: EliteDangerous64.exe
+                Process[] process = Process.GetProcessesByName("EliteDangerous64");
+                if (process.Length > 0)
+                {
+                    //Elite launched!
+                    if( m_autoLaunchedProcess == null)
+                        launchNexHud(true);
+                }
+                else if(m_autoLaunchedProcess != null)
+                {
+                    if( !m_autoLaunchedProcess.HasExited)
+                        m_autoLaunchedProcess.Kill();
+                    m_autoLaunchedProcess = null;
+                }
+            }
+
         }
 
         private void menuMode_SelectedIndexChanged(object sender, EventArgs e)

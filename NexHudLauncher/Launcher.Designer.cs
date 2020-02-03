@@ -31,6 +31,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Launcher));
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.autoLaunch = new System.Windows.Forms.CheckBox();
             this.engineMode = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -58,12 +62,8 @@
             this.button11 = new System.Windows.Forms.Button();
             this.labelVersion = new System.Windows.Forms.Label();
             this.linkGithub = new System.Windows.Forms.LinkLabel();
-            this.notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutPanel1.SuspendLayout();
             this.notifyIconContextMenu.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -79,13 +79,44 @@
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.e_MouseDoubleClick);
             // 
+            // notifyIconContextMenu
+            // 
+            this.notifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
+            this.closeToolStripMenuItem,
+            this.closeToolStripMenuItem1});
+            this.notifyIconContextMenu.Name = "notifyIconContextMenu";
+            this.notifyIconContextMenu.Size = new System.Drawing.Size(143, 70);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.openToolStripMenuItem.Text = "Open config";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.closeToolStripMenuItem.Text = "Launch now";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
+            // closeToolStripMenuItem1
+            // 
+            this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(142, 22);
+            this.closeToolStripMenuItem1.Text = "Close";
+            this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
+            // 
             // autoLaunch
             // 
             this.autoLaunch.AutoSize = true;
             this.autoLaunch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.autoLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.autoLaunch.Location = new System.Drawing.Point(36, 68);
-            this.autoLaunch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.autoLaunch.Margin = new System.Windows.Forms.Padding(2);
             this.autoLaunch.Name = "autoLaunch";
             this.autoLaunch.Size = new System.Drawing.Size(181, 21);
             this.autoLaunch.TabIndex = 0;
@@ -105,7 +136,7 @@
             "VR",
             "Classic"});
             this.engineMode.Location = new System.Drawing.Point(136, 45);
-            this.engineMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.engineMode.Margin = new System.Windows.Forms.Padding(2);
             this.engineMode.Name = "engineMode";
             this.engineMode.Size = new System.Drawing.Size(102, 21);
             this.engineMode.TabIndex = 1;
@@ -124,7 +155,7 @@
             // 
             // EliteCheckTimer
             // 
-            this.EliteCheckTimer.Interval = 5000;
+            this.EliteCheckTimer.Interval = 2000;
             this.EliteCheckTimer.Tick += new System.EventHandler(this.EliteCheckTimer_Tick);
             // 
             // tableLayoutPanel1
@@ -149,9 +180,9 @@
             this.tableLayoutPanel1.Controls.Add(this.label8, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.btnSCright, 1, 6);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(263, 39);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.RowCount = 7;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -182,7 +213,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSCmenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSCmenu.Location = new System.Drawing.Point(68, 4);
-            this.btnSCmenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSCmenu.Margin = new System.Windows.Forms.Padding(2);
             this.btnSCmenu.Name = "btnSCmenu";
             this.btnSCmenu.Size = new System.Drawing.Size(196, 26);
             this.btnSCmenu.TabIndex = 1;
@@ -209,7 +240,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSCback.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSCback.Location = new System.Drawing.Point(68, 34);
-            this.btnSCback.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSCback.Margin = new System.Windows.Forms.Padding(2);
             this.btnSCback.Name = "btnSCback";
             this.btnSCback.Size = new System.Drawing.Size(196, 26);
             this.btnSCback.TabIndex = 3;
@@ -236,7 +267,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSCselect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSCselect.Location = new System.Drawing.Point(68, 64);
-            this.btnSCselect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSCselect.Margin = new System.Windows.Forms.Padding(2);
             this.btnSCselect.Name = "btnSCselect";
             this.btnSCselect.Size = new System.Drawing.Size(196, 26);
             this.btnSCselect.TabIndex = 5;
@@ -264,7 +295,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSCup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSCup.Location = new System.Drawing.Point(68, 94);
-            this.btnSCup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSCup.Margin = new System.Windows.Forms.Padding(2);
             this.btnSCup.Name = "btnSCup";
             this.btnSCup.Size = new System.Drawing.Size(196, 26);
             this.btnSCup.TabIndex = 7;
@@ -291,7 +322,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSCdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSCdown.Location = new System.Drawing.Point(68, 124);
-            this.btnSCdown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSCdown.Margin = new System.Windows.Forms.Padding(2);
             this.btnSCdown.Name = "btnSCdown";
             this.btnSCdown.Size = new System.Drawing.Size(196, 26);
             this.btnSCdown.TabIndex = 9;
@@ -318,7 +349,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSCleft.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSCleft.Location = new System.Drawing.Point(68, 154);
-            this.btnSCleft.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSCleft.Margin = new System.Windows.Forms.Padding(2);
             this.btnSCleft.Name = "btnSCleft";
             this.btnSCleft.Size = new System.Drawing.Size(196, 26);
             this.btnSCleft.TabIndex = 11;
@@ -345,7 +376,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSCright.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSCright.Location = new System.Drawing.Point(68, 184);
-            this.btnSCright.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSCright.Margin = new System.Windows.Forms.Padding(2);
             this.btnSCright.Name = "btnSCright";
             this.btnSCright.Size = new System.Drawing.Size(196, 26);
             this.btnSCright.TabIndex = 13;
@@ -388,7 +419,7 @@
             "Hold",
             "Press"});
             this.menuMode.Location = new System.Drawing.Point(423, 260);
-            this.menuMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.menuMode.Margin = new System.Windows.Forms.Padding(2);
             this.menuMode.Name = "menuMode";
             this.menuMode.Size = new System.Drawing.Size(102, 21);
             this.menuMode.TabIndex = 5;
@@ -399,7 +430,7 @@
             // 
             this.btnLogs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogs.Location = new System.Drawing.Point(36, 113);
-            this.btnLogs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLogs.Margin = new System.Windows.Forms.Padding(2);
             this.btnLogs.Name = "btnLogs";
             this.btnLogs.Size = new System.Drawing.Size(200, 26);
             this.btnLogs.TabIndex = 7;
@@ -411,7 +442,7 @@
             // 
             this.btnConfig.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConfig.Location = new System.Drawing.Point(36, 142);
-            this.btnConfig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnConfig.Margin = new System.Windows.Forms.Padding(2);
             this.btnConfig.Name = "btnConfig";
             this.btnConfig.Size = new System.Drawing.Size(200, 26);
             this.btnConfig.TabIndex = 8;
@@ -423,7 +454,7 @@
             // 
             this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button11.Location = new System.Drawing.Point(36, 209);
-            this.button11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button11.Margin = new System.Windows.Forms.Padding(2);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(200, 26);
             this.button11.TabIndex = 9;
@@ -454,37 +485,6 @@
             this.linkGithub.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.linkGithub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGithub_LinkClicked);
             // 
-            // notifyIconContextMenu
-            // 
-            this.notifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem,
-            this.closeToolStripMenuItem,
-            this.closeToolStripMenuItem1});
-            this.notifyIconContextMenu.Name = "notifyIconContextMenu";
-            this.notifyIconContextMenu.Size = new System.Drawing.Size(143, 70);
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openToolStripMenuItem.Text = "Open config";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
-            // 
-            // closeToolStripMenuItem
-            // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.closeToolStripMenuItem.Text = "Launch now";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
-            // 
-            // closeToolStripMenuItem1
-            // 
-            this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
-            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.closeToolStripMenuItem1.Text = "Close";
-            this.closeToolStripMenuItem1.Click += new System.EventHandler(this.closeToolStripMenuItem1_Click);
-            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -505,7 +505,7 @@
             this.Controls.Add(this.autoLaunch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Launcher";
@@ -515,8 +515,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.notifyIconContextMenu.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -9,11 +9,14 @@ using NexHUDCore.NxItems;
 using OpenTK;
 using Somfic.Logging.Handlers;
 using System;
+using System.Threading;
 
 namespace NexHUD
 {
     public class NexHudMain
     {
+        private static Mutex mutex = null;
+        public const string appName = "NexHud";
         public const string version = "v0.2-beta";
         public const string ARG_AUTO = "auto";
         public const string ARG_DEBUG = "debug";
@@ -28,6 +31,16 @@ namespace NexHUD
         [STAThreadAttribute]
         public static void Main(string[] args)
         {
+            bool createdNew;
+            mutex = new Mutex(true, appName, out createdNew);
+
+            if (!createdNew)
+            {
+                Console.WriteLine(appName + " is already running! Exiting the application.");
+                Console.ReadKey();
+                return;
+            }
+
             initLogs();
             NexHudEngine.Log("NexHud Version: " + version);
 
