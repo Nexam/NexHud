@@ -1,4 +1,6 @@
-﻿using NexHUD.EDEngineer;
+﻿using NexHUD.elite.engineers;
+using NexHUD.inputs;
+using NexHUD.ui.common;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 using System;
@@ -6,7 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace NexHUD.UI
+namespace NexHUD.ui.improve
 {
     public class UiImproveBlueprints : NxGroup
     {

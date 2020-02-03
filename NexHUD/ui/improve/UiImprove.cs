@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NexHUD.inputs;
+using NexHUD.ui.search;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 
-namespace NexHUD.UI
+namespace NexHUD.ui.improve
 {
     public class UiImprove : NxGroup
     {

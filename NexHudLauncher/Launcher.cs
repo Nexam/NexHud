@@ -1,5 +1,6 @@
 ﻿using NexHUD;
-using NexHUD.Settings;
+using NexHUD.inputs;
+using NexHUD.settings;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;

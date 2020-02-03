@@ -1,15 +1,17 @@
-﻿using NexHUD.EDEngineer;
-using NexHUD.EDSM;
-using NexHUD.Spansh;
-using NexHUD.UI;
+﻿using NexHUD.elite.engineers;
+using NexHUD.apis.edsm;
+using NexHUD.apis.spansh;
+using NexHUD.ui;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using NexHUD.apis;
+using NexHUD.ui.search;
 
-namespace NexHUD.Elite
+namespace NexHUD.elite
 {
     public class EDDatas
     {
@@ -140,7 +142,7 @@ namespace NexHUD.Elite
                         {
 
                             //Can be optimized with https://www.edsm.net/api-v1/systems
-                            EDSMSystemDatas _edsmDatas = ExternalDBConnection.EDSMSystemFullInfos(_names[i]);
+                            EDSMSystemDatas _edsmDatas = ApiConnection.EDSMSystemFullInfos(_names[i]);
                             if (_edsmDatas != null)
                             {
                                 EDSystem _system = new EDSystem();
@@ -188,7 +190,7 @@ namespace NexHUD.Elite
                             //Building list
                             if (_radius > m_greatestSearchRadius)
                             {
-                                EDSMSystemDatas[] _systemsInSphereRadius = ExternalDBConnection.EDSMSystemsInSphereRadius(getCurrentSystem().name, m_greatestSearchRadius, _radius);
+                                EDSMSystemDatas[] _systemsInSphereRadius = ApiConnection.EDSMSystemsInSphereRadius(getCurrentSystem().name, m_greatestSearchRadius, _radius);
                                 if (_systemsInSphereRadius != null)
                                 {
                                     m_greatestSearchRadius = _radius;
@@ -221,7 +223,7 @@ namespace NexHUD.Elite
                                 if (!m_systems[_sys].receivedEdsmInfos)
                                 {
                                     NexHudEngine.Log("//WARNING// system {0} has not received informations datas. Retrieving...", _sys);
-                                    m_systems[_sys].updateEDSM(ExternalDBConnection.EDSMSystem(new ExternalDBConnection.EDSMSystemParameters() { name = _sys, showInformation = true }));
+                                    m_systems[_sys].updateEDSM(ApiConnection.EDSMSystem(new ApiConnection.EDSMSystemParameters() { name = _sys, showInformation = true }));
                                     m_systems[_sys].calculDistanceFromCurrent();
                                 }
                                 if (m_systems[_sys].distanceFromCurrentSystem < _radius && m_systems[_sys].distanceFromCurrentSystem >= _radiusMinimum)
@@ -307,7 +309,7 @@ namespace NexHUD.Elite
                         if (m_lastUSRs[_id].entry.searchMaxRadius > 0)
                             maxDistance = Math.Min(m_lastUSRs[_id].entry.searchMaxRadius, 100);
 
-                        SpanshBodiesResult _spanshResult = ExternalDBConnection.SpanshBodies(getCurrentSystem().name, maxDistance, _listMaterials.ToArray(), isLandable);
+                        SpanshBodiesResult _spanshResult = ApiConnection.SpanshBodies(getCurrentSystem().name, maxDistance, _listMaterials.ToArray(), isLandable);
 
                         //Get infos about the targeted systems
                         List<string> _systemWithBodies = new List<string>();
@@ -336,7 +338,7 @@ namespace NexHUD.Elite
                         }
                         if (_systemToUpdate.Count > 0)
                         {
-                            EDSMSystemDatas[] _edsmDatas = ExternalDBConnection.EDSMSystemsList(_systemToUpdate.ToArray(), true);
+                            EDSMSystemDatas[] _edsmDatas = ApiConnection.EDSMSystemsList(_systemToUpdate.ToArray(), true);
                             foreach (EDSMSystemDatas _data in _edsmDatas)
                                 m_systems[_data.name].updateEDSM(_data);
                         }
@@ -420,11 +422,11 @@ namespace NexHUD.Elite
             Stopwatch _watch = new Stopwatch();
             _watch.Start();
             NexHudEngine.Log(">> Retrieving current system {0} from EDSM", _systemName);
-            m_systems[_systemName].updateEDSM(ExternalDBConnection.EDSMSystemFullInfos(_systemName));
+            m_systems[_systemName].updateEDSM(ApiConnection.EDSMSystemFullInfos(_systemName));
             NexHudEngine.Log(">> Retrieving value for system {0} from EDSM", _systemName);
-            m_systems[_systemName].updateEDSM(ExternalDBConnection.EDSMSystemValue(_systemName));
+            m_systems[_systemName].updateEDSM(ApiConnection.EDSMSystemValue(_systemName));
             NexHudEngine.Log(">> Retrieving current system {0} from EDDB", _systemName);
-            m_systems[_systemName].updateEDDB(ExternalDBConnection.EDDBSystemComplementaryInfos(_systemName));
+            m_systems[_systemName].updateEDDB(ApiConnection.EDDBSystemComplementaryInfos(_systemName));
             _watch.Stop();
             NexHudEngine.Log("--->> Update current system {0} took {1}ms", _systemName, _watch.ElapsedMilliseconds);
         }

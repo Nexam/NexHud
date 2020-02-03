@@ -1,9 +1,11 @@
 ﻿using EliteAPI;
-using NexHUD.EDEngineer;
-using NexHUD.Elite;
-using NexHUD.Elite.Craftlist;
-using NexHUD.Settings;
-using NexHUD.UI;
+using NexHUD.elite;
+using NexHUD.elite.craftlist;
+using NexHUD.elite.engineers;
+using NexHUD.inputs;
+using NexHUD.settings;
+using NexHUD.ui;
+using NexHUD.utility;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 using OpenTK;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace NexHUD.Elite
+namespace NexHUD.elite
 {
     public class NxSearchEntry
     {

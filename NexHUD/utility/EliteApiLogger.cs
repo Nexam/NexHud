@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NexHUDCore;
 using Somfic.Logging;
 
-namespace NexHUD
+namespace NexHUD.utility
 {
     public class EliteApiLogger : ILoggerHandler
     {

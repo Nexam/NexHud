@@ -1,7 +1,7 @@
 ﻿using NexHUDCore.NxItems;
 using System.Drawing;
 
-namespace NexHUD.Elite
+namespace NexHUD.elite
 {
     public enum EliteSystemThreat
     {

@@ -1,9 +1,13 @@
-﻿using NexHUD.Settings;
+﻿using NexHUD.inputs;
+using NexHUD.settings;
+using NexHUD.ui.improve;
+using NexHUD.ui.search;
+using NexHUD.utility;
 using NexHUDCore;
 using OpenTK;
 using System;
 
-namespace NexHUD.UI
+namespace NexHUD.ui
 {
     public class NxMenu
     {

@@ -1,10 +1,10 @@
-﻿using NexHUD.EDDB;
-using NexHUD.EDSM;
-using NexHUD.Spansh;
+﻿using NexHUD.apis.eddb;
+using NexHUD.apis.edsm;
+using NexHUD.apis.spansh;
 using System;
 using System.Collections.Generic;
 
-namespace NexHUD.Elite
+namespace NexHUD.elite
 {
     public class EDSystem
     {

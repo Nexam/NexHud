@@ -1,12 +1,13 @@
 ﻿using NAudio.Wave;
-using NexHUD.Audio;
-using NexHUD.Spansh;
+using NexHUD.apis;
+using NexHUD.apis.spansh;
+using NexHUD.audio;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace NexHUD
+namespace NexHUD.utility
 {
     /// <summary>
     /// Class to test differents packages, api, etc...
@@ -75,7 +76,7 @@ namespace NexHUD
             while (_distance <= 100)
             {
                 Console.WriteLine("search from {0} to {1}", _distance - _step, _distance);
-                SpanshBodiesResult _response = ExternalDBConnection.SpanshBodies(_currentSystem, 100, _mats, true);
+                SpanshBodiesResult _response = ApiConnection.SpanshBodies(_currentSystem, 100, _mats, true);
 
                 Console.WriteLine(_response);
 

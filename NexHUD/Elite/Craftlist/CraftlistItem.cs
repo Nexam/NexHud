@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NexHUD.EDEngineer;
+using NexHUD.elite.engineers;
 
-namespace NexHUD.Elite.Craftlist
+namespace NexHUD.elite.craftlist
 {
     public class CraftlistItem
     {

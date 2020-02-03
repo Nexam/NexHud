@@ -1,4 +1,4 @@
-﻿namespace NexHUD.Elite
+﻿namespace NexHUD.elite
 {
     public enum EliteAllegiance
     {

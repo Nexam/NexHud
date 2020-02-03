@@ -1,6 +1,6 @@
 ﻿using EliteAPI.Events;
 using Newtonsoft.Json;
-using NexHUD.Elite;
+using NexHUD.elite;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace NexHUD.EDEngineer
+namespace NexHUD.elite.engineers
 {
     public class EngineerHelper
     {

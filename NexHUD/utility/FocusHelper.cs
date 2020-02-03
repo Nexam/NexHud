@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NexHUDCore;
 
-namespace NexHUD
+namespace NexHUD.utility
 {
     public class FocusHelper
     {

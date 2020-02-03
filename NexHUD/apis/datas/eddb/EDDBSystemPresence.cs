@@ -1,4 +1,4 @@
-﻿namespace NexHUD.EDDB
+﻿namespace NexHUD.apis.eddb
 {
     class EDDBSystemPresence
     {

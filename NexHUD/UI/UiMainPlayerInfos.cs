@@ -5,7 +5,7 @@ using System;
 using System.Drawing;
 using System.Reflection;
 
-namespace NexHUD.UI
+namespace NexHUD.ui
 {
     public class UiMainPlayerInfos : NxGroup
     {

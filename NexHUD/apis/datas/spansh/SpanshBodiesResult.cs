@@ -1,4 +1,4 @@
-﻿namespace NexHUD.Spansh
+﻿namespace NexHUD.apis.spansh
 {
     public class SpanshBodiesResult
     {

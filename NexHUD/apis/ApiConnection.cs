@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
-using NexHUD.EDDB;
-using NexHUD.EDSM;
-using NexHUD.Spansh;
+using NexHUD.apis.eddb;
+using NexHUD.apis.edsm;
+using NexHUD.apis.spansh;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace NexHUD
+namespace NexHUD.apis
 {
-    public class ExternalDBConnection
+    public class ApiConnection
     {
         /* https://elitebgs.app/api/eddb */
 

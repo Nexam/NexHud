@@ -1,6 +1,6 @@
-﻿using NexHUD.Elite;
+﻿using NexHUD.elite;
 
-namespace NexHUD.EDEngineer
+namespace NexHUD.elite.engineers
 {
     /* "Name": "Boron",
     "Rarity": "Standard",

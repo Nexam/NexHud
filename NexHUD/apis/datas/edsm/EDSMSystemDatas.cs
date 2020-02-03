@@ -1,4 +1,4 @@
-﻿namespace NexHUD.EDSM
+﻿namespace NexHUD.apis.edsm
 {
 
     public class EDSMSystemDatas

@@ -4,11 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NexHUD.Elite.Craftlist;
+using NexHUD.elite.craftlist;
+using NexHUD.inputs;
+using NexHUD.ui.common;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 
-namespace NexHUD.UI
+namespace NexHUD.ui.improve
 {
     public class UiCraftListItem : NxButton
     {

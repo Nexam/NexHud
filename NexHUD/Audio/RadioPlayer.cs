@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NexHUD.Audio
+namespace NexHUD.audio
 {
     public class RadioInfos
     {

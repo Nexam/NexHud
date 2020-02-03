@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
-using NexHUD.Settings;
+using NexHUD.settings;
 using NexHUDCore;
 using OpenTK.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace NexHUD
+namespace NexHUD.inputs
 {
     public enum ShortcutId
     {

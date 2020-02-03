@@ -1,4 +1,5 @@
 ﻿using NexHUD;
+using NexHUD.inputs;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
