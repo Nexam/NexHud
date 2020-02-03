@@ -482,6 +482,7 @@ namespace NexHUDCore
         {
             if (e == null)
                 return false;
+                       
             bool _modifiersOk = true;
 
             foreach (Key m in e.OpenTkModifiers)
@@ -520,14 +521,16 @@ namespace NexHUDCore
             return m_lastKeysReleased.Contains(k);
         }
 
-        public static void Log(string message)
-        {
-            NxLog.log(message);
-            LogEvent?.Invoke(message);
-        }
+       
         public static void Log(string message, params object[] _params)
         {
-            NxLog.log(message, _params);
+            NxLog.log(NxLog.Type.Debug, message, _params);
+            message = string.Format(message, _params);
+            LogEvent?.Invoke(message);
+        }
+        public static void Log(NxLog.Type type, string message, params object[] _params)
+        {
+            NxLog.log(type, message, _params);
             message = string.Format(message, _params);
             LogEvent?.Invoke(message);
         }

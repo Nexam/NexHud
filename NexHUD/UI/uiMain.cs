@@ -1,4 +1,5 @@
-﻿using NexHUDCore;
+﻿using NexHUD.Settings;
+using NexHUDCore;
 using OpenTK;
 using System;
 
@@ -115,6 +116,8 @@ namespace NexHUD.UI
                     if (!m_frame.renderOverlay)
                     {
                         m_frame.renderOverlay = true;
+                        if (NexHudSettings.GetInstance().stealFocus)
+                            FocusHelper.focusonNexHud();
                     }
 
                     if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
@@ -128,6 +131,8 @@ namespace NexHUD.UI
                     if (m_frame.renderOverlay)
                     {
                         m_frame.renderOverlay = false;
+                        if (NexHudSettings.GetInstance().stealFocus)
+                            FocusHelper.focusOnGame();
                     }
                     return;
                 }
@@ -140,16 +145,22 @@ namespace NexHUD.UI
                     {
                         if (m_state != MenuState.Main)
                         {
-                            if( m_state != MenuState.Improve)
+                            if (m_state != MenuState.Improve)
                                 changeState(MenuState.Main);
                         }
                         else
+                        {
                             m_frame.renderOverlay = false;
+                            if (NexHudSettings.GetInstance().stealFocus)
+                                FocusHelper.focusOnGame();
+                        }
                     }
                     else
                     {
                         changeState(MenuState.Main);
                         m_frame.renderOverlay = true;
+                        if (NexHudSettings.GetInstance().stealFocus)
+                            FocusHelper.focusonNexHud();
                     }
                 }
             }

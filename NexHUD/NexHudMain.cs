@@ -9,6 +9,8 @@ using NexHUDCore.NxItems;
 using OpenTK;
 using Somfic.Logging.Handlers;
 using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace NexHUD
@@ -17,7 +19,7 @@ namespace NexHUD
     {
         private static Mutex mutex = null;
         public const string appName = "NexHud";
-        public const string version = "v0.2-beta";
+        public const string version = "v0.3-beta";
         public const string ARG_AUTO = "auto";
         public const string ARG_DEBUG = "debug";
         public const string ARG_VR = "vr";
@@ -42,6 +44,8 @@ namespace NexHUD
             }
 
             initLogs();
+            NexHudSettings.load();
+
             NexHudEngine.Log("NexHud Version: " + version);
 
             NexHudEngineMode _requestedMode = NexHudSettings.GetInstance().nexHudMode;
@@ -57,11 +61,12 @@ namespace NexHUD
                     _requestedMode = NexHudEngineMode.WindowOverlay;
 
             }
-            NexHudEngine.Log("Engine mode: " + _requestedMode);
+            NexHudEngine.Log("Engine mode Requested: " + _requestedMode);
             //performTests();
             initElite();
 
             initEngine(_requestedMode);
+            NexHudEngine.Log("Engine mode: " + _requestedMode);
 
             loadConfigs();
             
@@ -71,8 +76,21 @@ namespace NexHUD
 
             new NxMenu();
 
-            NexHudEngine.Run(); // Runs update/draw calls for all active overlays. And yes, it's blocking.
+            try
+            {
+                NexHudEngine.Run(); // Runs update/draw calls for all active overlays. And yes, it's blocking.
+            }
+            catch(Exception ex)
+            {
+                NexHudEngine.Log(NxLog.Type.Fatal, ex.Message);
+                NexHudEngine.Log(NxLog.Type.Fatal, ex.Source);
+                NexHudEngine.Log(NxLog.Type.Fatal, ex.StackTrace);
+            }
         }
+
+
+     
+
         private static void performTests()
         {
             //To test Spansh.co.uk for bodies search. I know, this is dirty :)
@@ -87,7 +105,7 @@ namespace NexHUD
         {
             EngineerHelper.loadDatas();
 
-            if (!Shortcuts.loadShortcuts())
+            if (!Shortcuts.loadShortcuts(NexHudEngine.engineMode, NexHudSettings.GetInstance().useCustomShortcutClassic ))
                 return;
 
             //User params
@@ -129,42 +147,20 @@ namespace NexHUD
 
         private static void initElite()
         {
-            NexHudEngine.Log("Elite API Initilization...");
+            NexHudEngine.Log(NxLog.Type.Debug, "Elite API Initilization...");
             m_eliteApi = new EliteDangerousAPI();
-            m_eliteApi.Logger.AddHandler(new ConsoleHandler());
+            m_eliteApi.Logger.AddHandler( new EliteApiLogger() );
             m_eliteApi.Start(false);
 
-            m_eliteApi.Events.AllEvent += Events_AllEvent;
-            NexHudEngine.Log("Welcome CMDR " + m_eliteApi.Commander.Commander);
-            NexHudEngine.Log("Current Star system: " + m_eliteApi.Location.StarSystem);
-            NexHudEngine.Log("Current Station: " + m_eliteApi.Location.Station);
-            NexHudEngine.Log("Current Body: " + m_eliteApi.Location.Body);
-            NexHudEngine.Log("Current Body type: " + m_eliteApi.Location.BodyType);
+            NexHudEngine.Log(NxLog.Type.Info, "Welcome CMDR " + m_eliteApi.Commander.Commander);
+            NexHudEngine.Log(NxLog.Type.Info, "Current Star system: " + m_eliteApi.Location.StarSystem);
 
         }
 
-        private static void Events_AllEvent(object sender, dynamic e)
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Elite Event triggered: " + e);
-            Console.ResetColor();
-
-            if (m_vrConsoleTb != null)
-            {
-                try
-                {
-                    m_vrConsoleTb.AddLine(e.ToString());
-                }
-                catch (Exception ex)
-                {
-                    NexHudEngine.Log("ERROR Events_AllEvent: " + ex.Message.ToString());
-                }
-            }
-        }
-
+       
         private static void SteamVR_NexHUD_Log(string line)
         {
-            Console.WriteLine(line);
+          //  Console.WriteLine(line);
 
             if (m_vrConsoleTb != null)
                 m_vrConsoleTb.AddLine(line);

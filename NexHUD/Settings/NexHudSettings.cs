@@ -15,10 +15,8 @@ namespace NexHUD.Settings
 
         public bool launchWithElite = true;
         public NexHudEngineMode nexHudMode = NexHudEngineMode.Auto;
-        public string shortcutsDefault = "Shortcuts.json";
-        public string shortcutClassic = "";
-        public string shortcutDebug = "";
-        public bool stealFocus = false;
+        public bool useCustomShortcutClassic = false;
+        public bool stealFocus = true;
 
         #region singleton
         public static NexHudSettings GetInstance() { return m_instance; }

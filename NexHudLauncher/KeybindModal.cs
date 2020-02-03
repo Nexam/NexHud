@@ -174,7 +174,7 @@ namespace NexHudLauncher
             {
                 Shortcuts.setShortcut(m_shortcut, m_modifiers, m_key);
             }
-            Shortcuts.saveShortcuts();
+            Shortcuts.saveShortcuts( m_mainForm.targetForKeys == NexHUDCore.NexHudEngineMode.WindowOverlay );
             m_mainForm.loadSettings();
             Close();           
         }

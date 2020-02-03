@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NexHUD.Settings;
 using NexHUDCore;
 using OpenTK.Input;
 using System;
@@ -48,11 +49,13 @@ namespace NexHUD
             return e;
         }
 
-        public static bool loadShortcuts()
+        public static bool loadShortcuts(NexHudEngineMode _mode, bool _useClassic)
         {
             string _path = Environment.CurrentDirectory + autoPath;
-            if (NexHudEngine.engineMode == NexHudEngineMode.WindowDebug)
+            if (_mode == NexHudEngineMode.WindowDebug)
                 _path = Environment.CurrentDirectory + debugPath;
+            else if (_mode == NexHudEngineMode.WindowOverlay && _useClassic)
+                _path = Environment.CurrentDirectory + classicPath;
 
 
             if (File.Exists(_path))
@@ -120,13 +123,16 @@ namespace NexHUD
             }
         }
 
-        public static void saveShortcuts()
+        public static void saveShortcuts(bool _classicMode = false)
         {
             ShortcutEntry[] _entrys = new ShortcutEntry[m_entrys.Count];
 
             m_entrys.Values.CopyTo(_entrys, 0);
 
             string _path = Environment.CurrentDirectory + autoPath;
+            if(_classicMode )
+                _path = Environment.CurrentDirectory + classicPath;
+
             using (StreamWriter file = File.CreateText(_path))
             {
                 JsonSerializer serializer = new JsonSerializer() { Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore };

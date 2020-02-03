@@ -20,9 +20,15 @@ namespace NexHudLauncher
     {
         private bool m_isLoadingSetting = false;
         private Process m_autoLaunchedProcess = null;
+        private NexHudEngineMode m_targetForKeys = NexHudEngineMode.Auto;
+
+        public NexHudEngineMode targetForKeys { get => m_targetForKeys; }
         public Launcher()
         {
             InitializeComponent();
+
+            keysToCustomize.SelectedIndex = 0;
+            useClassicKeys.Visible = false;
 
             loadSettings();
 
@@ -41,6 +47,9 @@ namespace NexHudLauncher
                     //case 3: NexHudSettings.get().nexHudMode = NexHudEngineMode.WindowDebug; break;
             }
             NexHudSettings.GetInstance().launchWithElite = autoLaunch.Checked;
+            NexHudSettings.GetInstance().useCustomShortcutClassic = useClassicKeys.Checked;
+            NexHudSettings.GetInstance().stealFocus = stealFocus.Checked;
+
 
             EliteCheckTimer.Enabled = autoLaunch.Checked;
 
@@ -59,7 +68,9 @@ namespace NexHudLauncher
             }
             autoLaunch.Checked = NexHudSettings.GetInstance().launchWithElite;
 
-            Shortcuts.loadShortcuts();
+            useClassicKeys.Checked = NexHudSettings.GetInstance().useCustomShortcutClassic;
+
+            Shortcuts.loadShortcuts(m_targetForKeys, true);
             ShortcutEntry[] shortcuts = Shortcuts.getShortcuts();
             for (int i = 0; i < shortcuts.Length; i++)
             {
@@ -94,6 +105,8 @@ namespace NexHudLauncher
                 if( b != null )
                     b.Text = bText;
             }
+
+            stealFocus.Checked = NexHudSettings.GetInstance().stealFocus;
 
             EliteCheckTimer.Enabled = autoLaunch.Checked;
             m_isLoadingSetting = false;
@@ -304,6 +317,40 @@ namespace NexHudLauncher
         private void menuMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             Shortcuts.setMenuMode(menuMode.SelectedIndex == 0);
+            Shortcuts.saveShortcuts(m_targetForKeys == NexHudEngineMode.WindowOverlay);
+            checkEnableSCButtons();
+        }
+
+        private void keysToCustomize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            m_targetForKeys = keysToCustomize.SelectedIndex == 0 ? NexHudEngineMode.Auto : NexHudEngineMode.WindowOverlay;
+            loadSettings();
+            useClassicKeys.Visible = keysToCustomize.SelectedIndex == 1;
+            checkEnableSCButtons();
+        }
+
+        private void useClassicKeys_CheckedChanged(object sender, EventArgs e)
+        {
+            saveSettings();
+            checkEnableSCButtons();
+        }
+
+        private void checkEnableSCButtons()
+        {
+            btnSCback.Enabled = ( keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked ) && menuMode.SelectedIndex == 0;
+            btnSCdown.Enabled = keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked;
+            btnSCleft.Enabled = keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked;
+            btnSCmenu.Enabled = keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked;
+            btnSCright.Enabled = keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked;
+            btnSCselect.Enabled = keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked;
+            btnSCup.Enabled = keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked;
+
+            menuMode.Enabled = (keysToCustomize.SelectedIndex == 0 || useClassicKeys.Checked);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            saveSettings();
         }
     }
 }

@@ -91,7 +91,11 @@ namespace NexHUD.UI
                 return;
             }
 
-            if ( NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back) ) )
+            bool _back = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back));
+            if( !Shortcuts.holdMode && !_back)
+                _back = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.menu));
+
+            if (_back)
             {
                 if (m_state == UiImproveState.BlueprintDetail && m_previousState == UiImproveState.CraftList)
                     changeState(UiImproveState.CraftList);
