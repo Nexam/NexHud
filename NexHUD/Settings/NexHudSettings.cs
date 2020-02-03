@@ -28,7 +28,7 @@ namespace NexHUD.Settings
         public static void load()
         {
             string _envPath = Environment.CurrentDirectory + m_path;
-            NexHudEngine.Log("Loadiing: "+_envPath);
+            //NexHudEngine.Log("Loadiing: "+_envPath);
             if (File.Exists(_envPath))
             {
                 string _json = File.ReadAllText(_envPath);

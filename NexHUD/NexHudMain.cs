@@ -2,6 +2,7 @@
 using NexHUD.EDEngineer;
 using NexHUD.Elite;
 using NexHUD.Elite.Craftlist;
+using NexHUD.Settings;
 using NexHUD.UI;
 using NexHUDCore;
 using NexHUDCore.NxItems;
@@ -13,7 +14,11 @@ namespace NexHUD
 {
     public class NexHudMain
     {
-        public const string version = "0.0.1";
+        public const string version = "v0.2-beta";
+        public const string ARG_AUTO = "auto";
+        public const string ARG_DEBUG = "debug";
+        public const string ARG_VR = "vr";
+        public const string ARG_CLASSIC = "classic";
 
         private static NexHudOverlay m_vrConsoleOverlay;
         private static NxTextbox m_vrConsoleTb;
@@ -23,17 +28,27 @@ namespace NexHUD
         [STAThreadAttribute]
         public static void Main(string[] args)
         {
-            bool _debugMode = false;
-            foreach(string a in args)
-            {
-                if (a == "debug")
-                    _debugMode = true;
-            }
             initLogs();
+            NexHudEngine.Log("NexHud Version: " + version);
+
+            NexHudEngineMode _requestedMode = NexHudSettings.GetInstance().nexHudMode;
+            foreach (string a in args)
+            {
+                if (a == ARG_AUTO)
+                    _requestedMode = NexHudEngineMode.Auto;
+                else if (a == ARG_DEBUG)
+                    _requestedMode = NexHudEngineMode.WindowDebug;
+                else if (a == ARG_VR)
+                    _requestedMode = NexHudEngineMode.Vr;
+                else if (a == ARG_CLASSIC)
+                    _requestedMode = NexHudEngineMode.WindowOverlay;
+
+            }
+            NexHudEngine.Log("Engine mode: " + _requestedMode);
             //performTests();
             initElite();
 
-            initEngine(_debugMode ? NexHudEngineMode.WindowDebug: NexHudEngineMode.Auto);
+            initEngine(_requestedMode);
 
             loadConfigs();
             

@@ -20,13 +20,13 @@ namespace NexHudLauncher
         private const string TITLE_RECORD = "Press key(s) for '{0}'";
         private const string TITLE_CHOICE = "key(s) chosen for '{0}'";
         private const double MOD_CHOICE_TIME = 2000;
-        private Form1 m_mainForm;
+        private Launcher m_mainForm;
         private bool m_isRecording;
         private Key[] m_modifiers = new Key[0];
         private Key? m_key = null;
         private double m_sameKeysTimer;
         private ShortcutId m_shortcut;
-        public KeybindModal(Form1 _mainForm, ShortcutId _id)
+        public KeybindModal(Launcher _mainForm, ShortcutId _id)
         {
             InitializeComponent();
             //progressBar1.Maximum = MOD_CHOICE_TIME;            
@@ -170,7 +170,13 @@ namespace NexHudLauncher
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            Close();
+            if (m_key != null || m_modifiers.Length > 0)
+            {
+                Shortcuts.setShortcut(m_shortcut, m_modifiers, m_key);
+            }
+            Shortcuts.saveShortcuts();
+            m_mainForm.loadSettings();
+            Close();           
         }
     }
 }

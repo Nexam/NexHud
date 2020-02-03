@@ -1,18 +1,23 @@
-﻿using OpenTK.Input;
+﻿using Newtonsoft.Json;
+using OpenTK.Input;
 using System;
 
 namespace NexHUDCore
 {
     public class ShortcutEntry
     {
-        public string id;
+        public string id;       
         public string menuMode;
         public string key;
         public string[] modifiers;
 
+        [JsonIgnore]
         public Key OpentTkKey;
+
+        [JsonIgnore]
         public Key[] OpenTkModifiers;
 
+        [JsonIgnore]
         public bool holdMode = false;
 
         public bool compile()

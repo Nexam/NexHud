@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NexHUDCore;
+using OpenTK.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,10 +50,10 @@ namespace NexHUD
 
         public static bool loadShortcuts()
         {
-            string _path = Environment.CurrentDirectory + "\\Config\\Shortcuts.json";
-            if( NexHudEngine.engineMode == NexHudEngineMode.WindowDebug )
-                _path = Environment.CurrentDirectory + "\\Config\\Shortcuts-debug.json";
-           
+            string _path = Environment.CurrentDirectory + autoPath;
+            if (NexHudEngine.engineMode == NexHudEngineMode.WindowDebug)
+                _path = Environment.CurrentDirectory + debugPath;
+
 
             if (File.Exists(_path))
             {
@@ -66,7 +67,12 @@ namespace NexHUD
                         if (!_array[i].compile())
                             throw new Exception(string.Format("ERROR: shortcut {0} is invalid", _array[i].id));
                         else
-                            m_entrys.Add(_array[i].id, _array[i]);
+                        {
+                            if (m_entrys.ContainsKey(_array[i].id))
+                                m_entrys[_array[i].id] = _array[i];
+                            else
+                                m_entrys.Add(_array[i].id, _array[i]);
+                        }
                     }
 
                     return true;
@@ -75,8 +81,8 @@ namespace NexHUD
                 {
                     NexHudEngine.Log("ERROR while reading Shortcuts.json");
                     NexHudEngine.Log(ex.Message);
-                    Console.WriteLine("Type any key to exist...");
-                    Console.ReadKey();
+                    //Console.WriteLine("Type any key to exist...");
+                    // Console.ReadKey();
                     return false;
                 }
             }
@@ -89,13 +95,43 @@ namespace NexHUD
             }
         }
 
+        public static void setShortcut(ShortcutId _id, Key[] _modifiers, Key? _key)
+        {
+            if (m_entrys.ContainsKey(_id.ToString()))
+            {
+                m_entrys[_id.ToString()].key = _key?.ToString();
+                m_entrys[_id.ToString()].OpentTkKey = _key != null ? (Key)_key : Key.Unknown;
+
+                string[] _mods = new string[_modifiers.Length];
+                for (int i = 0; i < _modifiers.Length; i++)
+                    _mods[i] = _modifiers[i].ToString();
+
+                m_entrys[_id.ToString()].modifiers = _mods;
+                m_entrys[_id.ToString()].OpenTkModifiers = _modifiers;
+            }
+        }
+
+        public static void setMenuMode(bool hold)
+        {
+            if (m_entrys.ContainsKey(ShortcutId.menu.ToString()))
+            {
+                m_entrys[ShortcutId.menu.ToString()].holdMode = hold;
+                m_entrys[ShortcutId.menu.ToString()].menuMode = hold ? "hold" : "press";
+            }
+        }
+
         public static void saveShortcuts()
         {
-           /* using (StreamWriter file = File.CreateText(path))
+            ShortcutEntry[] _entrys = new ShortcutEntry[m_entrys.Count];
+
+            m_entrys.Values.CopyTo(_entrys, 0);
+
+            string _path = Environment.CurrentDirectory + autoPath;
+            using (StreamWriter file = File.CreateText(_path))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, _listArray);
-            } */
+                JsonSerializer serializer = new JsonSerializer() { Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore };
+                serializer.Serialize(file, _entrys);
+            }
         }
     }
 }
