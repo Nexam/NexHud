@@ -151,13 +151,18 @@
     <Compile Include="Apis\Eddb\EddbSystemPage.cs" />
     <Compile Include="Apis\Eddb\EddbSystemPresence.cs" />
     <Compile Include="Apis\Edsm\EDSMSystemDatas.cs" />
+    <Compile Include="Apis\SpanshSort.cs" />
+    <Compile Include="Apis\Spansh\SearchEngine.cs" />
     <Compile Include="Apis\Spansh\Datas\SpanshBodiesResult.cs" />
     <Compile Include="Apis\Spansh\Datas\SpanshBody.cs" />
     <Compile Include="Apis\Spansh\SpanshDatas.cs" />
     <Compile Include="Apis\Spansh\Datas\SpanshMaterial.cs" />
     <Compile Include="Apis\Spansh\SpanshApi.cs" />
     <Compile Include="Apis\Spansh\Datas\SpanshSystem.cs" />
+    <Compile Include="Apis\Spansh\SpanshFilter.cs" />
     <Compile Include="Apis\Spansh\SpanshSearch.cs" />
+    <Compile Include="Apis\Spansh\SpanshSortValue.cs" />
+    <Compile Include="Apis\Spansh\SpanshValue.cs" />
     <Compile Include="audio\RadioPlayer.cs" />
     <Compile Include="Elite\Craft\Craftlist.cs" />
     <Compile Include="Elite\Craft\CraftlistItem.cs" />
@@ -180,7 +185,6 @@
     <Compile Include="Elite\Searchs\SearchEngine.cs" />
     <Compile Include="Elite\UserSearchResult.cs" />
     <Compile Include="Elite\UserSearchs.cs" />
-    <Compile Include="Spansh\enums\Fields.cs" />
     <Compile Include="Ui\UiMainRadio.cs" />
     <Compile Include="Utility\EliteApiLogger.cs" />
     <Compile Include="Utility\FocusHelper.cs" />
@@ -281,7 +285,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
+      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

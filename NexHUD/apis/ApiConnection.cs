@@ -73,109 +73,41 @@ namespace NexHUD.Apis
 
             return _alive;
         }
-
-        public class spanshParam
-        {
-            public string reference_system;
-            public spanshFilter filters;
-            public spanshSort[] sort;
-            public int? size;
-        }
-        public class spanshFilter
-        {
-            //public spanshValue<long> system_id64;
-            public spanshValue<int?> distance_from_coords;
-            //public spanshValue<long> population;
-            public spanshValue<double?>[] materials;
-            public spanshValue<bool?> is_landable;
-            // public intValue distance;
-        }
-        public class spanshValue<T>
-        {
-            public string name;
-            public T value;
-            public string comparison;
-            public T min;
-            public T max;
-            public spanshValue()
-            {
-            }
-            public spanshValue(T _min, T _max)
-            {
-                min = _min;
-                max = _max;
-            }
-            public spanshValue(T _v) : this(null, (typeof(T) == typeof(bool?) ? null : "=="), _v)
-            {
-            }
-            public spanshValue(string _comparison, T _v) : this(null, _comparison, _v)
-            {
-            }
-            public spanshValue(string _name, string _comparison, T _value)
-            {
-                name = _name;
-                value = _value;
-                comparison = _comparison;
-            }
-        }
-
-        public class spanshSort
-        {
-            public spanshSortValue[] materials;
-            public spanshSortValue distance_from_coords;
-        }
-        public class spanshSortValue
-        {
-            //public const string ASC = "asc";
-            //public const string DESC = "desc";
-
-            public string name;
-            public string direction;
-            public spanshSortValue(bool _ascending)
-            {
-                direction = _ascending ? "asc" : "desc";
-            }
-            public spanshSortValue(string _name, bool _ascending)
-            {
-                name = _name;
-                direction = _ascending ? "asc" : "desc";
-            }
-        }
-
+        
         public static SpanshBodiesResult SpanshBodies(string _systemOrigin, int _maxDistance, string[] _materials, bool? _isLandable = null)
         {
             _maxDistance = Math.Min(_maxDistance, 100);
 
             Dictionary<string, string> _sParams = new Dictionary<string, string>();
 
-            spanshValue<double?>[] _spanshMats = new spanshValue<double?>[_materials.Length];
+            SpanshValue<double?>[] _spanshMats = new SpanshValue<double?>[_materials.Length];
             for (int i = 0; i < _materials.Length; i++)
             {
-                _spanshMats[i] = new spanshValue<double?>(_materials[i], ">", 0);
+                _spanshMats[i] = new SpanshValue<double?>(_materials[i], ">", 0);
             }
-            spanshSortValue[] _spanshMatsSort = new spanshSortValue[_materials.Length];
+            SpanshSortValue[] _spanshMatsSort = new SpanshSortValue[_materials.Length];
             for (int i = 0; i < _materials.Length; i++)
             {
-                _spanshMatsSort[i] = new spanshSortValue(_materials[i].ToString(), false);
+                _spanshMatsSort[i] = new SpanshSortValue(_materials[i].ToString(), false);
             }
 
-            spanshParam p = new spanshParam()
+            SpanshSearch p = new SpanshSearch()
             {
                 size = 11,
                 reference_system = _systemOrigin,
-                filters = new spanshFilter()
+                filters = new SpanshFilderBodies()
                 {
-                    distance_from_coords = new spanshValue<int?>() { max = _maxDistance },
+                    distance_from_coords = new SpanshValue<int?>() { max = _maxDistance },
                     materials = _spanshMats,
-                    is_landable = new spanshValue<bool?>(_isLandable)
+                    is_landable = new SpanshValue<bool?>(_isLandable)
                 },
-                sort = new spanshSort[] { new spanshSort() {
+                sort = new SpanshSort[] { new SpanshSort() {
                     materials = _spanshMatsSort,
-                },new spanshSort() {
-                    distance_from_coords = new spanshSortValue(true)
+                },new SpanshSort() {
+                    distance_from_coords = new SpanshSortValue(true)
                 } }
             };
-            string _spanshJson = JsonConvert.SerializeObject(p, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }); ;
+            string _spanshJson = JsonConvert.SerializeObject(p, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore }); ;
 
             Console.WriteLine(_spanshJson);
             string json = requestPOSTFromURL(Url_SpanshBodies, _spanshJson);

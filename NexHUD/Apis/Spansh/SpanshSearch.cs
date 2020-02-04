@@ -9,10 +9,11 @@ namespace NexHUD.Apis.Spansh
 {
     public class SpanshSearch
     {
-        public spanshFilter Filter;
+        public SpanshFilderBodies filters;
         public int Page;
         //public SpanshCoords ReferenceCoords;
-        public int Size;
-        public spanshSort Sort;
+        public string reference_system;
+        public int size;
+        public SpanshSort[] sort;
     }
 }
