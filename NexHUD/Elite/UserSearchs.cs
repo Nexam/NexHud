@@ -3,7 +3,7 @@ using NexHUDCore;
 using System;
 using System.IO;
 
-namespace NexHUD.elite
+namespace NexHUD.Elite
 {
     public class UserSearchs
     {

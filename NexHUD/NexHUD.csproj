@@ -144,37 +144,44 @@
     <None Include="config\MaterialsSearchs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="apis\ApiConnection.cs" />
-    <Compile Include="apis\datas\eddb\EDDBFaction.cs" />
-    <Compile Include="apis\datas\eddb\EDDBFactionsPage.cs" />
-    <Compile Include="apis\datas\eddb\EDDBSystemDatas.cs" />
-    <Compile Include="apis\datas\eddb\EDDBSystemPage.cs" />
-    <Compile Include="apis\datas\eddb\EDDBSystemPresence.cs" />
-    <Compile Include="apis\datas\edsm\EDSMSystemDatas.cs" />
-    <Compile Include="apis\datas\spansh\SpanshBodiesResult.cs" />
+    <Compile Include="Apis\ApiConnection.cs" />
+    <Compile Include="Apis\Eddb\EddbFaction.cs" />
+    <Compile Include="Apis\Eddb\EddbFactionsPage.cs" />
+    <Compile Include="Apis\Eddb\EddbSystemDatas.cs" />
+    <Compile Include="Apis\Eddb\EddbSystemPage.cs" />
+    <Compile Include="Apis\Eddb\EddbSystemPresence.cs" />
+    <Compile Include="Apis\Edsm\EDSMSystemDatas.cs" />
+    <Compile Include="Apis\Spansh\Datas\SpanshBodiesResult.cs" />
+    <Compile Include="Apis\Spansh\Datas\SpanshBody.cs" />
+    <Compile Include="Apis\Spansh\SpanshDatas.cs" />
+    <Compile Include="Apis\Spansh\Datas\SpanshMaterial.cs" />
+    <Compile Include="Apis\Spansh\SpanshApi.cs" />
+    <Compile Include="Apis\Spansh\Datas\SpanshSystem.cs" />
+    <Compile Include="Apis\Spansh\SpanshSearch.cs" />
     <Compile Include="audio\RadioPlayer.cs" />
-    <Compile Include="elite\craftlist\Craftlist.cs" />
-    <Compile Include="elite\craftlist\CraftlistItem.cs" />
-    <Compile Include="elite\EDBody.cs" />
-    <Compile Include="elite\EDDatas.cs" />
-    <Compile Include="elite\EDSystem.cs" />
-    <Compile Include="elite\engineers\BlueprintCategorie.cs" />
-    <Compile Include="elite\engineers\BlueprintDatas.cs" />
-    <Compile Include="elite\engineers\EngineerHelper.cs" />
-    <Compile Include="elite\engineers\MaterialDatas.cs" />
-    <Compile Include="elite\enums\EDEnumHelper.cs" />
-    <Compile Include="elite\enums\EliteAllegiance.cs" />
-    <Compile Include="elite\enums\EliteEconomy.cs" />
-    <Compile Include="elite\enums\EliteGovernment.cs" />
-    <Compile Include="elite\enums\EliteReserve.cs" />
-    <Compile Include="elite\enums\EliteSecurity.cs" />
-    <Compile Include="elite\enums\EliteStates.cs" />
-    <Compile Include="elite\enums\EliteSystemThreat.cs" />
-    <Compile Include="elite\SearchEntry.cs" />
-    <Compile Include="elite\searchs\SearchEngine.cs" />
-    <Compile Include="elite\UserSearchResult.cs" />
-    <Compile Include="elite\UserSearchs.cs" />
+    <Compile Include="Elite\craftlist\Craftlist.cs" />
+    <Compile Include="Elite\craftlist\CraftlistItem.cs" />
+    <Compile Include="Elite\EDBody.cs" />
+    <Compile Include="Elite\EDDatas.cs" />
+    <Compile Include="Elite\EDSystem.cs" />
+    <Compile Include="Elite\Engineers\BlueprintCategorie.cs" />
+    <Compile Include="Elite\Engineers\BlueprintDatas.cs" />
+    <Compile Include="Elite\Engineers\EngineerHelper.cs" />
+    <Compile Include="Elite\Engineers\MaterialDatas.cs" />
+    <Compile Include="Elite\enums\EDEnumHelper.cs" />
+    <Compile Include="Elite\enums\EliteAllegiance.cs" />
+    <Compile Include="Elite\enums\EliteEconomy.cs" />
+    <Compile Include="Elite\enums\EliteGovernment.cs" />
+    <Compile Include="Elite\enums\EliteReserve.cs" />
+    <Compile Include="Elite\enums\EliteSecurity.cs" />
+    <Compile Include="Elite\enums\EliteStates.cs" />
+    <Compile Include="Elite\enums\EliteSystemThreat.cs" />
+    <Compile Include="Elite\SearchEntry.cs" />
+    <Compile Include="Elite\searchs\SearchEngine.cs" />
+    <Compile Include="Elite\UserSearchResult.cs" />
+    <Compile Include="Elite\UserSearchs.cs" />
     <Compile Include="spansh\enums\Fields.cs" />
+    <Compile Include="ui\UiMainRadio.cs" />
     <Compile Include="utility\EliteApiLogger.cs" />
     <Compile Include="utility\FocusHelper.cs" />
     <Compile Include="inputs\Shortcuts.cs" />
@@ -196,8 +203,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="elite\engineers\Datas\blueprints.json" />
-    <EmbeddedResource Include="elite\engineers\Datas\entryData.json" />
+    <EmbeddedResource Include="Elite\Engineers\Datas\blueprints.json" />
+    <EmbeddedResource Include="Elite\Engineers\Datas\entryData.json" />
     <EmbeddedResource Include="Resources\ranks\double-elite.png" />
     <EmbeddedResource Include="Resources\ranks\triple-elite.png" />
     <EmbeddedResource Include="Resources\MenuImages\menu_improve.png" />
@@ -274,7 +281,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
+      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

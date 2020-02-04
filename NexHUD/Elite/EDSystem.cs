@@ -1,10 +1,10 @@
-﻿using NexHUD.apis.eddb;
-using NexHUD.apis.edsm;
-using NexHUD.apis.spansh;
+﻿using NexHUD.Apis.Eddb;
+using NexHUD.Apis.Edsm;
+using NexHUD.Apis.Spansh;
 using System;
 using System.Collections.Generic;
 
-namespace NexHUD.elite
+namespace NexHUD.Elite
 {
     public class EDSystem
     {
@@ -117,7 +117,7 @@ namespace NexHUD.elite
             return m_Bodys[(int)_spanshDatas.edsm_id];
         }
 
-        public void updateEDDB(EDDBSystemDatas _datas)
+        public void updateEDDB(EddbSystemDatas _datas)
         {
             if (_datas == null)
                 return;

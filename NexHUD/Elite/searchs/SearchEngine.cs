@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NexHUD.elite.searchs
+namespace NexHUD.Elite.searchs
 {
     public class SearchEngine
     {

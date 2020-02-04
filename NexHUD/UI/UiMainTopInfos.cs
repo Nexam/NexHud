@@ -1,11 +1,11 @@
-﻿using NexHUD.elite;
+﻿using NexHUD.Elite;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 using System;
 using System.Drawing;
 using System.Reflection;
 
-namespace NexHUD.ui
+namespace NexHUD.Ui
 {
     public class UiMainTopInfos : NxGroup
     {

@@ -1,7 +1,7 @@
-﻿using NexHUD.apis.spansh;
+﻿using NexHUD.Apis.Spansh;
 using System.Collections.Generic;
 
-namespace NexHUD.elite
+namespace NexHUD.Elite
 {
     public class EDBody
     {

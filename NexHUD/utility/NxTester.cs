@@ -1,13 +1,13 @@
 ﻿using NAudio.Wave;
-using NexHUD.apis;
-using NexHUD.apis.spansh;
-using NexHUD.audio;
+using NexHUD.Apis;
+using NexHUD.Apis.Spansh;
+using NexHUD.Audio;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace NexHUD.utility
+namespace NexHUD.Utility
 {
     /// <summary>
     /// Class to test differents packages, api, etc...

@@ -1,6 +1,6 @@
 ﻿using NexHUD;
-using NexHUD.inputs;
-using NexHUD.settings;
+using NexHUD.Inputs;
+using NexHUD.Settings;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace NexHudLauncher
 
             loadSettings();
 
-            labelVersion.Text = NexHudMain.version;
+            labelVersion.Text = NexHudMain.Version;
         }
 
         public void saveSettings()

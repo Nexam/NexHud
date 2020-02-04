@@ -1,5 +1,5 @@
-﻿using NexHUD.elite.engineers;
-using NexHUD.elite;
+﻿using NexHUD.Elite.Engineers;
+using NexHUD.Elite;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 using System;
@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using NexHUD.inputs;
+using NexHUD.Inputs;
 
-namespace NexHUD.ui.search
+namespace NexHUD.Ui.Search
 {
 
 

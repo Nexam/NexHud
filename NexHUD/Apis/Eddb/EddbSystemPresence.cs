@@ -1,6 +1,6 @@
-﻿namespace NexHUD.apis.eddb
+﻿namespace NexHUD.Apis.Eddb
 {
-    class EDDBSystemPresence
+    class EddbSystemPresence
     {
         string _id;
         int minor_faction_id;

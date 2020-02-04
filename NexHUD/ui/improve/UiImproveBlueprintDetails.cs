@@ -1,13 +1,13 @@
 ﻿using System.Drawing;
 using System.Linq;
-using NexHUD.elite.craftlist;
-using NexHUD.elite.engineers;
-using NexHUD.inputs;
-using NexHUD.ui.common;
+using NexHUD.Elite.Craft;
+using NexHUD.Elite.Engineers;
+using NexHUD.Inputs;
+using NexHUD.Ui.Common;
 using NexHUDCore;
 using NexHUDCore.NxItems;
 
-namespace NexHUD.ui.improve
+namespace NexHUD.Ui.Improve
 {
     public class UiBlueprintDetails : NxGroup
     {

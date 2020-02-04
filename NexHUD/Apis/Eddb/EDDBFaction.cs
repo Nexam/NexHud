@@ -1,6 +1,6 @@
-﻿namespace NexHUD.apis.eddb
+﻿namespace NexHUD.Apis.Eddb
 {
-    public class EDDBFaction
+    public class EddbFaction
     {
         public string _id;
         public int __v;

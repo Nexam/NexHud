@@ -1,6 +1,6 @@
-﻿namespace NexHUD.apis.eddb
+﻿namespace NexHUD.Apis.Eddb
 {
-    public class EDDBSystemDatas
+    public class EddbSystemDatas
     {
         /** Only what missing from EDSM **/
         //So basically just powerplay

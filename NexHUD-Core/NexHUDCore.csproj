@@ -212,6 +212,7 @@
     <Compile Include="NxItems\NxGroup.cs" />
     <Compile Include="NxItems\NxImage.cs" />
     <Compile Include="NxItems\NxLoading.cs" />
+    <Compile Include="NxItems\NxProgressBar.cs" />
     <Compile Include="NxLog.cs" />
     <Compile Include="OpenVR\AttachmentType.cs" />
     <Compile Include="JsInterop\Applications.cs" />

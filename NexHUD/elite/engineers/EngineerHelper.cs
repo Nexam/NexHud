@@ -1,6 +1,6 @@
 ﻿using EliteAPI.Events;
 using Newtonsoft.Json;
-using NexHUD.elite;
+using NexHUD.Elite;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace NexHUD.elite.engineers
+namespace NexHUD.Elite.Engineers
 {
     public class EngineerHelper
     {
@@ -67,7 +67,7 @@ namespace NexHUD.elite.engineers
                 return;
 
             NexHudEngine.Log("Loading blueprints datas...");
-            string _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "EDEngineer.Datas.blueprints.json");
+            string _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "Elite.Engineers.Datas.blueprints.json");
             m_bpDatas = JsonConvert.DeserializeObject<BlueprintDatas[]>(_json);
             NexHudEngine.Log(">>{0} blueprints loaded", m_bpDatas.Length);
 
@@ -94,7 +94,7 @@ namespace NexHUD.elite.engineers
 
 
                 NexHudEngine.Log("Loading materials datas...");
-            _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "EDEngineer.Datas.entryData.json");
+            _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "Elite.Engineers.Datas.entryData.json");
             m_matDatas = JsonConvert.DeserializeObject<MaterialDatas[]>(_json);
             NexHudEngine.Log(">>{0} materials loaded", m_matDatas.Length);
 
@@ -276,13 +276,13 @@ namespace NexHUD.elite.engineers
         {
             long _count = 0;
 
-            Encoded e = NexHudMain.eliteApi.Materials.Encoded.Where(x => x.NameLocalised == name).FirstOrDefault();
+            Encoded e = NexHudMain.EliteApi.Materials.Encoded.Where(x => x.NameLocalised == name).FirstOrDefault();
             if (e != null)
                 _count += e.Count;
-            Encoded m = NexHudMain.eliteApi.Materials.Manufactured.Where(x => x.NameLocalised == name).FirstOrDefault();
+            Encoded m = NexHudMain.EliteApi.Materials.Manufactured.Where(x => x.NameLocalised == name).FirstOrDefault();
             if( m != null)
                 _count += m.Count;
-            Raw r = NexHudMain.eliteApi.Materials.Raw.Where(x => x.Name == name.ToLower() ).FirstOrDefault();
+            Raw r = NexHudMain.EliteApi.Materials.Raw.Where(x => x.Name == name.ToLower() ).FirstOrDefault();
             if (r != null)
                 _count += r.Count;
 

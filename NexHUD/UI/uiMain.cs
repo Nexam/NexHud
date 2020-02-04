@@ -1,13 +1,14 @@
-﻿using NexHUD.inputs;
-using NexHUD.settings;
-using NexHUD.ui.improve;
-using NexHUD.ui.search;
-using NexHUD.utility;
+﻿using NexHUD.Inputs;
+using NexHUD.Settings;
+using NexHUD.Ui.Improve;
+using NexHUD.Ui.Search;
+using NexHUD.Utility;
 using NexHUDCore;
 using OpenTK;
 using System;
+using System.Drawing;
 
-namespace NexHUD.ui
+namespace NexHUD.Ui
 {
     public class NxMenu
     {
@@ -25,6 +26,7 @@ namespace NexHUD.ui
         private NexHudOverlay m_frame;
 
         private MenuState m_state = MenuState.Initialize;
+        public Point Cursor;
 
         public NexHudOverlay frame { get { return m_frame; } }
         //Top Infos panel
@@ -36,6 +38,8 @@ namespace NexHUD.ui
         public UiSearch m_searchPanel;
         //Improve
         public UiImprove m_uiImprove;
+        //Radio
+        public UiMainRadio m_UiRadio;
         public NxMenu()
         {
 
@@ -79,6 +83,8 @@ namespace NexHUD.ui
             m_uiImprove = new UiImprove(this);
             m_frame.NxOverlay.Add(m_uiImprove);
 
+            m_frame.NxOverlay.Add(m_UiRadio = new UiMainRadio(Width / 2, Height - (UiMainRadio.Height + 50), this));
+
         }
 
         public void changeState(MenuState _newState)
@@ -91,12 +97,14 @@ namespace NexHUD.ui
             m_uiImprove.isVisible = false;
             m_uiMainMenu.isVisible = false;
             m_uiPlayerInfos.isVisible = false;
+            m_UiRadio.isVisible = false;
 
             switch (m_state)
             {
                 case MenuState.Main:
                     m_uiMainMenu.isVisible = true;
                     m_uiPlayerInfos.isVisible = true;
+                    m_UiRadio.isVisible = true;
                     break;
                 case MenuState.Search:
                     m_searchPanel.isVisible = true;
@@ -174,32 +182,73 @@ namespace NexHUD.ui
                 //MAIN MENU NAVIGATION
                 if (m_uiMainMenu.isVisible)
                 {
-                    if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right)))
+                    bool up = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up));
+                    bool down = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.down));
+                    bool left = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left));
+                    bool right = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right));
+                    bool select = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select));
+
+                    
+
+                    if( Cursor.Y == 0)
                     {
-                        m_uiMainMenu.selectNext();
-                    }
-                    else if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left)))
-                    {
-                        m_uiMainMenu.selectPrev();
-                    }
-                    else if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select)))
-                    {
-                        if (m_uiMainMenu.isSelectedMenuActive())
+                        if (right)
                         {
-                            switch (m_uiMainMenu.SelectedMenu)
+                            m_uiMainMenu.selectNext();
+                        }
+                        else if (left)
+                        {
+                            m_uiMainMenu.selectPrev();
+                        }
+                        else if( down )
+                        {
+                            Cursor = new Point(1, 1);
+                        }
+                        else if (select)
+                        {
+                            if (m_uiMainMenu.isSelectedMenuActive())
                             {
-                                case UiMainMenuButton.MenuButtonType.Search:
-                                    changeState(MenuState.Search);
-                                    break;
-                                case UiMainMenuButton.MenuButtonType.Improve:
-                                    changeState(MenuState.Improve);
-                                    break;
-                                case UiMainMenuButton.MenuButtonType.Trade:
-                                    changeState(MenuState.Trade);
-                                    break;
+                                switch (m_uiMainMenu.SelectedMenu)
+                                {
+                                    case UiMainMenuButton.MenuButtonType.Search:
+                                        changeState(MenuState.Search);
+                                        break;
+                                    case UiMainMenuButton.MenuButtonType.Improve:
+                                        changeState(MenuState.Improve);
+                                        break;
+                                    case UiMainMenuButton.MenuButtonType.Trade:
+                                        changeState(MenuState.Trade);
+                                        break;
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        if (up)
+                        {
+                            Cursor.Y--;
+                        }
+                        else if (down &&  Cursor.Y < 2)
+                        {
+                            Cursor.Y++;
+                        }
+
+                        else if( left && Cursor.X > 0 && Cursor.Y < 2)
+                        {
+                            Cursor.X--;
+                        }
+                        else if( right && Cursor.X < 2 && Cursor.Y < 2)
+                        {
+                            Cursor.X++;
+                        }
+                        m_UiRadio.PreviousRadio.Selected = Cursor == new Point(0, 1);
+                        m_UiRadio.Radio.Selected = Cursor == new Point(1, 1);
+                        m_UiRadio.NextRadio.Selected = Cursor == new Point(2, 1);
+
+                        m_UiRadio.VolumeSelected = Cursor.Y == 2;
+                    }
+                    
                 }
             }
         }

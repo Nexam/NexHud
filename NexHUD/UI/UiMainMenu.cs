@@ -2,7 +2,7 @@
 using System;
 using System.Drawing;
 
-namespace NexHUD.ui
+namespace NexHUD.Ui
 {
     public class UiMainMenu : NxGroup
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace NexHUD.elite.engineers
+namespace NexHUD.Elite.Engineers
 {
     public class BlueprintDatas
     {

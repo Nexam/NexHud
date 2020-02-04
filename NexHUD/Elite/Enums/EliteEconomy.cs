@@ -1,4 +1,4 @@
-﻿namespace NexHUD.elite
+﻿namespace NexHUD.Elite
 {
     public enum EliteEconomy
     {

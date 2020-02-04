@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NexHUD.audio
+namespace NexHUD.Audio
 {
     public class RadioInfos
     {
@@ -58,9 +58,11 @@ namespace NexHUD.audio
             }
             set
             {
+                float v = value;
+                v = Math.Min(Math.Max(v,0),1);
                 if (m_wo != null)
-                    m_wo.Volume = value;
-                m_volume = value;
+                    m_wo.Volume = v;
+                m_volume = v;
             }
         }
         

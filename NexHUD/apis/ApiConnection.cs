@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
-using NexHUD.apis.eddb;
-using NexHUD.apis.edsm;
-using NexHUD.apis.spansh;
+using NexHUD.Apis.Eddb;
+using NexHUD.Apis.Edsm;
+using NexHUD.Apis.Spansh;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace NexHUD.apis
+namespace NexHUD.Apis
 {
     public class ApiConnection
     {
@@ -17,25 +17,25 @@ namespace NexHUD.apis
 
         /*Endpoints EDDB*/
         // Factions
-        public const string url_EDDBFactions = @"https://eddbapi.kodeblox.com/api/v4/factions?";
+        public const string Url_EDDBFactions = @"https://eddbapi.kodeblox.com/api/v4/factions?";
         // Populated Systems
-        public const string url_EDDBpopulatedSystems = @"https://eddbapi.kodeblox.com/api/v4/populatedsystems?";
+        public const string Url_EDDBpopulatedSystems = @"https://eddbapi.kodeblox.com/api/v4/populatedsystems?";
         // Stations
-        public const string url_EDDBStations = @"https://eddbapi.kodeblox.com/api/v4/stations?";
+        public const string Url_EDDBStations = @"https://eddbapi.kodeblox.com/api/v4/stations?";
         // Systems
-        public const string url_EDDBSystems = @"https://eddbapi.kodeblox.com/api/v4/systems?";
+        public const string Url_EDDBSystems = @"https://eddbapi.kodeblox.com/api/v4/systems?";
         /*Please note that the endpoints have been changed to their own subdomain.*/
 
         /*ENDPOINTS EDSM*/
-        public const string url_EDSMSystem = @"https://www.edsm.net/api-v1/system?";
-        public const string url_EDSMSystems = @"https://www.edsm.net/api-v1/systems?";
-        public const string url_SystemsInSphere = @"https://www.edsm.net/api-v1/sphere-systems?";
-        public const string url_SystemsInCube = @"https://www.edsm.net/api-v1/cube-systems?";
-        public const string url_EDSMSystemValue = @"https://www.edsm.net/api-system-v1/estimated-value?";
-        public const string url_EDSMSystemBodies = @"https://www.edsm.net/api-system-v1/bodies?";
+        public const string Url_EDSMSystem = @"https://www.edsm.net/api-v1/system?";
+        public const string Url_EDSMSystems = @"https://www.edsm.net/api-v1/systems?";
+        public const string Url_SystemsInSphere = @"https://www.edsm.net/api-v1/sphere-systems?";
+        public const string Url_SystemsInCube = @"https://www.edsm.net/api-v1/cube-systems?";
+        public const string Url_EDSMSystemValue = @"https://www.edsm.net/api-system-v1/estimated-value?";
+        public const string Url_EDSMSystemBodies = @"https://www.edsm.net/api-system-v1/bodies?";
 
         /* END POINT Spansh */
-        public const string url_SpanshBodies = @"https://spansh.co.uk/api/bodies/search?";
+        public const string Url_SpanshBodies = @"https://spansh.co.uk/api/bodies/search?";
 
         public static bool isEDSMOnline()
         {
@@ -178,7 +178,7 @@ namespace NexHUD.apis
             string _spanshJson = JsonConvert.SerializeObject(p, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }); ;
 
             Console.WriteLine(_spanshJson);
-            string json = requestPOSTFromURL(url_SpanshBodies, _spanshJson);
+            string json = requestPOSTFromURL(Url_SpanshBodies, _spanshJson);
             try
             {
                 SpanshBodiesResult result = JsonConvert.DeserializeObject<SpanshBodiesResult>(json);
@@ -200,7 +200,7 @@ namespace NexHUD.apis
             string _edsmParams = string.Format("systemName={0}", _systemName);
 
 
-            string _json = requestGETFromURL(url_EDSMSystemBodies, _edsmParams.ToString());
+            string _json = requestGETFromURL(Url_EDSMSystemBodies, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas>(_json); }
             catch (Exception ex)
@@ -219,7 +219,7 @@ namespace NexHUD.apis
             if (_showInformation)
                 _edsmParams += "&showInformation=1";
 
-            string _json = requestGETFromURL(url_EDSMSystems, _edsmParams.ToString());
+            string _json = requestGETFromURL(Url_EDSMSystems, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas[]>(_json); }
             catch (Exception ex) { NexHudEngine.Log(ex.Message); }
@@ -231,7 +231,7 @@ namespace NexHUD.apis
             if (_showInformation)
                 _edsmParams += "&showInformation=1";
 
-            string _json = requestGETFromURL(url_SystemsInSphere, _edsmParams.ToString());
+            string _json = requestGETFromURL(Url_SystemsInSphere, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas[]>(_json); }
             catch (Exception ex) { NexHudEngine.Log(ex.Message); }
@@ -269,7 +269,7 @@ namespace NexHUD.apis
             if (_parameters.showPrimaryStar)
                 _edsmParams += "&showPrimaryStar=1";
 
-            string _json = requestGETFromURL(url_EDSMSystem, _edsmParams.ToString());
+            string _json = requestGETFromURL(Url_EDSMSystem, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas>(_json); }
             catch (Exception ex) { NexHudEngine.Log(ex.Message); }
@@ -283,7 +283,7 @@ namespace NexHUD.apis
             if (_systemId != null)
                 _edsmParams += "&systemId=" + _systemId;
 
-            string _json = requestGETFromURL(url_EDSMSystemValue, _edsmParams.ToString());
+            string _json = requestGETFromURL(Url_EDSMSystemValue, _edsmParams.ToString());
 
             try { return JsonConvert.DeserializeObject<EDSMSystemDatas>(_json); }
             catch (Exception ex) { NexHudEngine.Log("ERROR. System name={0}. message:{1}", _systemName, ex.Message); }
@@ -295,15 +295,15 @@ namespace NexHUD.apis
         /// </summary>
         /// <param name="_systemName"></param>
         /// <returns></returns>
-        public static EDDBSystemDatas EDDBSystemComplementaryInfos(string _systemName)
+        public static EddbSystemDatas EDDBSystemComplementaryInfos(string _systemName)
         {
             NexHudEngine.Log("Search complementary information EDDB for System: " + _systemName);
 
-            string _json = requestGETFromURL(url_EDDBSystems, string.Format("name={0}", _systemName));
+            string _json = requestGETFromURL(Url_EDDBSystems, string.Format("name={0}", _systemName));
 
             try
             {
-                EDDBSystemPage _systemPage = JsonConvert.DeserializeObject<EDDBSystemPage>(_json);
+                EddbSystemPage _systemPage = JsonConvert.DeserializeObject<EddbSystemPage>(_json);
                 if (_systemPage != null && _systemPage.docs != null && _systemPage.docs.Length > 0)
                 {
                     return _systemPage.docs[0];

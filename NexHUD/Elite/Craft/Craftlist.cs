@@ -4,7 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using NexHUDCore;
 
-namespace NexHUD.elite.craftlist
+namespace NexHUD.Elite.Craft
 {
     public class Craftlist
     {

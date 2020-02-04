@@ -1,8 +1,8 @@
-﻿namespace NexHUD.apis.eddb
+﻿namespace NexHUD.Apis.Eddb
 {
-    public class EDDBFactionsPage
+    public class EddbFactionsPage
     {
-        public EDDBFaction[] docs;
+        public EddbFaction[] docs;
         public int total;
         public int limit;
         public int page;

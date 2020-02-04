@@ -1,17 +1,17 @@
-﻿using NexHUD.elite.engineers;
-using NexHUD.apis.edsm;
-using NexHUD.apis.spansh;
-using NexHUD.ui;
+﻿using NexHUD.Elite.Engineers;
+using NexHUD.Apis.Edsm;
+using NexHUD.Apis.Spansh;
+using NexHUD.Ui;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using NexHUD.apis;
-using NexHUD.ui.search;
+using NexHUD.Apis;
+using NexHUD.Ui.Search;
 
-namespace NexHUD.elite
+namespace NexHUD.Elite
 {
     public class EDDatas
     {
@@ -58,7 +58,7 @@ namespace NexHUD.elite
             _unknowSystem.security = EliteSecurity.Lawless;
             _unknowSystem.government = EliteGovernment.None;
 
-            NexHudMain.eliteApi.Events.LocationEvent += Events_LocationEvent;
+            NexHudMain.EliteApi.Events.LocationEvent += Events_LocationEvent;
         }
 
         private void Events_LocationEvent(object sender, EliteAPI.Events.LocationInfo e)
@@ -378,7 +378,7 @@ namespace NexHUD.elite
 
         public EDSystem getCurrentSystem()
         {
-            string _systemName = NexHudMain.eliteApi.Location.StarSystem;
+            string _systemName = NexHudMain.EliteApi.Location.StarSystem;
             if (m_systems.ContainsKey(_systemName))
             {
                 if (!m_systems[_systemName].isEDSMComplete() || !m_systems[_systemName].receivedEddbInfos)
@@ -398,7 +398,7 @@ namespace NexHUD.elite
 
         private void updateCurrentSystemInfos()
         {
-            if (m_currentSystemThread != null && m_currentSystemThread.ThreadState == System.Threading.ThreadState.Running && _lastCurrentSystem == NexHudMain.eliteApi.Location.StarSystem)
+            if (m_currentSystemThread != null && m_currentSystemThread.ThreadState == System.Threading.ThreadState.Running && _lastCurrentSystem == NexHudMain.EliteApi.Location.StarSystem)
             {
                 return; //Loading already in process
             }
@@ -407,7 +407,7 @@ namespace NexHUD.elite
                 if (m_currentSystemThread != null) //We changed system before the loading was done for the previous.
                     m_currentSystemThread.Abort();
 
-                _lastCurrentSystem = NexHudMain.eliteApi.Location.StarSystem;
+                _lastCurrentSystem = NexHudMain.EliteApi.Location.StarSystem;
                 m_currentSystemThread = new Thread(updateCurrentSystemThread);
                 m_currentSystemThread.Start();
             }
@@ -416,7 +416,7 @@ namespace NexHUD.elite
 
         private void updateCurrentSystemThread()
         {
-            string _systemName = NexHudMain.eliteApi.Location.StarSystem;
+            string _systemName = NexHudMain.EliteApi.Location.StarSystem;
             if (string.IsNullOrEmpty(_systemName))
                 return;
             Stopwatch _watch = new Stopwatch();

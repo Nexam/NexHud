@@ -3,7 +3,7 @@ using NexHUDCore.NxItems;
 using System.Drawing;
 using System.Reflection;
 
-namespace NexHUD.ui
+namespace NexHUD.Ui
 {
     public class UiMainMenuButton : NxGroup
     {

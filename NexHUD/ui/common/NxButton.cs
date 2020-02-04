@@ -1,7 +1,7 @@
 ﻿using NexHUDCore.NxItems;
 using System.Drawing;
 
-namespace NexHUD.ui.common
+namespace NexHUD.Ui.Common
 {
     public class NxButton : NxGroup
     {

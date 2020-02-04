@@ -1,13 +1,5 @@
-﻿namespace NexHUD.apis.spansh
-{
-    public class SpanshBodiesResult
-    {
-        public int count;
-        public int from;
-        public SpanshBody[] results;
-        public string search_reference;
-    }
-    public class SpanshBody
+﻿namespace NexHUD.Apis.Spansh
+{    public class SpanshBody
     {
         public double? arg_of_periapsis;
         public string atmosphere;
@@ -31,10 +23,5 @@
         public string volcanism_type;
         public long? system_id64;
 
-    }
-    public class SpanshMaterial
-    {
-        public string name;
-        public double? share;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace NexHUD.elite.engineers
+﻿namespace NexHUD.Elite.Engineers
 {
     public enum BlueprintCategorie
     {

@@ -3,7 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 using NexHUDCore;
 
-namespace NexHUD.settings
+namespace NexHUD.Settings
 {
     public class NexHudSettings
     {
