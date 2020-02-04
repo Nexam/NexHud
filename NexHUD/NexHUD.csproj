@@ -138,10 +138,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config\Searchs.json">
+    <None Include="Config\Searchs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\MaterialsSearchs.json">
+    <None Include="Config\MaterialsSearchs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Apis\ApiConnection.cs" />
@@ -159,8 +159,8 @@
     <Compile Include="Apis\Spansh\Datas\SpanshSystem.cs" />
     <Compile Include="Apis\Spansh\SpanshSearch.cs" />
     <Compile Include="audio\RadioPlayer.cs" />
-    <Compile Include="Elite\craftlist\Craftlist.cs" />
-    <Compile Include="Elite\craftlist\CraftlistItem.cs" />
+    <Compile Include="Elite\Craft\Craftlist.cs" />
+    <Compile Include="Elite\Craft\CraftlistItem.cs" />
     <Compile Include="Elite\EDBody.cs" />
     <Compile Include="Elite\EDDatas.cs" />
     <Compile Include="Elite\EDSystem.cs" />
@@ -168,37 +168,37 @@
     <Compile Include="Elite\Engineers\BlueprintDatas.cs" />
     <Compile Include="Elite\Engineers\EngineerHelper.cs" />
     <Compile Include="Elite\Engineers\MaterialDatas.cs" />
-    <Compile Include="Elite\enums\EDEnumHelper.cs" />
-    <Compile Include="Elite\enums\EliteAllegiance.cs" />
-    <Compile Include="Elite\enums\EliteEconomy.cs" />
-    <Compile Include="Elite\enums\EliteGovernment.cs" />
-    <Compile Include="Elite\enums\EliteReserve.cs" />
-    <Compile Include="Elite\enums\EliteSecurity.cs" />
-    <Compile Include="Elite\enums\EliteStates.cs" />
-    <Compile Include="Elite\enums\EliteSystemThreat.cs" />
+    <Compile Include="Elite\Enums\EDEnumHelper.cs" />
+    <Compile Include="Elite\Enums\EliteAllegiance.cs" />
+    <Compile Include="Elite\Enums\EliteEconomy.cs" />
+    <Compile Include="Elite\Enums\EliteGovernment.cs" />
+    <Compile Include="Elite\Enums\EliteReserve.cs" />
+    <Compile Include="Elite\Enums\EliteSecurity.cs" />
+    <Compile Include="Elite\Enums\EliteStates.cs" />
+    <Compile Include="Elite\Enums\EliteSystemThreat.cs" />
     <Compile Include="Elite\SearchEntry.cs" />
-    <Compile Include="Elite\searchs\SearchEngine.cs" />
+    <Compile Include="Elite\Searchs\SearchEngine.cs" />
     <Compile Include="Elite\UserSearchResult.cs" />
     <Compile Include="Elite\UserSearchs.cs" />
-    <Compile Include="spansh\enums\Fields.cs" />
-    <Compile Include="ui\UiMainRadio.cs" />
-    <Compile Include="utility\EliteApiLogger.cs" />
-    <Compile Include="utility\FocusHelper.cs" />
-    <Compile Include="inputs\Shortcuts.cs" />
-    <Compile Include="utility\NxTester.cs" />
-    <Compile Include="settings\NexHudSettings.cs" />
-    <Compile Include="utility\StringExtensions.cs" />
-    <Compile Include="ui\common\NxButton.cs" />
-    <Compile Include="ui\improve\UiImproveBlueprintDetails.cs" />
-    <Compile Include="ui\improve\UiImproveBlueprints.cs" />
-    <Compile Include="ui\improve\UiImprove.cs" />
-    <Compile Include="ui\improve\UiImproveCraftlist.cs" />
-    <Compile Include="ui\search\UiSearch.cs" />
-    <Compile Include="ui\UiMainMenu.cs" />
-    <Compile Include="ui\UiMainMenuButton.cs" />
-    <Compile Include="ui\UiMainPlayerInfos.cs" />
-    <Compile Include="ui\UiMainTopInfos.cs" />
-    <Compile Include="ui\UiMain.cs" />
+    <Compile Include="Spansh\enums\Fields.cs" />
+    <Compile Include="Ui\UiMainRadio.cs" />
+    <Compile Include="Utility\EliteApiLogger.cs" />
+    <Compile Include="Utility\FocusHelper.cs" />
+    <Compile Include="Inputs\Shortcuts.cs" />
+    <Compile Include="Utility\NxTester.cs" />
+    <Compile Include="Settings\NexHudSettings.cs" />
+    <Compile Include="Utility\StringExtensions.cs" />
+    <Compile Include="Ui\Common\NxButton.cs" />
+    <Compile Include="Ui\Improve\UiImproveBlueprintDetails.cs" />
+    <Compile Include="Ui\Improve\UiImproveBlueprints.cs" />
+    <Compile Include="Ui\Improve\UiImprove.cs" />
+    <Compile Include="Ui\Improve\UiImproveCraftlist.cs" />
+    <Compile Include="Ui\Search\UiSearch.cs" />
+    <Compile Include="Ui\UiMainMenu.cs" />
+    <Compile Include="Ui\UiMainMenuButton.cs" />
+    <Compile Include="Ui\UiMainPlayerInfos.cs" />
+    <Compile Include="Ui\UiMainTopInfos.cs" />
+    <Compile Include="Ui\UiMain.cs" />
     <Compile Include="NexHudMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -227,23 +227,23 @@
     <EmbeddedResource Include="Resources\ranks\rank-8.png" />
     <EmbeddedResource Include="Resources\ranks\rank-9.png" />
     <None Include="App.config" />
-    <Content Include="config\Readme-materialsSearchs.txt" />
-    <Content Include="config\Readme-shortcuts.txt">
+    <Content Include="Config\Readme-materialsSearchs.txt" />
+    <Content Include="Config\Readme-shortcuts.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="config\Readme-searchs.txt">
+    <Content Include="Config\Readme-searchs.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="manifest.vrmanifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="config\Shortcuts-debug.json">
+    <None Include="Config\Shortcuts-debug.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="config\Shortcuts-Save.json">
+    <None Include="Config\Shortcuts-Save.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="config\Shortcuts.json">
+    <None Include="Config\Shortcuts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="OpenTK.dll.config" />
@@ -268,7 +268,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ui\trade\" />
+    <Folder Include="Ui\Trade\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />
