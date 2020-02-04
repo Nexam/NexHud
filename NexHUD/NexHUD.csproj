@@ -171,8 +171,10 @@
     <Compile Include="elite\enums\EliteStates.cs" />
     <Compile Include="elite\enums\EliteSystemThreat.cs" />
     <Compile Include="elite\SearchEntry.cs" />
+    <Compile Include="elite\searchs\SearchEngine.cs" />
     <Compile Include="elite\UserSearchResult.cs" />
     <Compile Include="elite\UserSearchs.cs" />
+    <Compile Include="spansh\enums\Fields.cs" />
     <Compile Include="utility\EliteApiLogger.cs" />
     <Compile Include="utility\FocusHelper.cs" />
     <Compile Include="inputs\Shortcuts.cs" />

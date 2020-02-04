@@ -7,7 +7,7 @@ namespace NexHUD.settings
 {
     public class NexHudSettings
     {
-        private static string m_path = "\\NexHudSettings.json";
+        private const string m_path = "\\NexHudSettings.json";
 
         public bool launchWithElite = true;
         public NexHudEngineMode nexHudMode = NexHudEngineMode.Auto;
