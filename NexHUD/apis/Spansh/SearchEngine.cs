@@ -27,14 +27,13 @@ namespace NexHUD.Apis.Spansh
         //Memory
         private Dictionary<string, UserSearchResult> m_memory = new Dictionary<string, UserSearchResult>();
 
-        public void SearchInBodies(SpanshSearch _search, Action<SpanshBodiesResult> _method)
+        public async Task SearchInBodies(SpanshSearch _search, Action<SpanshBodiesResult> _method)
         {
             Task<SpanshBodiesResult> t = new Task<SpanshBodiesResult>( () => ApiConnection.SpanshBodies("Sol",50,new string[] {"Arsenic" }, true));
             t.Start();
+            //t.ContinueWith(() => _method(t.Result));
+           // t.Wait();
            
-            t.Wait();
-           
-            _method(t.Result);
         }
     }
 }
