@@ -9,8 +9,6 @@ namespace NexHUDCore.NxItems
         private string m_text = "blank";
         public NxFonts font = NxFonts.EuroStile;
         public int size;
-        public int width;
-        public int height;
         private bool m_reverseLineOrder = false;
         private bool m_reverseDrawing = false;
 

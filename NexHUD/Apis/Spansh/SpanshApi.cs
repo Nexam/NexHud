@@ -10,7 +10,7 @@ namespace NexHUD.Apis.Spansh
         public const string Url_SpanshBodies = @"https://spansh.co.uk/api/bodies/search?";
         public const string Url_SpanshSystems = @"https://spansh.co.uk/api/systems/search?";
 
-        public static object SearchInSystems(SpanshSearch _search)
+        public static object SearchInSystems(SpanshSearchBodies _search)
         {
             return null;
            /* _maxDistance = Math.Min(_maxDistance, 100);

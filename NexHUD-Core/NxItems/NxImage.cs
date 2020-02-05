@@ -5,11 +5,6 @@ namespace NexHUDCore.NxItems
     public class NxImage : NxItem
     {
         private Bitmap m_image;
-        private int m_w;
-        private int m_h;
-
-        public int width { get => m_w; set { m_w = value; makeItDirty(); } }
-        public int height { get => m_h; set { m_h = value; makeItDirty(); } }
 
       
 

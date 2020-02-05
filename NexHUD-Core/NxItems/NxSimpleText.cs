@@ -12,6 +12,7 @@ namespace NexHUDCore.NxItems
         private bool m_centerVertical = false;
         private NxFonts m_font = NxFonts.EuroStile;
         private bool m_vertical = false;
+        private bool m_autoSize = true;
 
         public SizeF sizeF { get { return m_sizeF; } }
 
@@ -23,8 +24,7 @@ namespace NexHUDCore.NxItems
 
         public bool vertical { get { return m_vertical; } set { if (m_vertical != value) makeItDirty(); m_vertical = value; } }
 
-
-
+        public bool AutoSize { get => m_autoSize; set => m_autoSize = value; }
 
         public NxSimpleText(int _x, int _y, string _text, Color _color, int _size = 16, NxFonts _font = NxFonts.EuroStile)
         {
@@ -37,6 +37,11 @@ namespace NexHUDCore.NxItems
         public override void Render(Graphics _g)
         {
             m_sizeF = _g.MeasureString(text, NxFont.getFont(font, size));
+            if (AutoSize)
+            {
+                width = (int)m_sizeF.Width;
+                height = (int)m_sizeF.Height;
+            }
             if (m_vertical)
             {
                 _g.RotateTransform(-90);

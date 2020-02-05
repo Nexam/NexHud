@@ -4,32 +4,7 @@ namespace NexHUDCore.NxItems
 {
     public class NxRectangle : NxItem
     {
-        private int m_w;
-        private int m_h;
-        public int width
-        {
-            get => m_w;
-            set
-            {
-                if (m_w != value)
-                {
-                    m_w = value;
-                    makeItDirty();
-                }
-            }
-        }
-        public int height
-        {
-            get => m_h;
-            set
-            {
-                if (m_h != value)
-                {
-                    m_h = value;
-                    makeItDirty();
-                }
-            }
-        }
+       
 
         public NxRectangle(int _x, int _y, int _w, int _h, Color _c)
         {

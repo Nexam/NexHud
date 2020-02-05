@@ -25,8 +25,61 @@ namespace NexHUDCore.NxItems
 
         private int m_x;
         private int m_y;
-        public int x { get { return m_x; } set { if (m_x != value) makeItDirty(); m_x = value; } }
-        public int y { get { return m_y; } set { if (m_y != value) makeItDirty(); m_y = value; } }
+        public int x
+        {
+            get
+            {
+                if (group != null && group.RelativeChildPos)
+                    return m_x + group.x;
+                return m_x;
+            }
+            set
+            {
+                if (m_x != value) makeItDirty();
+                m_x = value;
+            }
+        }
+        public int y
+        {
+            get
+            {
+                if (group != null && group.RelativeChildPos)
+                    return m_y + group.y;
+                return m_y;
+            }
+            set
+            {
+                if (m_y != value)
+                    makeItDirty(); m_y = value;
+            }
+        }
+
+        private int m_w;
+        private int m_h;
+        public int width
+        {
+            get => m_w;
+            set
+            {
+                if (m_w != value)
+                {
+                    m_w = value;
+                    makeItDirty();
+                }
+            }
+        }
+        public int height
+        {
+            get => m_h;
+            set
+            {
+                if (m_h != value)
+                {
+                    m_h = value;
+                    makeItDirty();
+                }
+            }
+        }
 
         public Brush SolidBrush { get { return m_Brush; } }
 
@@ -40,7 +93,7 @@ namespace NexHUDCore.NxItems
             get
             {
                 if (group != null && !group.isVisible)
-                        return false;
+                    return false;
                 return m_isVisible;
             }
             set

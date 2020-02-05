@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NexHudTest
@@ -15,8 +16,10 @@ namespace NexHudTest
 
             Console.WriteLine("Search in bodies...");
             Console.WriteLine("_____________");
-            SearchEngine.Instance.SearchInBodies(new SpanshSearch(), _onBodiesFounded);
-            Console.WriteLine("_____________");
+            SearchEngine.Instance.SearchInBodies(new SpanshSearchBodies(), _onBodiesFounded, _onFailedSearch);
+            Thread.Sleep(500);
+            SearchEngine.Instance.SearchInBodies(new SpanshSearchBodies(), _onBodiesFounded, _onFailedSearch);
+            Console.WriteLine("-------------");
 
             Console.WriteLine("==> Type escape to exit");
             while (true)
@@ -24,10 +27,14 @@ namespace NexHudTest
                     break;
         }
 
-        private static int _onBodiesFounded(SpanshBodiesResult obj)
+        private static void _onFailedSearch(SearchEngine.SearchError error)
         {
-            Console.WriteLine("_onBodiesFounded: {0}", obj);
-            return 1;
+            Console.WriteLine("-> failed: " + error);
+        }
+
+        private static void _onBodiesFounded(SpanshBodiesResult obj)
+        {
+            Console.WriteLine("-> _onBodiesFounded: {0}", obj?.search_reference);
         }
     }
 }

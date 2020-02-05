@@ -11,8 +11,6 @@ using NexHUD.Inputs;
 
 namespace NexHUD.Ui.Search
 {
-
-
     public class NxMainPanelSearchButton : NxGroup
     {
         public const int Height = 30;

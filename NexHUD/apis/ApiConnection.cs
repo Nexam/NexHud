@@ -74,16 +74,16 @@ namespace NexHUD.Apis
             return _alive;
         }
         
-        public static SpanshBodiesResult SpanshBodies(string _systemOrigin, int _maxDistance, string[] _materials, bool? _isLandable = null)
+        public static SpanshBodiesResult SpanshBodies(string _systemOrigin, int _maxDistance, string[] _materials, bool _isLandable = true)
         {
             _maxDistance = Math.Min(_maxDistance, 100);
 
             Dictionary<string, string> _sParams = new Dictionary<string, string>();
 
-            SpanshValue<double?>[] _spanshMats = new SpanshValue<double?>[_materials.Length];
+            SpanshValue<double>[] _spanshMats = new SpanshValue<double>[_materials.Length];
             for (int i = 0; i < _materials.Length; i++)
             {
-                _spanshMats[i] = new SpanshValue<double?>(_materials[i], ">", 0);
+                _spanshMats[i] = new SpanshValue<double>(_materials[i], ">", 0);
             }
             SpanshSortValue[] _spanshMatsSort = new SpanshSortValue[_materials.Length];
             for (int i = 0; i < _materials.Length; i++)
@@ -91,15 +91,15 @@ namespace NexHUD.Apis
                 _spanshMatsSort[i] = new SpanshSortValue(_materials[i].ToString(), false);
             }
 
-            SpanshSearch p = new SpanshSearch()
+            SpanshSearchBodies p = new SpanshSearchBodies()
             {
                 size = 11,
                 reference_system = _systemOrigin,
-                filters = new SpanshFilderBodies()
+                filters = new SpanshFilterBodies()
                 {
-                    distance_from_coords = new SpanshValue<int?>() { max = _maxDistance },
+                    distance_from_coords = new SpanshValue<int>() { max = _maxDistance },
                     materials = _spanshMats,
-                    is_landable = new SpanshValue<bool?>(_isLandable)
+                    is_landable = new SpanshValue<bool>(_isLandable)
                 },
                 sort = new SpanshSort[] { new SpanshSort() {
                     materials = _spanshMatsSort,
@@ -255,6 +255,7 @@ namespace NexHUD.Apis
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
+            
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 streamWriter.Write(_json);

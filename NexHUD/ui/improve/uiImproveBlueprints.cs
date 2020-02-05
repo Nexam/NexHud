@@ -167,7 +167,6 @@ namespace NexHUD.Ui.Improve
                     m_Buttons[_btnId].Obj = _data.Type;
                     m_Buttons[_btnId].Coords = _cCoords;
                     m_Buttons[_btnId].resetColors();
-                    m_Buttons[_btnId].ColorLines = EDColors.BLACK;
                     m_Buttons[_btnId].ColorLabel = EDColors.getColor(EDColors.YELLOW, .8f);
                     m_Buttons[_btnId].Label = _data.Type;
                     m_Buttons[_btnId].isSelectable = true;
@@ -196,7 +195,6 @@ namespace NexHUD.Ui.Improve
                     if (!string.IsNullOrEmpty(m_TypeSelected) && m_TypeSelected == _data.Type)
                     {
                         m_CursorCoords = m_Buttons[_btnId - 1].Coords;
-                        m_Buttons[_btnId - 1].ColorLines = EDColors.YELLOW;
                         m_Buttons[_btnId - 1].ColorBack = EDColors.getColor(EDColors.ORANGE, 0.3f);
                         m_Buttons[_btnId - 1].ColorLabel = EDColors.YELLOW;
 
@@ -212,7 +210,6 @@ namespace NexHUD.Ui.Improve
                             m_Buttons[_btnId].resetColors();
                             m_Buttons[_btnId].ColorBack = EDColors.getColor(EDColors.GREEN, 0.4f);
                             m_Buttons[_btnId].ColorBackSelected = EDColors.getColor(EDColors.GREEN, 0.8f);
-                            m_Buttons[_btnId].ColorLines = EDColors.BLACK;
                             m_Buttons[_btnId].Label = _data2.Name;
                             m_Buttons[_btnId].isSelectable = true;
                             m_Buttons[_btnId].Selected = false;

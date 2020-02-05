@@ -7,9 +7,18 @@ using static NexHUD.Apis.ApiConnection;
 
 namespace NexHUD.Apis.Spansh
 {
-    public class SpanshSearch
+    public class SpanshSearchBodies
     {
-        public SpanshFilderBodies filters;
+        public SpanshFilterBodies filters;
+        public int Page;
+        //public SpanshCoords ReferenceCoords;
+        public string reference_system;
+        public int size;
+        public SpanshSort[] sort;
+    }
+    public class SpanshSearchSystems
+    {
+        public SpanshFilterSystems filters;
         public int Page;
         //public SpanshCoords ReferenceCoords;
         public string reference_system;

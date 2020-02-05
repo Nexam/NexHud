@@ -274,7 +274,6 @@ namespace NexHUD.Ui.Improve
 
                 m_materials[i].ColorBack = EDColors.BLACK;
                 m_materials[i].ColorBackSelected = EDColors.WHITE;
-                m_materials[i].ColorLines = EDColors.BLACK;
                 m_materials[i].ColorLabel = EDColors.LIGHTBLUE;
                 Add(m_materials[i]);
 
@@ -296,7 +295,6 @@ namespace NexHUD.Ui.Improve
             m_ButtonPin = new NxButton(5, NxMenu.Height - 50, NxMenu.Width - 10, 40, string.Format(PIN_LABEL, m_pinCount), m_uiImprove.Menu);
             m_ButtonPin.ColorBack = EDColors.getColor(EDColors.GREEN, 0.1f);
             m_ButtonPin.ColorBackSelected = EDColors.getColor(EDColors.GREEN, 0.8f);
-            m_ButtonPin.ColorLines = EDColors.getColor(EDColors.GREEN, 0.8f);
             m_ButtonPin.LabelTextSize = 22;
             m_ButtonPin.Coords = new Point(0, 100);
             Add(m_ButtonPin);
@@ -304,7 +302,6 @@ namespace NexHUD.Ui.Improve
             m_ButtonDelete = new NxButton(5, NxMenu.Height - 50, NxMenu.Width - 10, 40, "/!\\ DELETE /!\\", m_uiImprove.Menu);
             m_ButtonDelete.ColorBack = EDColors.getColor(EDColors.RED, 0.1f);
             m_ButtonDelete.ColorBackSelected = EDColors.getColor(EDColors.RED, 0.8f);
-            m_ButtonDelete.ColorLines = EDColors.getColor(EDColors.RED, 0.5f);
             m_ButtonDelete.LabelTextSize = 22;
             m_ButtonDelete.ColorLabel = EDColors.RED;
             m_ButtonDelete.ColorLabelSelected = EDColors.WHITE;

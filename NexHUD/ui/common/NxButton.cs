@@ -29,10 +29,7 @@ namespace NexHUD.Ui.Common
         public Color ColorBackSelected;
         public Color ColorBackDisable;
         public Color ColorBackDisableSelected;
-
-
-        public Color ColorLines;
-
+        
         private int m_labelTextSize = 16;
 
         public int LabelTextSize
@@ -40,9 +37,7 @@ namespace NexHUD.Ui.Common
             get => m_labelTextSize;
             set => m_labelTextSize = value;
         }
-
-        private NxRectangle[] Lines = new NxRectangle[2];
-
+        
         public string Label
         {
             get { return m_buttonName.text; }
@@ -64,7 +59,6 @@ namespace NexHUD.Ui.Common
             ColorBackSelected = EDColors.getColor(EDColors.ORANGE, 0.8f);
             ColorBackDisable = EDColors.getColor(EDColors.WHITE, 0.1f);
             ColorBackDisableSelected = EDColors.getColor(EDColors.WHITE, 0.2f);
-            ColorLines = EDColors.YELLOW;
         }
 
         public void repos()
@@ -74,15 +68,6 @@ namespace NexHUD.Ui.Common
             m_background.width = m_width;
             m_background.height = m_height;
 
-            Lines[0].x = x;
-            Lines[0].y = y;
-            Lines[0].width = m_width;
-            Lines[0].height = 1;
-
-            Lines[1].x = x;
-            Lines[1].y = y + m_height - 1;
-            Lines[1].width = m_width;
-            Lines[1].height = 1;
 
             m_buttonName.x = x + (m_width / 2);
             m_buttonName.y = y + (m_height / 2);
@@ -98,11 +83,7 @@ namespace NexHUD.Ui.Common
 
             m_background = new NxRectangle(x, y, m_width, m_height, ColorBack);
             Add(m_background);
-            Lines[0] = new NxRectangle(x, y, m_width, 1, EDColors.YELLOW);
-            Lines[1] = new NxRectangle(x, y + m_height - 1, m_width, 1, EDColors.getColor(EDColors.YELLOW, 0.5f));
-            Add(Lines[0]);
-            Add(Lines[1]);
-
+        
             m_buttonName = new NxSimpleText(x + (m_width / 2), y + (m_height / 2), _label, EDColors.getColor(EDColors.WHITE, 0.2f));
             m_buttonName.centerHorizontal = true;
             m_buttonName.centerVertical = true;
@@ -135,11 +116,6 @@ namespace NexHUD.Ui.Common
                 m_background.y = y;
                 m_buttonName.size = m_labelTextSize;
             }
-
-
-
-            Lines[0].Color = ColorLines;
-            Lines[1].Color = EDColors.getColor(ColorLines, 0.5f);
         }
     }
 }

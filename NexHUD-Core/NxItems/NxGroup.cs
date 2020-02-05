@@ -8,20 +8,22 @@ namespace NexHUDCore.NxItems
     {
         private List<NxItem> m_nxItems = new List<NxItem>();
         private NxOverlay m_parent = null;
+        private bool m_realativeChildPos = false;
 
         public NxOverlay Parent { get { return m_parent; } }
+
 
         public NxGroup(NxOverlay _parent)
         {
             m_parent = _parent;
         }
-        public void Add(NxItem _item)
+        public virtual void Add(NxItem _item)
         {
             m_nxItems.Add(_item);
             _item.group = this;
             makeItDirty();
         }
-        public void Remove(NxItem _item)
+        public virtual void Remove(NxItem _item)
         {
             m_nxItems.Remove(_item);
             _item.group = null;
@@ -36,6 +38,8 @@ namespace NexHUDCore.NxItems
                 base.isVisible = value;
             }
         }
+
+        public bool RelativeChildPos { get => m_realativeChildPos; set => m_realativeChildPos = value; }
 
         public override void Render(Graphics _g)
         {

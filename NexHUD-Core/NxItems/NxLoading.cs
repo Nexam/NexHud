@@ -7,8 +7,6 @@ namespace NexHUDCore.NxItems
     {
         private float _elapsed = 0;
 
-        public int width = 1;
-        public int height = 20;
         public int spacing = 6;
 
         private float[] scales;
@@ -29,6 +27,8 @@ namespace NexHUDCore.NxItems
         {
             x = _x;
             y = _y;
+            width = 1;
+            height = 20;
             m_brush = new SolidBrush(EDColors.ORANGE);
             m_brush2 = new SolidBrush(EDColors.WHITE);
             scales = new float[numbers];

@@ -295,7 +295,7 @@ namespace NexHUD.Elite
                                 _listMaterials.Add(_material);
                         }
                     }
-                    bool? isLandable = null;
+                    bool isLandable = true;
                     if (m_lastUSRs[_id].entry.searchParamsFormated.ContainsKey(NxSearchParam.isLandable))
                     {
                         isLandable = m_lastUSRs[_id].entry.searchParamsFormated[NxSearchParam.isLandable][0] == "true";

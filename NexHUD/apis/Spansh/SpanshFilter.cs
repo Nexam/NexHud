@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace NexHUD.Apis.Spansh
 {
-    public class SpanshFilderBodies
+    public class SpanshFilterBodies
     {
         public SpanshValue<string[]> name;
         public SpanshValue<string[]> atmosphere;
-        public SpanshValue<int?> distance_from_coords;
-        public SpanshValue<int?> distance_to_arrival;
-        public SpanshValue<int?> estimated_scan_value;
-        public SpanshValue<int?> estimated_mapping_value;
-        public SpanshValue<double?> gravity;
+        public SpanshValue<int> distance_from_coords;
+        public SpanshValue<int> distance_to_arrival;
+        public SpanshValue<int> estimated_scan_value;
+        public SpanshValue<int> estimated_mapping_value;
+        public SpanshValue<double> gravity;
 
-        public SpanshValue<double?>[] materials;
-        public SpanshValue<bool?> is_landable;
+        public SpanshValue<double>[] materials;
+        public SpanshValue<bool> is_landable;
         // public intValue distance;
     }
-    public class SpanshFilderSystems
+    public class SpanshFilterSystems
     {
         public SpanshValue<string[]> name;
         public SpanshValue<int?> distance_from_coords;

@@ -1,7 +1,11 @@
-﻿using NexHUD.Elite;
+﻿using Newtonsoft.Json;
+using NexHUD.Elite;
+using NexHUDCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,16 +28,115 @@ namespace NexHUD.Apis.Spansh
         }
         #endregion
 
+        public enum SearchError
+        {
+            None,
+            Aborded,
+            Unknow,
+            SerializationFailed
+        }
+        /* END POINT */
+        public const string URL_BODIES = @"https://spansh.co.uk/api/bodies/search?";
+
         //Memory
         private Dictionary<string, UserSearchResult> m_memory = new Dictionary<string, UserSearchResult>();
+        private HttpWebRequest m_lastRequest = null;
 
-        public async Task SearchInBodies(SpanshSearch _search, Action<SpanshBodiesResult> _method)
+        public bool IsRequesting()
         {
-            Task<SpanshBodiesResult> t = new Task<SpanshBodiesResult>( () => ApiConnection.SpanshBodies("Sol",50,new string[] {"Arsenic" }, true));
-            t.Start();
-            //t.ContinueWith(() => _method(t.Result));
-           // t.Wait();
-           
+            if( m_lastRequest != null )
+            {
+                return true;
+            }
+            return false;
+        }
+        public async void SearchInBodies(SpanshSearchBodies _search, Action<SpanshBodiesResult> _method, Action<SearchError> _onFailedMethod)
+        {
+            //for test purpose:
+            _search = new SpanshSearchBodies()
+            {
+                filters = new SpanshFilterBodies()
+                {
+                    distance_from_coords = new SpanshValue<int>(0, 100),
+                    is_landable = new SpanshValue<bool>(true),
+                    estimated_mapping_value = new SpanshValue<int>(">", 100000)
+                },
+                reference_system = "Sol",
+                size = 10,
+                Page = 0,                
+            };
+ 
+            string _spanshJson = JsonConvert.SerializeObject(_search, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore }); ;
+            NxLog.log(NxLog.Type.Debug, "SearchInBodies. json={0}", _spanshJson);
+
+            SearchError error = SearchError.None;
+            Task<string> task = new Task<string>( () => requestPOSTFromURL(URL_BODIES, _spanshJson, out error) );
+            task.Start();
+            string json = await task;
+
+            if (error != SearchError.None)
+            {
+                _onFailedMethod(error);
+            }
+            else
+            {
+                // string json = requestPOSTFromURL(URL_BODIES, _spanshJson);
+                try
+                {
+                    SpanshBodiesResult result = JsonConvert.DeserializeObject<SpanshBodiesResult>(json, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+                    NxLog.log( NxLog.Type.Debug, "Search Successful! Search ID = " + result.search_reference);
+
+                    _method(result);
+                }
+                catch (Exception ex)
+                {
+                    NexHudEngine.Log(NxLog.Type.Error, ex.Message);
+                    _onFailedMethod( error = SearchError.SerializationFailed);
+                }
+            }
+        }
+
+        private string requestPOSTFromURL(string _url, string _json, out SearchError error)
+        {
+            if (m_lastRequest != null)            
+                m_lastRequest.Abort();
+            
+
+            m_lastRequest = (HttpWebRequest)WebRequest.Create(_url);
+            m_lastRequest.ContentType = "application/json";
+            m_lastRequest.Method = "POST";            
+
+            using (var streamWriter = new StreamWriter(m_lastRequest.GetRequestStream()))
+            {
+                streamWriter.Write(_json);
+            }
+            try
+            {
+                var httpResponse = (HttpWebResponse)m_lastRequest.GetResponse();
+                m_lastRequest = null;
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    error = SearchError.None;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+               
+                error = SearchError.Unknow;
+                if ( ex is WebException )
+                {
+                    if (((WebException)ex).Status == WebExceptionStatus.RequestCanceled)
+                    {
+                        error = SearchError.Aborded; 
+                        NexHudEngine.Log(NxLog.Type.Warning, ex.Message);
+                    }
+                }
+                else
+                    NexHudEngine.Log(NxLog.Type.Error, ex.Message);
+            }
+            return string.Empty;
         }
     }
 }

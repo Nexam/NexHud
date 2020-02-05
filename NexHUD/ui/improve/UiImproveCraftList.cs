@@ -61,19 +61,16 @@ namespace NexHUD.Ui.Improve
                 {
                     m_materials.text = "All materials!";
                     m_materials.Color = EDColors.GREEN;
-                    ColorLines = EDColors.GREEN;
                 }
                 else if( craftNbr > 0)
                 {
                     m_materials.text = string.Format("Can craft {0}x", craftNbr);
                     m_materials.Color = EDColors.YELLOW;
-                    ColorLines = EDColors.YELLOW;
                 }
                 else
                 {
                     m_materials.text = string.Format("Missing materials!");
                     m_materials.Color = EDColors.RED;
-                    ColorLines = EDColors.RED;
                 }
                 
             }
@@ -82,7 +79,6 @@ namespace NexHUD.Ui.Improve
                 m_bpType.text = "";
                 m_bpName.text = "Explore blueprints";
                 m_bpName.Color = EDColors.GRAY;
-                ColorLines = EDColors.BLACK;
                 m_bpExp.text = "";
                 m_materials.text = "";
 
