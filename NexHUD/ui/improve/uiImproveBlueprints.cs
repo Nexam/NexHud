@@ -149,8 +149,8 @@ namespace NexHUD.Ui.Improve
                 m_Buttons[_btnId].isSelectable = false;
                 m_Buttons[_btnId].x = _x;
                 m_Buttons[_btnId].y = _y;
-                m_Buttons[_btnId].Height = HEIGHT_CAT;
-                _y += m_Buttons[_btnId].Height + _vSpace;
+                m_Buttons[_btnId].height = HEIGHT_CAT;
+                _y += m_Buttons[_btnId].height + _vSpace;
                 _btnId++;
                 _cCoords.Y++;
 
@@ -173,8 +173,8 @@ namespace NexHUD.Ui.Improve
                     m_Buttons[_btnId].Selected = false;
                     m_Buttons[_btnId].x = _x;
                     m_Buttons[_btnId].y = _y;
-                    m_Buttons[_btnId].Height = HEIGHT_TYPE;
-                    _y += m_Buttons[_btnId].Height + _vSpace;
+                    m_Buttons[_btnId].height = HEIGHT_TYPE;
+                    _y += m_Buttons[_btnId].height + _vSpace;
 
 
 
@@ -215,8 +215,8 @@ namespace NexHUD.Ui.Improve
                             m_Buttons[_btnId].Selected = false;
                             m_Buttons[_btnId].x = _x;
                             m_Buttons[_btnId].y = _y;
-                            m_Buttons[_btnId].Height = HEIGHT_TYPE;
-                            _y += m_Buttons[_btnId].Height + _vSpace;
+                            m_Buttons[_btnId].height = HEIGHT_TYPE;
+                            _y += m_Buttons[_btnId].height + _vSpace;
                             _btnId++;
                             _cCoords.Y++;
 

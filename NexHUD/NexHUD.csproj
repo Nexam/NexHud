@@ -287,7 +287,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
+      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

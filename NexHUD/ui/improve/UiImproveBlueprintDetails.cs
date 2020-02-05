@@ -66,7 +66,7 @@ namespace NexHUD.Ui.Improve
 
             m_prevButton = new NxButton(x, y + Height + 5, (Width / 2) - 2, 25, "<< Previous", _uiBlueprintsDetails.uiImprove.Menu);
             m_prevButton.Coords = new Point(IsExperimental ? 2 : 0, 0);
-            m_nextButton = new NxButton(x + m_prevButton.Width + 4, m_prevButton.y, m_prevButton.Width, m_prevButton.Height, "Next >>", _uiBlueprintsDetails.uiImprove.Menu);
+            m_nextButton = new NxButton(x + m_prevButton.width + 4, m_prevButton.y, m_prevButton.width, m_prevButton.height, "Next >>", _uiBlueprintsDetails.uiImprove.Menu);
             m_nextButton.Coords = new Point(IsExperimental ? 3 : 1, 0);
             Add(m_prevButton);
             Add(m_nextButton);

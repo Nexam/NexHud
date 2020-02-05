@@ -11,8 +11,6 @@ namespace NexHUD.Ui.Common
 
         public Point Coords = new Point(0, 0);
 
-        private int m_height = 10;
-        private int m_width = 10;
 
         private NxRectangle m_background;
         private NxSimpleText m_buttonName;
@@ -43,8 +41,6 @@ namespace NexHUD.Ui.Common
             get { return m_buttonName.text; }
             set { m_buttonName.text = value; }
         }
-        public int Height { get { return Selected ? (int)(m_height * HeightInc) : m_height; } set { m_height = value; repos(); } }
-        public int Width { get { return m_width; } set { m_width = value; repos(); } }
         public NxSimpleText labelST { get => m_buttonName; }
         public bool isSelectable { get => m_isSelectable; set { if (m_isSelectable != value) makeItDirty();  m_isSelectable = value; } }
 
@@ -63,28 +59,29 @@ namespace NexHUD.Ui.Common
 
         public void repos()
         {
-            m_background.x = x;
-            m_background.y = y;
-            m_background.width = m_width;
-            m_background.height = m_height;
+            m_background.x = 0;
+            m_background.y = 0;
+            m_background.width = width;
+            m_background.height = height;
 
 
-            m_buttonName.x = x + (m_width / 2);
-            m_buttonName.y = y + (m_height / 2);
+            m_buttonName.x = (height / 2);
+            m_buttonName.y = (width / 2);
         }
         public NxButton(int _x, int _y, int _width, int _height, string _label, NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
-            m_width = _width;
-            m_height = _height;
+            RelativeChildPos = true;
+            width = _width;
+            height = _height;
             x = _x;
             y = _y;
 
             resetColors();
 
-            m_background = new NxRectangle(x, y, m_width, m_height, ColorBack);
+            m_background = new NxRectangle(0, 0, width, height, ColorBack);
             Add(m_background);
         
-            m_buttonName = new NxSimpleText(x + (m_width / 2), y + (m_height / 2), _label, EDColors.getColor(EDColors.WHITE, 0.2f));
+            m_buttonName = new NxSimpleText( (width / 2), (height / 2), _label, EDColors.getColor(EDColors.WHITE, 0.2f));
             m_buttonName.centerHorizontal = true;
             m_buttonName.centerVertical = true;
             Add(m_buttonName);
@@ -106,14 +103,14 @@ namespace NexHUD.Ui.Common
 
             if (Selected)
             {
-                m_background.height = (int)(m_height * HeightInc);
-                m_background.y = y - (m_background.height - m_height) / 2;
+                //m_background.height = (int)(height * HeightInc);
+                //m_background.y = y - (m_background.height - height) / 2;
                 m_buttonName.size = m_labelTextSize+4;
             }
             else
             {
-                m_background.height = (m_height);
-                m_background.y = y;
+                //m_background.height = (m_height);
+                //m_background.y = y;
                 m_buttonName.size = m_labelTextSize;
             }
         }
