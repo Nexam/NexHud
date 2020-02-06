@@ -81,6 +81,18 @@ namespace NexHUDCore.NxItems
             }
         }
 
+        public Rectangle Rectangle
+        {
+            get { return new Rectangle(x, y, width, height); }
+            set
+            {
+                x = value.X;
+                height = value.Height;
+                y = value.Y;
+                width = value.Width;
+            }
+        }
+
         public Brush SolidBrush { get { return m_Brush; } }
 
         public bool isDirty = true;

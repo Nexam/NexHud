@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace NexHUD.Ui.Common
 {
-    public class NxButton : NxGroup
+    public class NxButton : NxGroup, ISelectable
     {
         public object Obj;
 
@@ -15,7 +15,7 @@ namespace NexHUD.Ui.Common
         private NxRectangle m_background;
         private NxSimpleText m_buttonName;
 
-        public bool Selected = false;
+        public bool Selected { get; set; }
         private bool m_isSelectable = true;
 
         public Color ColorLabel;
@@ -43,6 +43,8 @@ namespace NexHUD.Ui.Common
         }
         public NxSimpleText labelST { get => m_buttonName; }
         public bool isSelectable { get => m_isSelectable; set { if (m_isSelectable != value) makeItDirty();  m_isSelectable = value; } }
+
+        public bool isEnable { get; set; }
 
         public void resetColors()
         {

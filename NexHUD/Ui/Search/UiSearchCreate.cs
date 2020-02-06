@@ -7,7 +7,7 @@ using NexHUDCore.NxItems;
 
 namespace NexHUD.Ui.Search
 {
-    public class UiSearchCreate : NxGroupOrganized
+    public class UiSearchCreate : NxGroupAutoCursor
     {
         public UiSearchCreate(NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
@@ -23,9 +23,11 @@ namespace NexHUD.Ui.Search
             Security
             State
             Secondary Economy*/
-            InitGrid(8, 20);
+           // InitGrid(8, 20);
             x = 5;
             y = 90;
+            width = NxMenu.Width - 10;
+            height = NxMenu.Height - 90 - 5;
             RelativeChildPos = true;
 
            
@@ -42,17 +44,20 @@ namespace NexHUD.Ui.Search
                 NxButton b = new NxButton(_cx * (bsize + bmargin), _cy + 20, bsize, 30, s, _menu);
                 b.Coords = new System.Drawing.Point(_cx, _cy);
                 Add(b);
+                if (_cx == 0)
+                    moveCursorTo(b);
                 _cx++;
             }
             Add(new NxSimpleText(_cx * (bsize + bmargin)+5, 0, "Need a permit", EDColors.ORANGE, 18, NxFonts.EuroCapital));
             for(int i = 0; i < 2; i++)
             {
-                NxButton b = new NxButton(_cx * (bsize/2 + bmargin)+5, _cy + 20, bsize /2, 30, i == 0 ? "Yes": "No", _menu);
+                NxButton b = new NxButton(_cx * (bsize + bmargin)+5, _cy + 20, bsize /2, 30, i == 0 ? "Yes": "No", _menu);
                 b.Coords = new System.Drawing.Point(_cx, _cy);
                 Add(b);
                 _cx++;
             }
 
+            bsize = 120;
             _cx = 0;
             _cy++;
             //Economy
@@ -63,7 +68,23 @@ namespace NexHUD.Ui.Search
                 b.Coords = new System.Drawing.Point(_cx, _cy);
                 Add(b);
                 _cx++;
-                if (_cx >= GridWidth)
+                if (_cx >= 7)
+                {
+                    _cx = 0;
+                    _cy++;
+                }
+            }
+            //Governement
+            _cx = 0;
+            _cy++;
+            Add(new NxSimpleText(0, 165, "Government", EDColors.ORANGE, 18, NxFonts.EuroCapital));
+            foreach (string s in SpanshDatas.government)
+            {
+                NxButton b = new NxButton(_cx * (bsize + bmargin), _cy * 32 + 160, bsize, 30, s, _menu);
+                b.Coords = new System.Drawing.Point(_cx, _cy);
+                Add(b);
+                _cx++;
+                if (_cx >= 7)
                 {
                     _cx = 0;
                     _cy++;

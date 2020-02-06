@@ -40,6 +40,7 @@ namespace NexHUDCore.NxItems
         }
 
         public bool RelativeChildPos { get => m_realativeChildPos; set => m_realativeChildPos = value; }
+        public List<NxItem> Items { get => m_nxItems; }
 
         public override void Render(Graphics _g)
         {
