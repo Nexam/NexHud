@@ -53,7 +53,7 @@ namespace NexHUD.Ui
                 case MenuButtonType.Improve: return "Improve";
                 case MenuButtonType.Search: return "Search";
                 case MenuButtonType.Trade: return "Trade";
-                case MenuButtonType.SearchCreate:return "Create search";
+                case MenuButtonType.SearchCreate:return "Create";
             }
             return "UNKNOW";
         }

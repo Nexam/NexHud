@@ -21,7 +21,7 @@ namespace NexHUD.Apis.Spansh
             min = _min;
             max = _max;
         }
-        public SpanshValue(T _v) : this(null, (typeof(T) == typeof(bool?) ? null : "=="), _v)
+        public SpanshValue(T _v) : this(null, null, _v)
         {
         }
         public SpanshValue(string _comparison, T _v) : this(null, _comparison, _v)

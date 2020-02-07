@@ -11,7 +11,7 @@ namespace NexHUD.Ui.Common
     public class NxGroupAutoCursor : NxGroup
     {
         private Rectangle m_VirtualCursor;
-        private bool m_renderCursor = true;
+        private bool m_renderCursor = false;
         public NxGroupAutoCursor(NxOverlay _parent) : base(_parent)
         {
             m_VirtualCursor = new Rectangle(0, 0, 30, 30);
@@ -22,6 +22,20 @@ namespace NexHUD.Ui.Common
             m_VirtualCursor.Width = _width;
             m_VirtualCursor.Height = _height;
         }
+
+        public void MoveCursorToFirst()
+        {
+            ISelectable first = (ISelectable)Items.Where(x => x is ISelectable ).FirstOrDefault();
+            if (first != null)
+            {
+                first.Selected = true;
+                moveCursorTo(first);
+            }
+            else
+                m_VirtualCursor = new Rectangle(Parent.width / 2, 0, m_VirtualCursor.Width, m_VirtualCursor.Height);
+            makeItDirty();
+
+        }
         public void moveCursorTo(ISelectable item)
         {
             Rectangle r = item.Rectangle;
@@ -31,6 +45,7 @@ namespace NexHUD.Ui.Common
                     m_VirtualCursor.Width,
                     m_VirtualCursor.Height
                 );
+            makeItDirty();
         }
 
         public ISelectable GetSelectableUnderCursor()

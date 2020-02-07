@@ -147,9 +147,11 @@ namespace NexHUD.Ui
                     m_SystemName.text = EDDatas.Instance.getCurrentSystem().name.FirstCharToUpper();
                     m_ControllingFaction.text = EDDatas.Instance.getCurrentSystem().controlling_minor_faction.FirstCharToUpper();
                     m_GovAndPop.text = EDDatas.Instance.getCurrentSystem().government + ". Population: " + String.Format("{0:#,##0}", EDDatas.Instance.getCurrentSystem().population);
-                    m_Economy.text = EDDatas.Instance.getCurrentSystem().economy.ToStringFormated();
+                    string eco = EDDatas.Instance.getCurrentSystem().economy.ToStringFormated();
                     if (EDDatas.Instance.getCurrentSystem().secondEconomy != EliteEconomy.Unknow && EDDatas.Instance.getCurrentSystem().secondEconomy != EDDatas.Instance.getCurrentSystem().economy)
-                        m_Economy.text += " (" + EDDatas.Instance.getCurrentSystem().secondEconomy.ToStringFormated() + ")";
+                        eco += " (" + EDDatas.Instance.getCurrentSystem().secondEconomy.ToStringFormated() + ")";
+                    m_Economy.text = eco;
+
                     m_Security.Color = EliteSecurityHelper.getColor(EDDatas.Instance.getCurrentSystem().security);
                     m_Security.text = EDDatas.Instance.getCurrentSystem().security.ToString();
                     m_Threat.Color = EliteSystemThreatHelper.getColor(EDDatas.Instance.getCurrentSystem().Threat);

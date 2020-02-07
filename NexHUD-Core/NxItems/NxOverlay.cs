@@ -7,6 +7,11 @@ namespace NexHUDCore.NxItems
 {
     public class NxOverlay : NxItem
     {
+        //debug
+        public bool RenderDirtyBox = false;
+        private ulong m_RenderCount = 0;
+        public bool RenderCount = false;
+
         private bool m_drawDefaultBackground;
         private NexHudOverlay m_parent;
 
@@ -47,28 +52,45 @@ namespace NexHUDCore.NxItems
         }
         public override void Render(Graphics _g)
         {
-            Stopwatch _watch = new Stopwatch();
-            _watch.Start();
-            if (m_drawDefaultBackground)
+            if (isDirty)
             {
-                _g.FillRegion(new SolidBrush(EDColors.BACKGROUND), _g.Clip);
-                int _u = 2;
-                _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, 0, m_parent.WindowWidth, _u));
-                _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, m_parent.WindowHeight - _u, m_parent.WindowWidth, _u));
-            }
-            foreach (NxItem i in m_nxItems)
-            {
-                if (i.isVisible)
-                    i.Render(_g);
-                i.isDirty = false;
-                i.visIsUptodate = true;
-            }
-            isDirty = false;
+                m_RenderCount++;
+                Stopwatch _watch = new Stopwatch();
+                _watch.Start();
 
-            _watch.Stop();
+                if (m_drawDefaultBackground)
+                {
+                    _g.FillRegion(new SolidBrush(EDColors.BACKGROUND), _g.Clip);
+                    int _u = 2;
+                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, 0, m_parent.WindowWidth, _u));
+                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, m_parent.WindowHeight - _u, m_parent.WindowWidth, _u));
+                }
+                foreach (NxItem i in m_nxItems)
+                {
+                    if (i.isVisible)
+                    {
+                        if (RenderDirtyBox && i.isDirty)
+                            _g.DrawRectangle(Pens.Crimson, i.Rectangle);
+                        i.Render(_g);
+                    }
+                    i.isDirty = false;
+                    i.visIsUptodate = true;
+                }
+                isDirty = false;
 
-            if (LogRenderTime && _watch.ElapsedMilliseconds > 100)
-                NexHudEngine.Log("NxOverlay " + this + " rendered in " + _watch.ElapsedMilliseconds + "ms");
+                _watch.Stop();
+
+                if (LogRenderTime && _watch.ElapsedMilliseconds > 100)
+                    NexHudEngine.Log("NxOverlay " + this + " rendered in " + _watch.ElapsedMilliseconds + "ms");
+
+                if (RenderCount)
+                {
+                    _g.FillRectangle(Brushes.White, new Rectangle(0, m_parent.WindowHeight - 20, 300, 20));
+                    _g.DrawString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, 0, m_parent.WindowHeight - 20);
+                    SizeF s = _g.MeasureString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17) );
+                    _g.DrawString(string.Format("// {0}ms" , _watch.ElapsedMilliseconds), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, s.Width + 5, m_parent.WindowHeight - 20);
+                }
+            }
         }
 
         public override void Update()

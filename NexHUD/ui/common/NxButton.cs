@@ -1,4 +1,7 @@
-﻿using NexHUDCore.NxItems;
+﻿using NexHUD.Inputs;
+using NexHUDCore;
+using NexHUDCore.NxItems;
+using System;
 using System.Drawing;
 
 namespace NexHUD.Ui.Common
@@ -27,24 +30,27 @@ namespace NexHUD.Ui.Common
         public Color ColorBackSelected;
         public Color ColorBackDisable;
         public Color ColorBackDisableSelected;
-        
+
         private int m_labelTextSize = 16;
+
+        public EventHandler onClick;
 
         public int LabelTextSize
         {
             get => m_labelTextSize;
             set => m_labelTextSize = value;
         }
-        
+
         public string Label
         {
             get { return m_buttonName.text; }
             set { m_buttonName.text = value; }
         }
         public NxSimpleText labelST { get => m_buttonName; }
-        public bool isSelectable { get => m_isSelectable; set { if (m_isSelectable != value) makeItDirty();  m_isSelectable = value; } }
+        public bool isSelectable { get => m_isSelectable; set { if (m_isSelectable != value) makeItDirty(); m_isSelectable = value; } }
 
-        public bool isEnable { get; set; }
+        private bool m_isEnable = true;
+        public bool isEnable { get => m_isEnable; set => m_isEnable = value; }
 
         public void resetColors()
         {
@@ -82,15 +88,28 @@ namespace NexHUD.Ui.Common
 
             m_background = new NxRectangle(0, 0, width, height, ColorBack);
             Add(m_background);
-        
-            m_buttonName = new NxSimpleText( (width / 2), (height / 2), _label, EDColors.getColor(EDColors.WHITE, 0.2f));
+
+            m_buttonName = new NxSimpleText((width / 2), (height / 2), _label, EDColors.getColor(EDColors.WHITE, 0.2f));
             m_buttonName.centerHorizontal = true;
             m_buttonName.centerVertical = true;
             Add(m_buttonName);
         }
+        private bool _skipUpdate = true;
+
         public override void Update()
         {
             base.Update();
+            if (!isVisible)
+            {
+                _skipUpdate = true;
+                return;
+            }
+            else if (_skipUpdate)
+            {
+                _skipUpdate = false;
+                return;
+            }
+
             if (Selected && isSelectable)
                 m_buttonName.Color = ColorLabelSelected;
             else if (!isSelectable)
@@ -107,13 +126,20 @@ namespace NexHUD.Ui.Common
             {
                 //m_background.height = (int)(height * HeightInc);
                 //m_background.y = y - (m_background.height - height) / 2;
-                m_buttonName.size = m_labelTextSize+4;
+                m_buttonName.size = m_labelTextSize + 4;
             }
             else
             {
                 //m_background.height = (m_height);
                 //m_background.y = y;
                 m_buttonName.size = m_labelTextSize;
+            }
+
+            if (isEnable && Selected)
+            {
+                bool select = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select));
+                if (select)
+                    onClick?.Invoke(this, new EventArgs());
             }
         }
     }

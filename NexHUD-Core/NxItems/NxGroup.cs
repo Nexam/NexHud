@@ -48,7 +48,11 @@ namespace NexHUDCore.NxItems
             foreach (NxItem i in m_nxItems)
             {
                 if (i.isVisible)
+                {
+                    if (m_parent.RenderDirtyBox && i.isDirty)
+                        _g.DrawRectangle(Pens.Crimson, i.Rectangle);
                     i.Render(_g);
+                }
                 i.visIsUptodate = true;
                 i.isDirty = false;
             }
