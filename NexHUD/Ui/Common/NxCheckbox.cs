@@ -45,6 +45,8 @@ namespace NexHUD.Ui.Common
 
         public static Font DefaultFont = NxFont.getFont(NxFonts.EuroStile, 18);
 
+        public EventHandler onClick;
+
         public NxCheckbox(int _x, int _y, int _width, int _height, string _label, NxMenu _parent) : base(_parent.frame.NxOverlay)
         {
             RelativeChildPos = true;
@@ -113,7 +115,10 @@ namespace NexHUD.Ui.Common
                 {
                     bool select = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select));
                     if (select)
+                    {
                         Checked = !Checked;
+                        onClick?.Invoke(this, new EventArgs());
+                    }
                 }
             }
         }

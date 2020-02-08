@@ -55,7 +55,7 @@ namespace NexHUD.Apis.Spansh
         public async void SearchInSystems(SpanshSearchSystems _search, Action<SpanshSystemsResult> _method, Action<SearchError> _onFailedMethod)
         {
            
-            string _spanshJson = JsonConvert.SerializeObject(_search, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore }); ;
+            string _spanshJson = JsonConvert.SerializeObject(_search, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }); ;
             NxLog.log(NxLog.Type.Debug, "SearchInSystems. json={0}", _spanshJson);
 
             SearchError error = SearchError.None;
