@@ -362,9 +362,9 @@ namespace NexHUD.Ui.Search
                                 break;
                             case "populationOptions":
                                 if (checkBox.Label == "Unpopulated")
-                                    _search.filters.population = new SpanshValue<long>("==", 0);
+                                    _search.filters.population = new SpanshValue<long?>("==", 0);
                                 else if (checkBox.Label == "Populated")
-                                    _search.filters.population = new SpanshValue<long>(">", 0);
+                                    _search.filters.population = new SpanshValue<long?>(">", 0);
                                 break;
                         }
                     }
