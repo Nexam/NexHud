@@ -19,12 +19,14 @@ namespace NexHUDCore.NxItems
         }
         public virtual void Add(NxItem _item)
         {
+            _item.Overlay = Overlay;
             m_nxItems.Add(_item);
             _item.group = this;
             makeItDirty();
         }
         public virtual void Remove(NxItem _item)
         {
+            _item.Overlay = null;
             m_nxItems.Remove(_item);
             _item.group = null;
             makeItDirty();

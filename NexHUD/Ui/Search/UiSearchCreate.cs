@@ -293,7 +293,7 @@ namespace NexHUD.Ui.Search
 
         private void onSearch(object sender, EventArgs e)
         {
-            SpanshSearchSystems _search = compileSearch();
+            SpanshSearchSystems _search = CompileSearch();
             Console.WriteLine(_search);
 
             SearchEngine.Instance.SearchInSystems(_search, _onSearchSuccess, _onSearchFailed);
@@ -312,7 +312,7 @@ namespace NexHUD.Ui.Search
                 Console.WriteLine("- {0}Ly _ {1} ({2})", system.distance, system.name, system.allegiance);
         }
 
-        private SpanshSearchSystems compileSearch()
+        private SpanshSearchSystems CompileSearch()
         {
             SpanshSearchSystems _search = new SpanshSearchSystems();
             _search.filters = new SpanshFilterSystems();

@@ -13,7 +13,6 @@ namespace NexHUDCore.NxItems
         public bool RenderCount = false;
 
         private bool m_drawDefaultBackground;
-        private NexHudOverlay m_parent;
 
         private List<NxItem> m_nxItems = new List<NxItem>();
 
@@ -35,18 +34,20 @@ namespace NexHUDCore.NxItems
 
         public NxOverlay(NexHudOverlay _parent, bool _drawDefaultBackground = true)
         {
-            m_parent = _parent;
+            Overlay = _parent;
             m_drawDefaultBackground = _drawDefaultBackground;
         }
 
         public void Add(NxItem _item)
         {
+            _item.Overlay = Overlay;
             m_nxItems.Add(_item);
             if (_item.isVisible)
                 makeItDirty();
         }
         public void Remove(NxItem _item)
         {
+            _item.Overlay = null;
             m_nxItems.Remove(_item);
             makeItDirty();
         }
@@ -62,8 +63,8 @@ namespace NexHUDCore.NxItems
                 {
                     _g.FillRegion(new SolidBrush(EDColors.BACKGROUND), _g.Clip);
                     int _u = 2;
-                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, 0, m_parent.WindowWidth, _u));
-                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, m_parent.WindowHeight - _u, m_parent.WindowWidth, _u));
+                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, 0, Overlay.WindowWidth, _u));
+                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, Overlay.WindowHeight - _u, Overlay.WindowWidth, _u));
                 }
                 foreach (NxItem i in m_nxItems)
                 {
@@ -85,10 +86,10 @@ namespace NexHUDCore.NxItems
 
                 if (RenderCount)
                 {
-                    _g.FillRectangle(Brushes.White, new Rectangle(0, m_parent.WindowHeight - 20, 300, 20));
-                    _g.DrawString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, 0, m_parent.WindowHeight - 20);
+                    _g.FillRectangle(Brushes.White, new Rectangle(0, Overlay.WindowHeight - 20, 300, 20));
+                    _g.DrawString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, 0, Overlay.WindowHeight - 20);
                     SizeF s = _g.MeasureString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17) );
-                    _g.DrawString(string.Format("// {0}ms" , _watch.ElapsedMilliseconds), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, s.Width + 5, m_parent.WindowHeight - 20);
+                    _g.DrawString(string.Format("// {0}ms" , _watch.ElapsedMilliseconds), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, s.Width + 5, Overlay.WindowHeight - 20);
                 }
             }
         }

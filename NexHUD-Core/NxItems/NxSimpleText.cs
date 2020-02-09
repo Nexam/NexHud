@@ -16,7 +16,7 @@ namespace NexHUDCore.NxItems
 
         public SizeF sizeF { get { return m_sizeF; } }
 
-        public string text { get { return m_text; } set { if (m_text != value) makeItDirty(); m_text = value; } }
+        public string text { get { return m_text; } set { if (m_text != value) { makeItDirty(); ResizeRectangle(); } m_text = value; } }
         public int size { get { return m_size; } set { if (m_size != value) makeItDirty(); m_size = value; } }
         public bool centerHorizontal { get { return m_centerHorizontal; } set { if (m_centerHorizontal != value) makeItDirty(); m_centerHorizontal = value; } }
         public bool centerVertical { get { return m_centerVertical; } set { if (m_centerVertical != value) makeItDirty(); m_centerVertical = value; } }
@@ -34,8 +34,25 @@ namespace NexHUDCore.NxItems
             size = _size;
             x = _x; y = _y;
         }
+
+        private Graphics m_lastGraphics = null;
+        private void ResizeRectangle()
+        {
+            if (Overlay != null)
+            {
+                m_sizeF = Overlay.NxGraphics.MeasureString(text, NxFont.getFont(font, size));
+                if (AutoSize)
+                {
+                    width = (int)m_sizeF.Width;
+                    height = (int)m_sizeF.Height;
+                }
+            }
+            else
+                throw new System.Exception("Damn! Overlay == null");
+        }
         public override void Render(Graphics _g)
         {
+            m_lastGraphics = _g;
             m_sizeF = _g.MeasureString(text, NxFont.getFont(font, size));
             if (AutoSize)
             {

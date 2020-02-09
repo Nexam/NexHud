@@ -4,6 +4,8 @@ namespace NexHUDCore.NxItems
 {
     public abstract class NxItem
     {
+        private NexHudOverlay m_overlay;
+
         private Color m_Color;
         private Brush m_Brush;
 
@@ -21,6 +23,12 @@ namespace NexHUDCore.NxItems
                     m_Brush = new SolidBrush(m_Color);
                 }
             }
+        }
+
+        public NexHudOverlay Overlay
+        {
+            get { return m_overlay; }
+            internal set { m_overlay = value; }
         }
 
         private int m_x;
