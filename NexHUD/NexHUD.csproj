@@ -164,6 +164,9 @@
     <Compile Include="Apis\Spansh\SpanshSortValue.cs" />
     <Compile Include="Apis\Spansh\SpanshValue.cs" />
     <Compile Include="audio\RadioPlayer.cs" />
+    <None Include="Config\SearchSystemList.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="Elite\Craft\Craftlist.cs" />
     <Compile Include="Elite\Craft\CraftlistItem.cs" />
     <Compile Include="Elite\EDBody.cs" />
@@ -182,6 +185,7 @@
     <Compile Include="Elite\Enums\EliteStates.cs" />
     <Compile Include="Elite\Enums\EliteSystemThreat.cs" />
     <Compile Include="Elite\SearchEntry.cs" />
+    <Compile Include="Elite\Searchs\Bookmarks.cs" />
     <Compile Include="Elite\Searchs\CustomSearch.cs" />
     <Compile Include="Elite\UserSearchResult.cs" />
     <Compile Include="Elite\UserSearchs.cs" />
@@ -294,7 +298,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
+      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
 ﻿using NexHUD.Apis.Spansh;
+using NexHUD.Inputs;
 using NexHUD.Ui.Common;
 using NexHUDCore.NxItems;
 using System;
@@ -22,6 +23,9 @@ namespace NexHUD.Ui.Search
 
         public int[] XPos;
 
+        public EventHandler onClick;
+
+        public SpanshSystem LastSystem;
         public UiSearchResultLine(UiSearchResult _parent) : base(_parent.Parent)
         {
             Color = EDColors.getColor(EDColors.ORANGE, 0.1f);
@@ -103,6 +107,8 @@ namespace NexHUD.Ui.Search
 
             if (index == -1)
             {
+                LastSystem = null;
+
                 m_props[0].text = "Dist.";
                 m_props[1].text = "System name";
 
@@ -114,6 +120,7 @@ namespace NexHUD.Ui.Search
             }
             else if (index < result.count)
             {
+                LastSystem = result.results[index];
                 m_props[0].text = Math.Round(result.results[index].distance, 1).ToString();
                 m_props[1].text = result.results[index].name;
 
@@ -145,6 +152,7 @@ namespace NexHUD.Ui.Search
             setPositions();
 
             m_background.Color = isEnable ? Color.Orange : Color.White;
+
         }
         private void setPositions()
         {
@@ -174,6 +182,9 @@ namespace NexHUD.Ui.Search
         public override void Update()
         {
             base.Update();
+
+            if (Shortcuts.SelectPressed)
+                onClick?.Invoke(this, new EventArgs());
         }
         public override void Render(Graphics _g)
         {

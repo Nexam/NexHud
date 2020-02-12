@@ -77,12 +77,26 @@ namespace NexHUD.Ui.Search
                     height = 30
                 };
                 _by += m_results[i].height + 2;
+
+                m_results[i].onClick += OnClickResult;
                 Add(m_results[i]);
             }
 
             MoveCursorToFirst();
         }
 
+        private void OnClickResult(object sender, EventArgs e)
+        {
+            if( sender is UiSearchResultLine)
+            {
+                SpanshSystem system = ((UiSearchResultLine)sender).LastSystem;
+                if( system != null )
+                {
+                    displayMessage(string.Format("{0} has been copied to your clipboard!", system.name.ToString()), EDColors.YELLOW);
+                    Clipboard.SetText(system.name.ToString());
+                }
+            }            
+        }
 
         public void displayMessage(string _text, Color _c)
         {
@@ -136,6 +150,7 @@ namespace NexHUD.Ui.Search
             for (int i = 0; i < m_results.Length; i++)
                 m_results[i].setPositions(ResultPosX);
 
+            MoveCursorToFirst();
         }
 
         private void _onSearchFailed(SearchEngine.SearchError obj)

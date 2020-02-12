@@ -1,0 +1,46 @@
+﻿[
+{
+    searchName : "Double painites",
+    systemNames : [
+            /*Names*/                       /*Notes*/
+            "Hyades Sector DB-X d1-112",    "2 ring A",
+            "Omicron Capricorni B",         "B1 ring A",
+            "HIP 73269",                    "A1 ring A (narrow overlap)",
+            "HIP 21991",                    "1 ring A",
+            "HIP 80266",                    "6 ring A",
+            "Xi-2 Lupi",                    "A2 ring A",
+            "HR 6844",                      "A3 ring A",
+            "HIP 76772",                    "2 ring A",
+            "HIP 59425",                    "2 ring A",
+            "HIP 66481",                    "8 ring A",
+            "HIP 19054",                    "1 ring A",
+            "HIP 25368",                    "1 ring A",
+            "HIP 37222",                    "3 ring A",
+            "Eol Prou QX-T d3-415",         "4 ring A (low yield)",
+            "Eol Prou HQ-N c7-13",          "4 ring A",
+            "Eol Prou RS-T d3-660",         "ABC3 ring A",
+            "Eol Prou PH-K c9-497",         "A3 ring A (low yield)",
+            "Eol Prou PC-K c9-104",         "3 ring A",
+            "Randgnid",                     "4 ring A",
+        ],
+},
+{
+    searchName : "Double LTD",
+    systemNames : [
+            /*Names*/                       /*Notes*/
+           "G 240-11",                      "B8 ring A (LTD2) 227K ls",
+            "Borann",                       "A2 ring B (LTD3 /u/haltingpoint)",
+            "Tjupali",                      "8 ring A (LTD2)",
+            "HIP 7799",                     "BCD7 ring A (LTD2) 100K ls",
+            "HIP 39383",                    "BC7 ring B (LTD2) 383K ls",
+            "Arietis Sector FG-X b1-5",     "8 ring B (LTD2)",
+            "Col 285 Sector SU-F c11-19",   "ABC1 ring A (LTD2 ElectricNacho)",
+            "Hyades Sector SD-T c3-4",      "4 ring B (LTD2)",
+            "Bokomu",                       "2 ring B (LTD2)",
+            "Pleiades Sector VZ-O b6-3",    "9 ring A (LTD2)",
+            "Lagoon Sector BW-M b7-2",      "A5 ring A (LTD3 /u/thicky_kemp)",
+            "Eol Prou HG-M c8-9",           "BC3 ring A (LTD3)",
+            "Coeus",                        "A2 ring B (LTD2)",
+        ],
+}
+]

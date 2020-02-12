@@ -2,6 +2,7 @@
 using NexHUD.Elite;
 using NexHUD.Elite.Craft;
 using NexHUD.Elite.Engineers;
+using NexHUD.Elite.Searchs;
 using NexHUD.Inputs;
 using NexHUD.Settings;
 using NexHUD.Ui;
@@ -110,6 +111,9 @@ namespace NexHUD
 
             //craft list
             Craftlist.load();
+
+            //Searchs
+            Bookmarks.Load();
 
         }
 
