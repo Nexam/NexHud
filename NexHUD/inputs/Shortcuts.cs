@@ -130,7 +130,7 @@ namespace NexHUD.Inputs
             m_entrys.Values.CopyTo(_entrys, 0);
 
             string _path = Environment.CurrentDirectory + autoPath;
-            if(_classicMode )
+            if (_classicMode)
                 _path = Environment.CurrentDirectory + classicPath;
 
             using (StreamWriter file = File.CreateText(_path))
@@ -139,5 +139,29 @@ namespace NexHUD.Inputs
                 serializer.Serialize(file, _entrys);
             }
         }
+
+        /*  bool up = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up));
+            bool down = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.down));
+            bool left = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left));
+            bool right = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right));
+            bool select = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select));
+*/
+        public static bool UpPressed { get { return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up)); } }
+        public static bool DownPressed { get { return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.down)); } }
+        public static bool LeftPressed { get { return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left)); } }
+        public static bool RightPressed { get { return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right)); } }
+        public static bool SelectPressed { get { return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select)); } }
+        public static bool BackPressed
+        {
+            get
+            {
+                if (holdMode)
+                    return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back));
+                else
+                    return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back)) || NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.menu));
+            }
+        }
+        public static bool MenuPressed { get { return NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.menu)); } }
+
     }
 }

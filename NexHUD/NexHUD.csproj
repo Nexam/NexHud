@@ -189,8 +189,11 @@
     <Compile Include="Ui\Common\NxCheckbox.cs" />
     <Compile Include="Ui\Common\NxGroupAutoCursor.cs" />
     <Compile Include="Ui\Common\NxGroupOrganized.cs" />
-    <Compile Include="Ui\Search\UiSearchNew.cs" />
+    <Compile Include="Ui\Search\UiSearch2.cs" />
+    <Compile Include="Ui\Search\UiSearchBookmarks.cs" />
+    <Compile Include="Ui\Search\UiSearchResult.cs" />
     <Compile Include="Ui\Search\UiSearchCreate.cs" />
+    <Compile Include="Ui\Search\UiSearchResultLine.cs" />
     <Compile Include="Ui\UiMainRadio.cs" />
     <Compile Include="Utility\EliteApiLogger.cs" />
     <Compile Include="Utility\FocusHelper.cs" />
@@ -291,7 +294,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
+      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

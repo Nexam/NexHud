@@ -10,47 +10,47 @@ using System.Windows.Forms;
 using NexHUD.Inputs;
 using NexHUD.Apis.Spansh;
 using NexHUD.Elite.Searchs;
+using NexHUD.Ui.Common;
 
 namespace NexHUD.Ui.Search
 {
-    public class UiSearchNew : NxGroup
+    public class UiSearchResult : NxGroupAutoCursor
     {
         public const int MAX_LINE_RESULT = 11;
-        NxMenu m_menu;
+
+        private UiSearch2 m_UiSearch;
 
         private bool m_firstUpdateSkipped = false; //To avoid insta click from the previous panel
         private NxSimpleText m_title;
         private NxSimpleText m_messageInfo;
         private NxLoading m_loading;
+        private UiSearchResultLine[] m_results;
 
         private float m_messageLifeTime;
         private float m_updateMessageFreq = 0;
 
-        private SearchPanelType m_searchPanelType;
-        public enum SearchPanelType
-        {
-            Bookmarks,
-            QuickSearch,
-            Materials
-        }
+        public int[] ResultPosX;
 
-        public UiSearchNew(NxMenu _menu, SearchPanelType _searchPanelType = SearchPanelType.Bookmarks) : base(_menu.frame.NxOverlay)
+        public UiSearch2.State PreviousState = UiSearch2.State.Create;
+
+        public UiSearchResult(UiSearch2 _search) : base(_search.Menu.frame.NxOverlay)
         {
-            m_menu = _menu;
-            m_searchPanelType = _searchPanelType;
+            m_UiSearch = _search;
+            RelativeChildPos = true;
             //Title
-            m_title = new NxSimpleText(0, UiMainTopInfos.HEIGHT, m_searchPanelType.ToString() + "...", EDColors.ORANGE, 24, NxFonts.EuroCapital);
+            m_title = new NxSimpleText(0, 0, "Search result...", EDColors.ORANGE, 24, NxFonts.EuroCapital);
             Add(m_title);
 
             int _by = 0;
+
+            width = NxMenu.Width;
+            height = NxMenu.Height - y;
             //Bookmark buttons
 
             //Tips for materials
 
             //Title
-            _by += 30;
-            Add(new NxSimpleText(0, _by, "Search Result...", EDColors.ORANGE, 24, NxFonts.EuroCapital));
-            _by += 30;
+            _by += 40;
 
             //Loading
 
@@ -60,7 +60,27 @@ namespace NexHUD.Ui.Search
             //Message
 
             m_messageInfo = new NxSimpleText(10, NxMenu.Height - 35, "", Color.CadetBlue, 22);
+
             Add(m_messageInfo);
+
+            //results
+
+            ResultPosX = new int[12];
+            m_results = new UiSearchResultLine[MAX_LINE_RESULT];
+            for (int i = 0; i < m_results.Length; i++)
+            {
+                m_results[i] = new UiSearchResultLine(this)
+                {
+                    x = 0,
+                    y = _by,
+                    width = NxMenu.Width,
+                    height = 30
+                };
+                _by += m_results[i].height + 2;
+                Add(m_results[i]);
+            }
+
+            MoveCursorToFirst();
         }
 
 
@@ -97,6 +117,25 @@ namespace NexHUD.Ui.Search
         {
             m_loading.isVisible = false;
             displayMessage("Search Succedded!", EDColors.RED);
+
+            for (int i = 0; i < ResultPosX.Length; i++)
+                ResultPosX[i] = 0;
+
+            for (int i = 0; i < m_results.Length; i++)
+            {
+                if (i < obj.results.Length)
+                {
+                    m_results[i].SetDatas(obj, i - 1);
+                    for (int j = 0; j < ResultPosX.Length; j++)
+                        ResultPosX[j] = Math.Max(ResultPosX[j], m_results[i].XPos[j]);
+                }
+                else
+                    m_results[i].isVisible = false;
+            }
+
+            for (int i = 0; i < m_results.Length; i++)
+                m_results[i].setPositions(ResultPosX);
+
         }
 
         private void _onSearchFailed(SearchEngine.SearchError obj)
@@ -105,9 +144,20 @@ namespace NexHUD.Ui.Search
             displayMessage("Search failed: " + obj.ToString(), EDColors.RED);
         }
 
+        private bool _skipUpdate = true;
         public override void Update()
         {
             base.Update();
+            if (!isVisible)
+            {
+                _skipUpdate = true;
+                return;
+            }
+            else if (_skipUpdate)
+            {
+                _skipUpdate = false;
+                return;
+            }
             m_updateMessageFreq += NexHudEngine.deltaTime;
             if (m_messageLifeTime < 10)
                 m_messageLifeTime += NexHudEngine.deltaTime;
@@ -138,10 +188,12 @@ namespace NexHUD.Ui.Search
             if (m_updateMessageFreq > 1)
                 m_updateMessageFreq = 0;
 
+            if (Shortcuts.BackPressed) m_UiSearch.changeState(PreviousState);
+
+            if (Shortcuts.UpPressed) moveUp();
+            if (Shortcuts.DownPressed) moveDown();
+            if (Shortcuts.LeftPressed) moveLeft();
+            if (Shortcuts.RightPressed) moveRight();
         }
-
-
-
-
     }
 }

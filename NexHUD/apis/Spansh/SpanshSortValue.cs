@@ -13,6 +13,11 @@ namespace NexHUD.Apis.Spansh
 
         public string name;
         public string direction;
+
+        public SpanshSortValue()
+        {
+
+        }
         public SpanshSortValue(bool _ascending)
         {
             direction = _ascending ? ASC : DESC;

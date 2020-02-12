@@ -33,7 +33,8 @@ namespace NexHUD.Apis.Spansh
             None,
             Aborded,
             Unknow,
-            SerializationFailed
+            SerializationFailed,
+            DeserializationFailed
         }
         /* END POINT */
         public const string URL_BODIES = @"https://spansh.co.uk/api/bodies/search?";
@@ -54,11 +55,20 @@ namespace NexHUD.Apis.Spansh
 
         public async void SearchInSystems(SpanshSearchSystems _search, Action<SpanshSystemsResult> _method, Action<SearchError> _onFailedMethod)
         {
-           
-            string _spanshJson = JsonConvert.SerializeObject(_search, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }); ;
-            NxLog.log(NxLog.Type.Debug, "SearchInSystems. json={0}", _spanshJson);
-
+            string _spanshJson = string.Empty;
             SearchError error = SearchError.None;
+            try
+            {
+                _spanshJson = JsonConvert.SerializeObject(_search, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }); ;
+                NxLog.log(NxLog.Type.Debug, "SearchInSystems. json={0}", _spanshJson);
+            }
+            catch(Exception ex)
+            {
+                NexHudEngine.Log(NxLog.Type.Error, ex.Message);
+                _onFailedMethod?.Invoke(error = SearchError.SerializationFailed);
+                return;
+            }
+
             Task<string> task = new Task<string>(() => requestPOSTFromURL(URL_SYSTEMS, _spanshJson, out error));
             task.Start();
             string json = await task;
@@ -80,7 +90,7 @@ namespace NexHUD.Apis.Spansh
                 catch (Exception ex)
                 {
                     NexHudEngine.Log(NxLog.Type.Error, ex.Message);
-                    _onFailedMethod?.Invoke(error = SearchError.SerializationFailed);
+                    _onFailedMethod?.Invoke(error = SearchError.DeserializationFailed);
                 }
             }
         }
@@ -125,7 +135,7 @@ namespace NexHUD.Apis.Spansh
                 catch (Exception ex)
                 {
                     NexHudEngine.Log(NxLog.Type.Error, ex.Message);
-                    _onFailedMethod?.Invoke( error = SearchError.SerializationFailed);
+                    _onFailedMethod?.Invoke( error = SearchError.DeserializationFailed);
                 }
             }
         }

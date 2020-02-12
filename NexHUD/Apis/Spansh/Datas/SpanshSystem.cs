@@ -20,8 +20,11 @@ namespace NexHUD.Apis.Spansh
         public string name;
         public bool needs_permit;
         public long population;
+        public string[] power;
+        public string power_state;
         public string primary_economy;
-        public string securty;
+        public string secondary_economy;
+        public string security;
         public string state;
         public double x;
         public double y;

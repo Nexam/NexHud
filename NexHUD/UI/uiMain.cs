@@ -42,7 +42,7 @@ namespace NexHUD.Ui
         //Radio
         public UiMainRadio m_UiRadio;
 
-        public UiSearchCreate m_searchCreate;
+        public UiSearch2 m_searchCreate;
         public NxMenu()
         {
 
@@ -86,8 +86,9 @@ namespace NexHUD.Ui
             m_uiImprove = new UiImprove(this);
             m_frame.NxOverlay.Add(m_uiImprove);
 
-            m_searchCreate = new UiSearchCreate(this);
+            m_searchCreate = new UiSearch2(this);
             m_frame.NxOverlay.Add(m_searchCreate);
+
             m_frame.NxOverlay.Add(m_UiRadio = new UiMainRadio(Width / 2, Height - (UiMainRadio.Height + 50), this));
 
         }
@@ -143,7 +144,7 @@ namespace NexHUD.Ui
 
                     if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
                     {
-                        if (m_state != MenuState.Main && m_state != MenuState.Improve)
+                        if (m_state != MenuState.Main && m_state != MenuState.Improve && m_state != MenuState.SearchCreate)
                             changeState(MenuState.Main);
                     }
                 }
@@ -166,7 +167,7 @@ namespace NexHUD.Ui
                     {
                         if (m_state != MenuState.Main)
                         {
-                            if (m_state != MenuState.Improve)
+                            if (m_state != MenuState.Improve && m_state != MenuState.SearchCreate)
                                 changeState(MenuState.Main);
                         }
                         else

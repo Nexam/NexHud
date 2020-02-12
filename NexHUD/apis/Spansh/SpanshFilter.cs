@@ -37,8 +37,6 @@ namespace NexHUD.Apis.Spansh
 
         public SpanshValue<long?> population;
         public SpanshValue<bool?> needs_permit;
-        public SpanshValue<double?>[] materials;
-        public SpanshValue<bool?> is_landable;
-        // public intValue distance;
+
     }
 }

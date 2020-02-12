@@ -10,7 +10,7 @@ namespace NexHUDCore.NxItems
         //debug
         public bool RenderDirtyBox = false;
         private ulong m_RenderCount = 0;
-        public bool RenderCount = false;
+        public bool RenderCount = true;
 
         private bool m_drawDefaultBackground;
 

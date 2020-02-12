@@ -19,7 +19,7 @@ namespace NexHUDCore.NxItems
         }
         public virtual void Add(NxItem _item)
         {
-            _item.Overlay = Overlay;
+            _item.Overlay = m_parent.Overlay;
             m_nxItems.Add(_item);
             _item.group = this;
             makeItDirty();

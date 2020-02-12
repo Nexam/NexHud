@@ -14,13 +14,14 @@ namespace NexHUD.Ui.Search
 {
     public class UiSearchCreate : NxGroupAutoCursor
     {
-        NxMenu m_menu;
+        UiSearch2 m_UiSearch;
 
         NxCheckbox[] m_CbPermits= new NxCheckbox[3];
         NxCheckbox[] m_CbPopulation = new NxCheckbox[3];
-        public UiSearchCreate(NxMenu _menu) : base(_menu.frame.NxOverlay)
+        public UiSearchCreate(UiSearch2 _search) : base(_search.Menu.frame.NxOverlay)
         {
-            m_menu = _menu;
+            m_UiSearch = _search;
+
             //10 params max
             /*Allegiance
             Economy
@@ -56,13 +57,13 @@ namespace NexHUD.Ui.Search
 
             //Allegiance
             Add(new NxSimpleText(0, 0, "Allegiance", EDColors.BLUE, 18, NxFonts.EuroCapital));
-            Add(new NxRectangle(5, _cy + 20, m_menu.frame.WindowWidth - 10, 1, breakLineColor));
+            Add(new NxRectangle(5, _cy + 20, m_UiSearch.Menu.frame.WindowWidth - 10, 1, breakLineColor));
             _cy += 24;
             foreach (string s in SpanshDatas.allegiance)
             {
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, _menu) { BoxSize = boxsize };
+                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize };
                 b.Obj = nameof(SpanshDatas.allegiance);
                 Add(b);
                 _cx += _width;
@@ -81,9 +82,9 @@ namespace NexHUD.Ui.Search
                     case 1: _cbText = "No"; break;
                     case 2: _cbText = "Mine only"; break;
                 }
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(_cbText, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(_cbText, NxCheckbox.DefaultFont).Width + boxPlusPadding;
 
-                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, _cbText, _menu) { BoxSize = boxsize, CircleBox = true };
+                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, _cbText, m_UiSearch.Menu) { BoxSize = boxsize, CircleBox = true };
                 m_CbPermits[i] = b;
                 b.onClick += onPermitChanged;
                 b.Obj = "permitOptions";
@@ -99,18 +100,18 @@ namespace NexHUD.Ui.Search
             _cy += spaceBetweenCategories;
             //Economy
             Add(new NxSimpleText(_cx, _cy, "Economy", EDColors.BLUE, 18, NxFonts.EuroCapital));
-            Add(new NxRectangle(5, _cy + 20, m_menu.frame.WindowWidth - 10, 1, breakLineColor));
+            Add(new NxRectangle(5, _cy + 20, m_UiSearch.Menu.frame.WindowWidth - 10, 1, breakLineColor));
             _cy += 24;
             foreach (string s in SpanshDatas.economy)
             {
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
-                if (_cx + _width + 5 > m_menu.frame.WindowWidth)
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                if (_cx + _width + 5 > m_UiSearch.Menu.frame.WindowWidth)
                 {
                     _cx = 0;
                     _cy += 32;
                 }
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, _menu) { BoxSize = boxsize };
+                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize };
                 b.Obj = nameof(SpanshDatas.economy);
                 Add(b);
                 _cx += _width;
@@ -121,18 +122,18 @@ namespace NexHUD.Ui.Search
             _cy += spaceBetweenCategories;
             //Governement
             Add(new NxSimpleText(_cx, _cy, "Government", EDColors.BLUE, 18, NxFonts.EuroCapital));
-            Add(new NxRectangle(5, _cy + 20, m_menu.frame.WindowWidth - 10, 1, breakLineColor));
+            Add(new NxRectangle(5, _cy + 20, m_UiSearch.Menu.frame.WindowWidth - 10, 1, breakLineColor));
             _cy += 24;
             foreach (string s in SpanshDatas.government)
             {
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
-                if (_cx + _width + 5 > m_menu.frame.WindowWidth)
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                if (_cx + _width + 5 > m_UiSearch.Menu.frame.WindowWidth)
                 {
                     _cx = 0;
                     _cy += 32;
                 }
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy , _width, 30, s, _menu) { BoxSize = boxsize };
+                NxCheckbox b = new NxCheckbox(_cx, _cy , _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize };
                 b.Obj = nameof(SpanshDatas.government);
                 Add(b);
                 _cx += _width;
@@ -144,18 +145,18 @@ namespace NexHUD.Ui.Search
             _cy += spaceBetweenCategories;
             //State
             Add(new NxSimpleText(_cx, _cy, "State", EDColors.BLUE, 18, NxFonts.EuroCapital));
-            Add(new NxRectangle(5, _cy + 20, m_menu.frame.WindowWidth - 10, 1, breakLineColor));
+            Add(new NxRectangle(5, _cy + 20, m_UiSearch.Menu.frame.WindowWidth - 10, 1, breakLineColor));
             _cy += 24;
             foreach (string s in SpanshDatas.state)
             {
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
-                if (_cx + _width + 5 > m_menu.frame.WindowWidth)
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                if (_cx + _width + 5 > m_UiSearch.Menu.frame.WindowWidth)
                 {
                     _cx = 0;
                     _cy += 32;
                 }
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy , _width, 30, s, _menu) { BoxSize = boxsize };
+                NxCheckbox b = new NxCheckbox(_cx, _cy , _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize };
                 b.Obj = nameof(SpanshDatas.state);
                 Add(b);
                 _cx += _width;
@@ -166,18 +167,18 @@ namespace NexHUD.Ui.Search
             int powerPositionY = _cy;
             //Power
             Add(new NxSimpleText(_cx, _cy, "Power", EDColors.BLUE, 18, NxFonts.EuroCapital));
-            Add(new NxRectangle(5, _cy + 20, m_menu.frame.WindowWidth - 10, 1, breakLineColor));
+            Add(new NxRectangle(5, _cy + 20, m_UiSearch.Menu.frame.WindowWidth - 10, 1, breakLineColor));
             _cy += 24;
             foreach (string s in SpanshDatas.power)
             {
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
                 if (_cx + _width + 5 > permitCatPositionX)
                 {
                     _cx = 0;
                     _cy += 32;
                 }
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, _menu) { BoxSize = boxsize };
+                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize };
                 b.Obj = nameof(SpanshDatas.power);
                 Add(b);
                 _cx += _width;
@@ -191,14 +192,14 @@ namespace NexHUD.Ui.Search
             _cy += 24;
             foreach (string s in SpanshDatas.power_state)
             {
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
-                if (_cx + _width + 5 > m_menu.frame.WindowWidth)
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                if (_cx + _width + 5 > m_UiSearch.Menu.frame.WindowWidth)
                 {
                     _cx = permitCatPositionX;
                     _cy += 32;
                 }
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, _menu) { BoxSize = boxsize };
+                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize };
                 b.Obj = nameof(SpanshDatas.power_state);
                 Add(b);
                 _cx += _width;
@@ -209,18 +210,18 @@ namespace NexHUD.Ui.Search
             powerPositionY = _cy;
             //Security
             Add(new NxSimpleText(_cx, _cy, "Security", EDColors.BLUE, 18, NxFonts.EuroCapital));
-            Add(new NxRectangle(5, _cy + 20, m_menu.frame.WindowWidth - 10, 1, breakLineColor));
+            Add(new NxRectangle(5, _cy + 20, m_UiSearch.Menu.frame.WindowWidth - 10, 1, breakLineColor));
             _cy += 24;
             foreach (string s in SpanshDatas.security)
             {
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
                 if (_cx + _width + 5 > permitCatPositionX)
                 {
                     _cx = 0;
                     _cy += 32;
                 }
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, _menu) { BoxSize = boxsize };
+                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize };
                 b.Obj = nameof(SpanshDatas.security);
                 Add(b);
                 _cx += _width;
@@ -239,14 +240,14 @@ namespace NexHUD.Ui.Search
                     s = "Populated";
                 else if( i == 2)
                     s = "Both";
-                int _width = (int)m_menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
-                if (_cx + _width + 5 > m_menu.frame.WindowWidth)
+                int _width = (int)m_UiSearch.Menu.frame.NxGraphics.MeasureString(s, NxCheckbox.DefaultFont).Width + boxPlusPadding;
+                if (_cx + _width + 5 > m_UiSearch.Menu.frame.WindowWidth)
                 {
                     _cx = permitCatPositionX;
                     _cy += 32;
                 }
                 _cx += spaceBetweenCheckbox;
-                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, _menu) { BoxSize = boxsize, CircleBox = true };
+                NxCheckbox b = new NxCheckbox(_cx, _cy, _width, 30, s, m_UiSearch.Menu) { BoxSize = boxsize, CircleBox = true };
                 b.Checked = i == 2;
                 m_CbPopulation[i] = b;
                 b.onClick += onPopulationChanged;
@@ -258,16 +259,16 @@ namespace NexHUD.Ui.Search
 
             _cx = 0;
 
-            _cy = m_menu.frame.WindowHeight-105;
+            _cy = m_UiSearch.Menu.frame.WindowHeight-105;
 
 
-            NxButton btnCreate = new NxButton(5, _cy, m_menu.frame.WindowWidth/2-15, 30, "Save search", m_menu);
+            NxButton btnCreate = new NxButton(5, _cy, m_UiSearch.Menu.frame.WindowWidth/2-15, 30, "Save search", m_UiSearch.Menu);
             btnCreate.onClick += onSave;
             btnCreate.ColorBack = EDColors.getColor( EDColors.GREEN, 0.1f);
             btnCreate.ColorBackSelected = EDColors.getColor(EDColors.GREEN, 0.9f);
             Add(btnCreate);
 
-            NxButton btnSearch = new NxButton(m_menu.frame.WindowWidth / 2 + 10, _cy, m_menu.frame.WindowWidth / 2 - 15, 30, "Search now", m_menu);
+            NxButton btnSearch = new NxButton(m_UiSearch.Menu.frame.WindowWidth / 2 + 10, _cy, m_UiSearch.Menu.frame.WindowWidth / 2 - 15, 30, "Search now", m_UiSearch.Menu);
             btnSearch.onClick += onSearch;
             Add(btnSearch);
 
@@ -296,7 +297,8 @@ namespace NexHUD.Ui.Search
             SpanshSearchSystems _search = CompileSearch();
             Console.WriteLine(_search);
 
-            SearchEngine.Instance.SearchInSystems(_search, _onSearchSuccess, _onSearchFailed);
+            m_UiSearch.changeState(UiSearch2.State.SearchResult);
+            m_UiSearch.UiSearchResult.processSearch(new Elite.Searchs.CustomSearch() { SearchName = "Quick search", SearchSystem = _search });
         }
 
         private void _onSearchFailed(SearchEngine.SearchError obj)
@@ -404,16 +406,18 @@ namespace NexHUD.Ui.Search
                 return;
             }
 
-            bool up = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up));
-            bool down = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.down));
-            bool left = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left));
-            bool right = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.right));
-            bool select = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.select));
 
-            if (up) moveUp();
-            if (down) moveDown();
-            if (left) moveLeft();
-            if (right) moveRight();
+            if (Shortcuts.UpPressed) 
+                moveUp();
+
+            if (Shortcuts.DownPressed) 
+                moveDown();
+
+            if (Shortcuts.LeftPressed) 
+                moveLeft();
+
+            if (Shortcuts.RightPressed) 
+                moveRight();
         }
     }
 }

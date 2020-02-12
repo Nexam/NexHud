@@ -6,6 +6,8 @@
         public int from;
         public SpanshBody[] results;
         public string search_reference;
+        public SpanshSearchBodies search;
+        public int size;
     }
 
     public class SpanshSystemsResult
@@ -14,5 +16,7 @@
         public int from;
         public SpanshSystem[] results;
         public string search_reference;
+        public SpanshSearchSystems search;
+        public int size;
     }
 }
