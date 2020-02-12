@@ -99,9 +99,14 @@ namespace NexHUD.Ui.Search
         }
         public override void Render(Graphics _g)
         {
-            _g.FillRectangle(new SolidBrush(EDColors.getColor(EDColors.WHITE, 0.1f)), Rectangle);
+
             if (Selected)
-                _g.DrawRectangle(new Pen(EDColors.ORANGE, 2), Rectangle);
+            {
+                _g.FillRectangle(new SolidBrush(EDColors.getColor(EDColors.ORANGE, 0.2f)), Rectangle);
+                _g.DrawRectangle(new Pen(EDColors.ORANGE, 1), Rectangle);
+            }
+            else
+                _g.FillRectangle(new SolidBrush(EDColors.getColor(EDColors.WHITE, 0.05f)), Rectangle);
             foreach (NxSimpleText text in m_content)
             {
                 if( text.isVisible )
@@ -161,6 +166,11 @@ namespace NexHUD.Ui.Search
                 return;
             }
 
+            if (Shortcuts.BackPressed)
+            {
+                m_UiSearch.Menu.changeState(NxMenu.MenuState.Main);
+                return;
+            }
             if (Shortcuts.SelectPressed)
                 m_UiSearch.changeState(UiSearch2.State.Create);
 

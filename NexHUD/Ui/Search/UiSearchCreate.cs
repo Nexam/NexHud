@@ -406,6 +406,12 @@ namespace NexHUD.Ui.Search
                 return;
             }
 
+            if (Shortcuts.BackPressed)
+            {
+                m_UiSearch.changeState(UiSearch2.State.Bookmarks);
+                return;
+            }
+
 
             if (Shortcuts.UpPressed) 
                 moveUp();

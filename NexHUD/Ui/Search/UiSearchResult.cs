@@ -203,7 +203,11 @@ namespace NexHUD.Ui.Search
             if (m_updateMessageFreq > 1)
                 m_updateMessageFreq = 0;
 
-            if (Shortcuts.BackPressed) m_UiSearch.changeState(PreviousState);
+            if (Shortcuts.BackPressed)
+            {
+                m_UiSearch.changeState(PreviousState);
+                return;
+            }
 
             if (Shortcuts.UpPressed) moveUp();
             if (Shortcuts.DownPressed) moveDown();

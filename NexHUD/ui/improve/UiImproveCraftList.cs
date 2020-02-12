@@ -149,6 +149,8 @@ namespace NexHUD.Ui.Improve
                 return;
             }
 
+            
+
             bool up = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.up));
             bool down = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.down));
             bool left = NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.left));
