@@ -86,7 +86,7 @@ namespace NexHUDCore.NxItems
 
                 if (RenderCount)
                 {
-                    _g.FillRectangle(Brushes.White, new Rectangle(0, Overlay.WindowHeight - 20, 300, 20));
+                    _g.FillRectangle(new SolidBrush( EDColors.getColor( Color.White, 0.5f) ), new Rectangle(0, Overlay.WindowHeight - 20, 300, 20));
                     _g.DrawString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, 0, Overlay.WindowHeight - 20);
                     SizeF s = _g.MeasureString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17) );
                     _g.DrawString(string.Format("// {0}ms" , _watch.ElapsedMilliseconds), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, s.Width + 5, Overlay.WindowHeight - 20);

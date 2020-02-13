@@ -21,6 +21,7 @@ namespace NexHUD.Ui.Search
         private NxSimpleText[] m_content;
 
         public CustomSearch Search;
+
         public UiSearchBookmarkCard(NxOverlay _parent) : base(_parent)
         {
             RelativeChildPos = true;

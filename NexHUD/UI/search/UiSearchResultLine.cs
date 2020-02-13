@@ -68,6 +68,8 @@ namespace NexHUD.Ui.Search
             isEnable = index != -1;
             Selected = false;
 
+            LastSystem = null;
+
             List<string> fields = new List<string>();
 
             if (result.search.filters.government != null)
@@ -107,7 +109,6 @@ namespace NexHUD.Ui.Search
 
             if (index == -1)
             {
-                LastSystem = null;
 
                 m_props[0].text = "Dist.";
                 m_props[1].text = "System name";
@@ -183,7 +184,7 @@ namespace NexHUD.Ui.Search
         {
             base.Update();
 
-            if (Shortcuts.SelectPressed)
+            if (Shortcuts.SelectPressed && isVisible && Selected)
                 onClick?.Invoke(this, new EventArgs());
         }
         public override void Render(Graphics _g)

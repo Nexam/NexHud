@@ -4,8 +4,6 @@ namespace NexHUDCore.NxItems
 {
     public class NxRectangle : NxItem
     {
-       
-
         public NxRectangle(int _x, int _y, int _w, int _h, Color _c)
         {
             x = _x;

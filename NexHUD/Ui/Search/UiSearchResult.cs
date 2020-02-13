@@ -11,6 +11,7 @@ using NexHUD.Inputs;
 using NexHUD.Apis.Spansh;
 using NexHUD.Elite.Searchs;
 using NexHUD.Ui.Common;
+using System.Threading.Tasks;
 
 namespace NexHUD.Ui.Search
 {
@@ -27,12 +28,11 @@ namespace NexHUD.Ui.Search
         private UiSearchResultLine[] m_results;
 
         private float m_messageLifeTime;
-        private float m_updateMessageFreq = 0;
 
         public int[] ResultPosX;
 
         public UiSearch2.State PreviousState = UiSearch2.State.Create;
-
+        
         public UiSearchResult(UiSearch2 _search) : base(_search.Menu.frame.NxOverlay)
         {
             m_UiSearch = _search;
@@ -59,7 +59,7 @@ namespace NexHUD.Ui.Search
 
             //Message
 
-            m_messageInfo = new NxSimpleText(10, NxMenu.Height - 35, "", Color.CadetBlue, 22);
+            m_messageInfo = new NxSimpleText(10, height - 140, "", Color.CadetBlue, 20);
 
             Add(m_messageInfo);
 
@@ -87,15 +87,15 @@ namespace NexHUD.Ui.Search
 
         private void OnClickResult(object sender, EventArgs e)
         {
-            if( sender is UiSearchResultLine)
+            if (sender is UiSearchResultLine)
             {
                 SpanshSystem system = ((UiSearchResultLine)sender).LastSystem;
-                if( system != null )
+                if (system != null)
                 {
-                    displayMessage(string.Format("{0} has been copied to your clipboard!", system.name.ToString()), EDColors.YELLOW);
+                    displayMessage(string.Format("{0} has been copied to your clipboard!", system.name.ToString()), EDColors.BLUE);
                     Clipboard.SetText(system.name.ToString());
                 }
-            }            
+            }
         }
 
         public void displayMessage(string _text, Color _c)
@@ -110,6 +110,7 @@ namespace NexHUD.Ui.Search
         {
             m_title.text = "Search : " + _search.SearchName;
             m_loading.isVisible = true;
+            displayMessage(string.Format("Process search: '{0}'", _search.SearchName), EDColors.YELLOW);
             if (_search.SearchSystem != null)
             {
                 SearchEngine.Instance.SearchInSystems(_search.SearchSystem, _onSystemsReceived, _onSearchFailed);
@@ -123,14 +124,14 @@ namespace NexHUD.Ui.Search
         private void _onBodiesReceived(SpanshBodiesResult obj)
         {
             m_loading.isVisible = false;
-            displayMessage("Search Succeeded!", EDColors.RED);
+            displayMessage("Search Succeeded!", EDColors.GREEN);
         }
 
 
         private void _onSystemsReceived(SpanshSystemsResult obj)
         {
             m_loading.isVisible = false;
-            displayMessage("Search Succedded!", EDColors.RED);
+            displayMessage("Search Succedded!", EDColors.GREEN);
 
             for (int i = 0; i < ResultPosX.Length; i++)
                 ResultPosX[i] = 0;
@@ -159,6 +160,7 @@ namespace NexHUD.Ui.Search
             displayMessage("Search failed: " + obj.ToString(), EDColors.RED);
         }
 
+
         private bool _skipUpdate = true;
         public override void Update()
         {
@@ -173,35 +175,22 @@ namespace NexHUD.Ui.Search
                 _skipUpdate = false;
                 return;
             }
-            m_updateMessageFreq += NexHudEngine.deltaTime;
+
             if (m_messageLifeTime < 10)
                 m_messageLifeTime += NexHudEngine.deltaTime;
-            if (isVisible)
-            {
-                //Message display
-                if (m_messageLifeTime < 5)
-                {
-                    m_messageInfo.isVisible = true;
-                    if (m_messageLifeTime > 4)
-                        m_messageInfo.Color = EDColors.getColor(m_messageInfo.Color, 5 - m_messageLifeTime);
-                }
-                else
-                {
-                    m_messageInfo.isVisible = false;
-                }
-                if (!m_firstUpdateSkipped)
-                {
-                    m_firstUpdateSkipped = true;
-                    return;
-                }
 
+            //Message display
+            if (m_messageLifeTime < 5)
+            {
+                m_messageInfo.isVisible = true;
+                if (m_messageLifeTime > 4)
+                    m_messageInfo.Color = EDColors.getColor(m_messageInfo.Color, 5 - m_messageLifeTime);
             }
             else
             {
-                m_firstUpdateSkipped = false;
+                m_messageInfo.isVisible = false;
             }
-            if (m_updateMessageFreq > 1)
-                m_updateMessageFreq = 0;
+
 
             if (Shortcuts.BackPressed)
             {
