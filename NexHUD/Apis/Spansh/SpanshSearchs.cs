@@ -14,7 +14,10 @@ namespace NexHUD.Apis.Spansh
         public int Page;
         //public SpanshCoords ReferenceCoords;
         public string reference_system;
-        public int size = 11;
+
+        [JsonIgnore]
+        public int size = 20;
+
         public SpanshSort[] sort;
     }
     public class SpanshSearchSystems
@@ -23,7 +26,10 @@ namespace NexHUD.Apis.Spansh
         public SpanshFilterSystems filters;
         //public SpanshCoords ReferenceCoords;
         public string reference_system;
-        public int size = 11;
+
+        [JsonIgnore]
+        public int size = 20;
+
         public SpanshSort[] sort;
     }
 }

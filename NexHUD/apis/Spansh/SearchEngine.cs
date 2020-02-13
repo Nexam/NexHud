@@ -14,6 +14,7 @@ namespace NexHUD.Apis.Spansh
 {
     public class SearchEngine
     {
+        public const int DefaultSystemRange = 100;
         #region singleton
         public static SearchEngine Instance { get { return Nested.instance; } }
         private class Nested

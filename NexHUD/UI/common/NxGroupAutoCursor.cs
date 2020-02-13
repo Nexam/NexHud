@@ -11,7 +11,7 @@ namespace NexHUD.Ui.Common
     public class NxGroupAutoCursor : NxGroup
     {
         private Rectangle m_VirtualCursor;
-        private bool m_renderCursor = true;
+        private bool m_renderCursor = false;
         public NxGroupAutoCursor(NxOverlay _parent) : base(_parent)
         {
             m_VirtualCursor = new Rectangle(0, 0, 30, 30);

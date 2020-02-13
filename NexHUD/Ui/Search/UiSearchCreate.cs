@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using NexHUD.Apis.Spansh;
 using NexHUD.Elite;
+using NexHUD.Elite.Searchs;
 using NexHUD.Inputs;
 using NexHUD.Ui.Common;
 using NexHUDCore;
@@ -259,7 +260,7 @@ namespace NexHUD.Ui.Search
 
             _cx = 0;
 
-            _cy = m_UiSearch.Menu.frame.WindowHeight-105;
+            _cy = m_UiSearch.Menu.frame.WindowHeight-110;
 
 
             NxButton btnCreate = new NxButton(5, _cy, m_UiSearch.Menu.frame.WindowWidth/2-15, 30, "Save search", m_UiSearch.Menu);
@@ -274,8 +275,24 @@ namespace NexHUD.Ui.Search
 
 
             MoveCursorToFirst();
+            Reset();
         }
 
+        public void Reset()
+        {
+            foreach(NxItem item in Items)
+            {
+                if( item is NxCheckbox )
+                {
+                    NxCheckbox cb = item as NxCheckbox;
+                    cb.Checked = false;
+                    if (cb.Label == "Both" || cb.Label == "Mine only")
+                        cb.Checked = true;
+                }
+                
+            }
+
+        }
         private void onPopulationChanged(object sender, EventArgs e)
         {
             foreach (NxCheckbox b in m_CbPopulation)
@@ -290,6 +307,12 @@ namespace NexHUD.Ui.Search
 
         private void onSave(object sender, EventArgs e)
         {
+            SpanshSearchSystems _search = CompileSearch();
+            Bookmarks.Save(new CustomSearch() { SearchName = "Custom search", SearchSystem = _search });
+            m_UiSearch.UiBookmarks.refreshCards();
+            m_UiSearch.changeState(UiSearch2.State.Bookmarks);
+            Reset();
+
         }
 
         private void onSearch(object sender, EventArgs e)
@@ -298,7 +321,7 @@ namespace NexHUD.Ui.Search
             Console.WriteLine(_search);
 
             m_UiSearch.changeState(UiSearch2.State.SearchResult);
-            m_UiSearch.UiSearchResult.processSearch(new Elite.Searchs.CustomSearch() { SearchName = "Quick search", SearchSystem = _search });
+            m_UiSearch.UiSearchResult.processSearch(new CustomSearch() { SearchName = "Quick search", SearchSystem = _search }, UiSearch2.State.Create);
         }
 
         private void _onSearchFailed(SearchEngine.SearchError obj)
@@ -319,7 +342,7 @@ namespace NexHUD.Ui.Search
             SpanshSearchSystems _search = new SpanshSearchSystems();
             _search.filters = new SpanshFilterSystems();
             _search.reference_system = EDDatas.Instance.getCurrentSystem().name;
-            _search.filters.distance_from_coords = new SpanshValue<int?>(0, 100);
+            _search.filters.distance_from_coords = new SpanshValue<int?>(0, SearchEngine.DefaultSystemRange);
 
             _search.sort = new SpanshSort[] { new SpanshSort() { distance_from_coords = new SpanshSortValue(true) } };
 

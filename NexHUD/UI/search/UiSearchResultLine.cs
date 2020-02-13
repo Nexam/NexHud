@@ -13,6 +13,7 @@ namespace NexHUD.Ui.Search
 {
     public class UiSearchResultLine : NxGroup, ISelectable
     {
+        public const int PropertiesCount = 12;
         private NxSimpleText[] m_props;
         private NxRectangle[] m_separators;
         private NxRectangle m_background;
@@ -34,8 +35,8 @@ namespace NexHUD.Ui.Search
             m_background = new NxRectangle(0, 0, width, height, Color);
             Add(m_background);
 
-            XPos = new int[12];
-            m_props = new NxSimpleText[12];
+            XPos = new int[PropertiesCount];
+            m_props = new NxSimpleText[PropertiesCount];
             m_separators = new NxRectangle[m_props.Length];
             m_maxWidth = new int[m_props.Length];
 

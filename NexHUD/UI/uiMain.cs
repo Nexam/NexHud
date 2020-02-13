@@ -16,7 +16,6 @@ namespace NexHUD.Ui
         {
             Initialize,
             Main,
-            SearchCreate,//for dev
             Search,
             Improve,
             Trade,
@@ -36,13 +35,11 @@ namespace NexHUD.Ui
         public UiMainPlayerInfos m_uiPlayerInfos;
         public UiMainMenu m_uiMainMenu;
         //Search
-        public UiSearch m_searchPanel;
+        public UiSearch2 m_searchPanel;
         //Improve
         public UiImprove m_uiImprove;
         //Radio
         public UiMainRadio m_UiRadio;
-
-        public UiSearch2 m_searchCreate;
         public NxMenu()
         {
 
@@ -80,14 +77,12 @@ namespace NexHUD.Ui
             m_uiPlayerInfos = new UiMainPlayerInfos(this);
             m_frame.NxOverlay.Add(m_uiPlayerInfos);
 
-            m_searchPanel = new UiSearch(this);
+            m_searchPanel = new UiSearch2(this);
             m_frame.NxOverlay.Add(m_searchPanel);
 
             m_uiImprove = new UiImprove(this);
             m_frame.NxOverlay.Add(m_uiImprove);
 
-            m_searchCreate = new UiSearch2(this);
-            m_frame.NxOverlay.Add(m_searchCreate);
 
             m_frame.NxOverlay.Add(m_UiRadio = new UiMainRadio(Width / 2, Height - (UiMainRadio.Height + 50), this));
 
@@ -104,7 +99,6 @@ namespace NexHUD.Ui
             m_uiMainMenu.isVisible = false;
             m_uiPlayerInfos.isVisible = false;
             m_UiRadio.isVisible = false;
-            m_searchCreate.isVisible = false;
 
             switch (m_state)
             {
@@ -112,9 +106,6 @@ namespace NexHUD.Ui
                     m_uiMainMenu.isVisible = true;
                     m_uiPlayerInfos.isVisible = true;
                     m_UiRadio.isVisible = true;
-                    break;
-                case MenuState.SearchCreate:
-                    m_searchCreate.isVisible = true;
                     break;
                 case MenuState.Search:
                     m_searchPanel.isVisible = true;
@@ -144,7 +135,7 @@ namespace NexHUD.Ui
 
                     if (NexHudEngine.isShortcutPressed(Shortcuts.get(ShortcutId.back)))
                     {
-                        if (m_state != MenuState.Main && m_state != MenuState.Improve && m_state != MenuState.SearchCreate)
+                        if (m_state != MenuState.Main && m_state != MenuState.Improve && m_state != MenuState.Search)
                             changeState(MenuState.Main);
                     }
                 }
@@ -167,7 +158,7 @@ namespace NexHUD.Ui
                     {
                         if (m_state != MenuState.Main)
                         {
-                            if (m_state != MenuState.Improve && m_state != MenuState.SearchCreate)
+                            if (m_state != MenuState.Improve && m_state != MenuState.Search)
                                 changeState(MenuState.Main);
                         }
                         else
@@ -222,9 +213,6 @@ namespace NexHUD.Ui
                                 {
                                     case UiMainMenuButton.MenuButtonType.Search:
                                         changeState(MenuState.Search);
-                                        break;
-                                    case UiMainMenuButton.MenuButtonType.SearchCreate:
-                                        changeState(MenuState.SearchCreate);
                                         break;
                                     case UiMainMenuButton.MenuButtonType.Improve:
                                         changeState(MenuState.Improve);

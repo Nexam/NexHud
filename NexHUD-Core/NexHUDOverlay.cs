@@ -360,9 +360,11 @@ namespace NexHUDCore
             {
                 if (m_nxOverlay.isDirty)
                 {
-                    m_graphics.Clear(Color.Transparent);
-                    m_nxOverlay.Render(m_graphics);
-
+                    lock (m_graphics)
+                    {
+                        m_graphics.Clear(Color.Transparent);
+                        m_nxOverlay.Render(m_graphics);
+                    }
                     rebindTexture();
 
                 }

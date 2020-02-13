@@ -10,7 +10,6 @@ namespace NexHUD.Ui
         public enum MenuButtonType
         {
             Search,
-            SearchCreate,
             Improve,
             Trade
         }
@@ -41,8 +40,6 @@ namespace NexHUD.Ui
                 case MenuButtonType.Improve: return "Resources.MenuImages.menu_improve.png";
                 case MenuButtonType.Search: return "Resources.MenuImages.menu_search.png";
                 case MenuButtonType.Trade: return "Resources.MenuImages.menu_trade.png";
-                case MenuButtonType.SearchCreate:
-                    return "Resources.MenuImages.menu_search.png";
             }
             return "Resources.MenuImages.menu_search.png";
         }
@@ -53,7 +50,6 @@ namespace NexHUD.Ui
                 case MenuButtonType.Improve: return "Improve";
                 case MenuButtonType.Search: return "Search";
                 case MenuButtonType.Trade: return "Trade";
-                case MenuButtonType.SearchCreate:return "Create";
             }
             return "UNKNOW";
         }
@@ -64,7 +60,6 @@ namespace NexHUD.Ui
                 case MenuButtonType.Improve: return "See your craft list from Inara and more";
                 case MenuButtonType.Search: return "Search engine based on EDDB & EDSM Datas";
                 case MenuButtonType.Trade: return "Find your next trade route and more";
-                case MenuButtonType.SearchCreate: return "Create a search";
             }
             return "UNKNOW";
         }

@@ -21,6 +21,7 @@ namespace NexHUD.Ui.Search
         private NxSimpleText[] m_content;
 
         public CustomSearch Search;
+        public EventHandler onClick;
 
         public UiSearchBookmarkCard(NxOverlay _parent) : base(_parent)
         {
@@ -30,16 +31,16 @@ namespace NexHUD.Ui.Search
 
             m_type = new NxSimpleText(2, 2, "", EDColors.YELLOW, 18, NxFonts.EuroCapital);
             m_content = new NxSimpleText[10];
-            for(int i = 0; i < m_content.Length; i++)
+            for (int i = 0; i < m_content.Length; i++)
             {
-                m_content[i] = new NxSimpleText(2, 20+i*20, "content", EDColors.ORANGE);
+                m_content[i] = new NxSimpleText(2, 20 + i * 20, "content", EDColors.ORANGE);
                 m_content[i].Color = EDColors.LIGHTBLUE;
                 Add(m_content[i]);
                 m_content[i].isVisible = false;
             }
 
             Add(m_type);
-            
+
         }
 
         public void setDatas(CustomSearch search)
@@ -47,6 +48,14 @@ namespace NexHUD.Ui.Search
             Search = search;
             foreach (NxSimpleText text in m_content)
                 text.isVisible = false;
+
+            if (search == null)
+            {
+                m_type.text = "Empty";
+                m_type.Color = EDColors.GRAY;
+                return;
+            }
+            m_type.Color = EDColors.YELLOW;
 
             if (search.SystemsNotes != null)
             {
@@ -59,7 +68,61 @@ namespace NexHUD.Ui.Search
                 }
             }
             else if (search.SearchSystem != null)
+            {
                 m_type.text = "System search";
+
+                int i = 0;
+
+                if (search.SearchSystem.filters.allegiance != null)
+                    foreach (string v in search.SearchSystem.filters.allegiance?.value)
+                    {
+                        m_content[i].text = getSubstring(v);
+                        m_content[i].isVisible = true;
+                        i++;
+                    }
+                if (search.SearchSystem.filters.government != null)
+                    foreach (string v in search.SearchSystem.filters.government?.value)
+                    {
+                        m_content[i].text = getSubstring(v);
+                        m_content[i].isVisible = true;
+                        i++;
+                    }
+                if (search.SearchSystem.filters.power != null)
+                    foreach (string v in search.SearchSystem.filters.power?.value)
+                    {
+                        m_content[i].text = getSubstring(v);
+                        m_content[i].isVisible = true;
+                        i++;
+                    }
+                if (search.SearchSystem.filters.power_state != null)
+                    foreach (string v in search.SearchSystem.filters.power_state?.value)
+                    {
+                        m_content[i].text = getSubstring(v);
+                        m_content[i].isVisible = true;
+                        i++;
+                    }
+                if (search.SearchSystem.filters.primary_economy != null)
+                    foreach (string v in search.SearchSystem.filters.primary_economy?.value)
+                    {
+                        m_content[i].text = getSubstring(v);
+                        m_content[i].isVisible = true;
+                        i++;
+                    }
+                if (search.SearchSystem.filters.security != null)
+                    foreach (string v in search.SearchSystem.filters.security?.value)
+                    {
+                        m_content[i].text = getSubstring(v);
+                        m_content[i].isVisible = true;
+                        i++;
+                    }
+                if (search.SearchSystem.filters.state != null)
+                    foreach (string v in search.SearchSystem.filters.state?.value)
+                    {
+                        m_content[i].text = getSubstring(v);
+                        m_content[i].isVisible = true;
+                        i++;
+                    }
+            }
             else if (search.SearchBodies != null)
                 m_type.text = "Body search";
 
@@ -70,9 +133,9 @@ namespace NexHUD.Ui.Search
         {
             int _x = 5;
             int _y = 30;
-            foreach( NxSimpleText text in m_content)
+            foreach (NxSimpleText text in m_content)
             {
-                if( _x + text.width+3 > width)
+                if (_x + text.width + 3 > width)
                 {
                     _x = 5;
                     _y += 20;
@@ -84,19 +147,36 @@ namespace NexHUD.Ui.Search
                 }
                 text.x = _x;
                 text.y = _y;
-                _x += text.width+3;
-                
+                _x += text.width + 3;
+
             }
         }
-        private string getSubstring( string s)
+        private string getSubstring(string s)
         {
             if (s.Length > 13)
                 s = s.Substring(0, 10) + "...";
             return s;
         }
+
+        private bool _skipUpdate = true;
         public override void Update()
         {
             base.Update();
+            if (!isVisible)
+            {
+                _skipUpdate = true;
+                return;
+            }
+            else if (_skipUpdate)
+            {
+                _skipUpdate = false;
+                return;
+            }
+
+            if (isVisible && Selected && isEnable && Shortcuts.SelectPressed)
+            {
+                onClick?.Invoke(this, new EventArgs());
+            }
         }
         public override void Render(Graphics _g)
         {
@@ -110,7 +190,7 @@ namespace NexHUD.Ui.Search
                 _g.FillRectangle(new SolidBrush(EDColors.getColor(EDColors.WHITE, 0.05f)), Rectangle);
             foreach (NxSimpleText text in m_content)
             {
-                if( text.isVisible )
+                if (text.isVisible)
                     _g.FillRectangle(new SolidBrush(EDColors.getColor(EDColors.BLUE, 0.4f)), text.Rectangle);
             }
             base.Render(_g);
@@ -131,25 +211,54 @@ namespace NexHUD.Ui.Search
             y = 90;
             width = NxMenu.Width;
             height = NxMenu.Height - 90;
-            Add(new NxSimpleText(50,200,"Search bookmarks placeholder", EDColors.ORANGE, 24));
 
-            for(int i = 0; i < 4; i++ )
+            for (int i = 0; i < 4; i++)
             {
-                for(int u = 0; u < 4; u++)
+                for (int u = 0; u < 4; u++)
                 {
                     UiSearchBookmarkCard card = new UiSearchBookmarkCard(_UiSearch.Menu.frame.NxOverlay);
-                    card.x = 5+u * 253;
+                    card.x = 5 + u * 253;
                     card.y = i * 123;
                     m_Cards.Add(card);
                     Add(card);
                 }
             }
 
-            for(int i = 0; i < Bookmarks.Searchs.Count && i < m_Cards.Count; i++)
-            {
-                m_Cards[i].setDatas(Bookmarks.Searchs[i]);
-            }
+            NxButton btnAdd = new NxButton(5, height - 50, width - 10, 40, "Create search // Quick search", m_UiSearch.Menu);
+            btnAdd.onClick += OnClickAdd;
+            Add(btnAdd);
             MoveCursorToFirst();
+
+
+            refreshCards();
+        }
+        public void refreshCards()
+        {
+            foreach (UiSearchBookmarkCard card in m_Cards)
+                card.setDatas(null);
+            for (int i = 0; i < Bookmarks.Searchs.Count && i < m_Cards.Count; i++)
+            {
+
+                m_Cards[i].setDatas(Bookmarks.Searchs[i]);
+                m_Cards[i].onClick += OnClickBookmark;
+            }
+        }
+        private void OnClickAdd(object sender, EventArgs e)
+        {
+            m_UiSearch.changeState(UiSearch2.State.Create);
+        }
+
+        private void OnClickBookmark(object sender, EventArgs e)
+        {
+            if (sender is UiSearchBookmarkCard)
+            {
+                UiSearchBookmarkCard card = (UiSearchBookmarkCard)sender;
+                if (card.Search != null)
+                {
+                    m_UiSearch.changeState(UiSearch2.State.SearchResult);
+                    m_UiSearch.UiSearchResult.processSearch(card.Search, UiSearch2.State.Bookmarks);
+                }
+            }
         }
 
         private bool _skipUpdate = true;
@@ -172,8 +281,6 @@ namespace NexHUD.Ui.Search
                 m_UiSearch.Menu.changeState(NxMenu.MenuState.Main);
                 return;
             }
-            if (Shortcuts.SelectPressed)
-                m_UiSearch.changeState(UiSearch2.State.Create);
 
             if (Shortcuts.UpPressed) moveUp();
             if (Shortcuts.DownPressed) moveDown();

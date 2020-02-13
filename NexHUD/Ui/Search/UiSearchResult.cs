@@ -17,11 +17,10 @@ namespace NexHUD.Ui.Search
 {
     public class UiSearchResult : NxGroupAutoCursor
     {
-        public const int MAX_LINE_RESULT = 11;
+        public const int MAX_LINE_RESULT = 13;
 
         private UiSearch2 m_UiSearch;
 
-        private bool m_firstUpdateSkipped = false; //To avoid insta click from the previous panel
         private NxSimpleText m_title;
         private NxSimpleText m_messageInfo;
         private NxLoading m_loading;
@@ -31,8 +30,11 @@ namespace NexHUD.Ui.Search
 
         public int[] ResultPosX;
 
-        public UiSearch2.State PreviousState = UiSearch2.State.Create;
-        
+        private UiSearch2.State m_PreviousState = UiSearch2.State.Create;
+
+        private NxButton m_BtnDelete;
+        private NxButton m_BtnSave;
+        private CustomSearch m_LastSearch;
         public UiSearchResult(UiSearch2 _search) : base(_search.Menu.frame.NxOverlay)
         {
             m_UiSearch = _search;
@@ -59,13 +61,13 @@ namespace NexHUD.Ui.Search
 
             //Message
 
-            m_messageInfo = new NxSimpleText(10, height - 140, "", Color.CadetBlue, 20);
+            m_messageInfo = new NxSimpleText(10, height - 160, "", Color.CadetBlue, 20);
 
             Add(m_messageInfo);
 
             //results
 
-            ResultPosX = new int[12];
+            ResultPosX = new int[UiSearchResultLine.PropertiesCount];
             m_results = new UiSearchResultLine[MAX_LINE_RESULT];
             for (int i = 0; i < m_results.Length; i++)
             {
@@ -83,6 +85,38 @@ namespace NexHUD.Ui.Search
             }
 
             MoveCursorToFirst();
+
+            m_BtnSave = new NxButton(width / 2 + 5, height - 135, width / 2 - 10, 35, "Save search", m_UiSearch.Menu);
+            m_BtnSave.ColorBack = EDColors.getColor(EDColors.GREEN, 0.1f);
+            m_BtnSave.ColorBackSelected = EDColors.getColor(EDColors.GREEN, 0.8f);
+            m_BtnSave.onClick += onSaveClicked;
+            Add(m_BtnSave);
+
+            m_BtnDelete = new NxButton(5, height - 135, width / 2 - 10, 35, "Delete search", m_UiSearch.Menu);
+            m_BtnDelete.ColorBack = EDColors.getColor(EDColors.RED, 0.1f);
+            m_BtnDelete.ColorBackSelected = EDColors.getColor(EDColors.RED, 0.8f);
+            m_BtnDelete.onClick += onDeleteClicked;
+            Add(m_BtnDelete);
+        }
+
+        private void onDeleteClicked(object sender, EventArgs e)
+        {
+           if( m_LastSearch != null && m_PreviousState == UiSearch2.State.Bookmarks)
+            {
+                Bookmarks.Delete(m_LastSearch);
+                m_UiSearch.changeState(UiSearch2.State.Bookmarks);
+                m_UiSearch.UiBookmarks.refreshCards();
+            }
+        }
+
+        private void onSaveClicked(object sender, EventArgs e)
+        {
+            if( m_LastSearch != null && m_PreviousState == UiSearch2.State.Create)
+            {
+                Bookmarks.Save(m_LastSearch);
+                m_UiSearch.changeState(UiSearch2.State.Bookmarks);
+                m_UiSearch.UiBookmarks.refreshCards();
+            }
         }
 
         private void OnClickResult(object sender, EventArgs e)
@@ -106,9 +140,15 @@ namespace NexHUD.Ui.Search
         }
 
 
-        public void processSearch(CustomSearch _search)
+        public void processSearch(CustomSearch _search, UiSearch2.State _previous)
         {
+            m_PreviousState = _previous;
+            m_LastSearch = _search;
             m_title.text = "Search : " + _search.SearchName;
+
+            m_BtnDelete.isVisible = m_PreviousState == UiSearch2.State.Bookmarks;
+            m_BtnSave.isVisible = m_PreviousState == UiSearch2.State.Create;
+
             m_loading.isVisible = true;
             displayMessage(string.Format("Process search: '{0}'", _search.SearchName), EDColors.YELLOW);
             if (_search.SearchSystem != null)
@@ -140,6 +180,7 @@ namespace NexHUD.Ui.Search
             {
                 if (i < obj.results.Length)
                 {
+                    m_results[i].isVisible = true;
                     m_results[i].SetDatas(obj, i - 1);
                     for (int j = 0; j < ResultPosX.Length; j++)
                         ResultPosX[j] = Math.Max(ResultPosX[j], m_results[i].XPos[j]);
@@ -194,7 +235,7 @@ namespace NexHUD.Ui.Search
 
             if (Shortcuts.BackPressed)
             {
-                m_UiSearch.changeState(PreviousState);
+                m_UiSearch.changeState(m_PreviousState);
                 return;
             }
 

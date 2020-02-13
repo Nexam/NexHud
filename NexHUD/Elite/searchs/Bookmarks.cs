@@ -30,6 +30,11 @@ namespace NexHUD.Elite.Searchs
             {
                 string _json = File.ReadAllText(BookmarkPath);
                 CustomSearch[] _list = JsonConvert.DeserializeObject<CustomSearch[]>(_json);
+                foreach(CustomSearch search in _list)
+                {
+                    if (search.SearchSystem != null && search.SearchSystem.filters.distance_from_coords != null)
+                        search.SearchSystem.filters.distance_from_coords = new SpanshValue<int?>(0, SearchEngine.DefaultSystemRange);
+                }
                 Searchs.AddRange(_list);
             }
         }
@@ -60,6 +65,8 @@ namespace NexHUD.Elite.Searchs
                     }
                     custom.SearchSystem.filters.name = new SpanshValue<string[]>(names.ToArray());
                     custom.Serializable = false;
+
+                    custom.SearchSystem.sort = new SpanshSort[]{ new SpanshSort() { distance_from_coords = new SpanshSortValue(true) } };
                     Searchs.Add(custom);
                 };
                 
@@ -77,6 +84,12 @@ namespace NexHUD.Elite.Searchs
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, Searchs.Where(x => x.Serializable ).ToArray() );
             }
+        }
+
+        public static void Delete(CustomSearch search)
+        {
+            Searchs.Remove(search);
+            SaveAll();
         }
     }
 }

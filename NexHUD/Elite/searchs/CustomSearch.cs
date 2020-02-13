@@ -30,5 +30,18 @@ namespace NexHUD.Elite.Searchs
         [JsonIgnore]
         public bool Serializable = true;
 
+        [JsonIgnore]
+        public readonly Guid Id = Guid.NewGuid();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CustomSearch)
+                return ((CustomSearch)obj).Id == Id;
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }
