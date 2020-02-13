@@ -17,16 +17,18 @@ namespace NexHUD.Ui.Search
         private NxSimpleText[] m_props;
         private NxRectangle[] m_separators;
         private NxRectangle m_background;
-        private int[] m_maxWidth;
         private bool m_Selected = false;
         private bool m_isSelectable = true;
         private bool m_isEnable = true;
 
-        public int[] XPos;
+        public int[] Widths;
 
         public EventHandler onClick;
 
         public SpanshSystem LastSystem;
+
+        private bool m_registerWidth = false;
+        public bool WidthMustBeRefreshed = false;
         public UiSearchResultLine(UiSearchResult _parent) : base(_parent.Parent)
         {
             Color = EDColors.getColor(EDColors.ORANGE, 0.1f);
@@ -35,20 +37,19 @@ namespace NexHUD.Ui.Search
             m_background = new NxRectangle(0, 0, width, height, Color);
             Add(m_background);
 
-            XPos = new int[PropertiesCount];
+            Widths = new int[PropertiesCount];
             m_props = new NxSimpleText[PropertiesCount];
-            m_separators = new NxRectangle[m_props.Length];
-            m_maxWidth = new int[m_props.Length];
+            m_separators = new NxRectangle[PropertiesCount];
 
             for (int i = 0; i < m_separators.Length; i++)
             {
-                m_separators[i] = new NxRectangle(i * 50, 0, 2, height, Color.Black);
+                m_separators[i] = new NxRectangle(i * 50, 0, 1, height, Color.Black);
                 Add(m_separators[i]);
             }
 
             for (int i = 0; i < m_props.Length; i++)
             {
-                m_props[i] = new NxSimpleText(i * 50, 5, "Property " + i.ToString(), Color.Orange, 18) { AutoSize = true };
+                m_props[i] = new NxSimpleText(i * 50, 5, "Property " + i.ToString(), Color.Orange, 18) { AutoSize = false };
                 Add(m_props[i]);
             }
         }
@@ -73,6 +74,10 @@ namespace NexHUD.Ui.Search
 
             List<string> fields = new List<string>();
 
+            if (result.search.filters.primary_economy != null)
+                fields.Add(nameof(result.search.filters.primary_economy));
+            if (result.search.filters.state != null)
+                fields.Add(nameof(result.search.filters.state));
             if (result.search.filters.government != null)
                 fields.Add(nameof(result.search.filters.government));
             if (result.search.filters.population != null)
@@ -81,16 +86,26 @@ namespace NexHUD.Ui.Search
                 fields.Add(nameof(result.search.filters.power));
             if (result.search.filters.power_state != null)
                 fields.Add(nameof(result.search.filters.power_state));
-            if (result.search.filters.primary_economy != null)
-                fields.Add(nameof(result.search.filters.primary_economy));
             if (result.search.filters.secondary_economy != null)
                 fields.Add(nameof(result.search.filters.secondary_economy));
-            if (result.search.filters.state != null)
-                fields.Add(nameof(result.search.filters.state));
 
             //Always display !
             fields.Add(nameof(result.search.filters.allegiance));
             fields.Add(nameof(result.search.filters.security));
+
+            //Additionnal fields
+            if (fields.Count < 10 && !fields.Contains(nameof(result.search.filters.primary_economy)))
+                fields.Add(nameof(result.search.filters.primary_economy));
+            if (fields.Count < 10 && !fields.Contains(nameof(result.search.filters.state)))
+                fields.Add(nameof(result.search.filters.state));
+            if (fields.Count < 10 && !fields.Contains(nameof(result.search.filters.government)))
+                fields.Add(nameof(result.search.filters.government));
+            if (fields.Count < 10 && !fields.Contains(nameof(result.search.filters.population)))
+                fields.Add(nameof(result.search.filters.population));
+            if (fields.Count < 10 && !fields.Contains(nameof(result.search.filters.power)))
+                fields.Add(nameof(result.search.filters.power));
+            if (fields.Count < 10 && !fields.Contains(nameof(result.search.filters.power_state)))
+                fields.Add(nameof(result.search.filters.power_state));
 
             //Visibilitys
             for (int i = 2; i < m_props.Length - 2; i++)
@@ -99,7 +114,6 @@ namespace NexHUD.Ui.Search
                 {
                     m_props[i].isVisible = true;
                     m_separators[i].isVisible = true;
-                    m_separators[i].height = height;
                 }
                 else
                 {
@@ -117,7 +131,7 @@ namespace NexHUD.Ui.Search
                 for (int i = 2; i < m_props.Length - 2; i++)
                 {
                     if (i - 2 < fields.Count)
-                        m_props[i].text = fields[i - 2];
+                        m_props[i].text = SpanshFilterSystems.getNameOf(fields[i - 2]);
                 }
             }
             else if (index < result.count)
@@ -137,9 +151,12 @@ namespace NexHUD.Ui.Search
                             case nameof(SpanshSearchSystems.filters.population): m_props[i].text = result.results[index].population.ToString(); break;
                             case nameof(SpanshSearchSystems.filters.power):
                                 m_props[i].text = "";
-                                foreach (string p in result.results[index].power)
-                                    m_props[i].text += p + ", ";
-                                m_props[i].text = m_props[i].text.Substring(0, m_props[i].text.Length - 2);
+                                if (result.results[index].power != null)
+                                {
+                                    foreach (string p in result.results[index].power)
+                                        m_props[i].text += p + ", ";
+                                    m_props[i].text = m_props[i].text.Substring(0, m_props[i].text.Length - 2);
+                                }
                                 break;
                             case nameof(SpanshSearchSystems.filters.power_state): m_props[i].text = result.results[index].power_state; break;
                             case nameof(SpanshSearchSystems.filters.primary_economy): m_props[i].text = result.results[index].primary_economy; break;
@@ -151,34 +168,29 @@ namespace NexHUD.Ui.Search
                 }
             }
 
-            setPositions();
+            m_registerWidth = true;
 
             m_background.Color = isEnable ? Color.Orange : Color.White;
 
         }
-        private void setPositions()
+        public void setPositions(int[] _Widths)
         {
-            //Positions
             int _totalWidth = 0;
-            for (int i = 0; i < XPos.Length; i++)
-                XPos[i] = 0;
-
             for (int i = 0; i < m_props.Length; i++)
             {
-                // m_separators[i].x = _totalWidth;
-                //  m_props[i].x = 5 + _totalWidth;
-                XPos[i] = _totalWidth;
-
-                _totalWidth += m_props[i].width + 15;
-            }
-        }
-        public void setPositions(int[] _Xpos)
-        {
-            XPos = _Xpos;
-            for (int i = 0; i < m_props.Length; i++)
-            {
-                m_separators[i].x = XPos[i] - 5;
-                m_props[i].x = XPos[i];
+                if (_totalWidth + _Widths[i] < width)
+                {
+                    m_props[i].isVisible = true;
+                    m_separators[i].isVisible = true;
+                    m_separators[i].x = _totalWidth-3;
+                    m_props[i].x = _totalWidth;
+                    _totalWidth += _Widths[i]+3;
+                }
+                else
+                {
+                    m_props[i].isVisible = false;
+                    m_separators[i].isVisible = false;
+                }
             }
         }
         public override void Update()
@@ -192,8 +204,18 @@ namespace NexHUD.Ui.Search
         {
             base.Render(_g);
 
-            m_background.Color = EDColors.getColor(m_background.Color, Selected ? 0.3f: 0.1f);
+            m_background.Color = EDColors.getColor(m_background.Color, Selected ? 0.3f : 0.1f);
             m_props[1].Color = Selected ? EDColors.WHITE : EDColors.ORANGE;
+
+            if (m_registerWidth)
+            {
+                for (int i = 0; i < m_props.Length; i++)
+                {
+                    Widths[i] = (int)m_props[i].sizeF.Width;
+                }
+                m_registerWidth = false;
+                WidthMustBeRefreshed = true;
+            }
         }
         public bool Selected { get => m_Selected; set { if (m_Selected != value) makeItDirty(); m_Selected = value; } }
         public bool isSelectable { get => m_isSelectable; set { if (m_isSelectable != value) makeItDirty(); m_isSelectable = value; } }

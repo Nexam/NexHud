@@ -79,6 +79,7 @@ namespace NexHUD.Ui.Search
                         m_content[i].text = getSubstring(v);
                         m_content[i].isVisible = true;
                         i++;
+                        if (i >= m_content.Length) break;
                     }
                 if (search.SearchSystem.filters.government != null)
                     foreach (string v in search.SearchSystem.filters.government?.value)
@@ -86,6 +87,7 @@ namespace NexHUD.Ui.Search
                         m_content[i].text = getSubstring(v);
                         m_content[i].isVisible = true;
                         i++;
+                        if (i >= m_content.Length) break;
                     }
                 if (search.SearchSystem.filters.power != null)
                     foreach (string v in search.SearchSystem.filters.power?.value)
@@ -93,6 +95,7 @@ namespace NexHUD.Ui.Search
                         m_content[i].text = getSubstring(v);
                         m_content[i].isVisible = true;
                         i++;
+                        if (i >= m_content.Length) break;
                     }
                 if (search.SearchSystem.filters.power_state != null)
                     foreach (string v in search.SearchSystem.filters.power_state?.value)
@@ -100,6 +103,7 @@ namespace NexHUD.Ui.Search
                         m_content[i].text = getSubstring(v);
                         m_content[i].isVisible = true;
                         i++;
+                        if (i >= m_content.Length) break;
                     }
                 if (search.SearchSystem.filters.primary_economy != null)
                     foreach (string v in search.SearchSystem.filters.primary_economy?.value)
@@ -107,6 +111,7 @@ namespace NexHUD.Ui.Search
                         m_content[i].text = getSubstring(v);
                         m_content[i].isVisible = true;
                         i++;
+                        if (i >= m_content.Length) break;
                     }
                 if (search.SearchSystem.filters.security != null)
                     foreach (string v in search.SearchSystem.filters.security?.value)
@@ -114,6 +119,7 @@ namespace NexHUD.Ui.Search
                         m_content[i].text = getSubstring(v);
                         m_content[i].isVisible = true;
                         i++;
+                        if (i >= m_content.Length) break;
                     }
                 if (search.SearchSystem.filters.state != null)
                     foreach (string v in search.SearchSystem.filters.state?.value)
@@ -121,6 +127,7 @@ namespace NexHUD.Ui.Search
                         m_content[i].text = getSubstring(v);
                         m_content[i].isVisible = true;
                         i++;
+                        if (i >= m_content.Length) break;
                     }
             }
             else if (search.SearchBodies != null)

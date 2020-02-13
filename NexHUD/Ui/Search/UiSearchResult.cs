@@ -28,7 +28,6 @@ namespace NexHUD.Ui.Search
 
         private float m_messageLifeTime;
 
-        public int[] ResultPosX;
 
         private UiSearch2.State m_PreviousState = UiSearch2.State.Create;
 
@@ -67,7 +66,6 @@ namespace NexHUD.Ui.Search
 
             //results
 
-            ResultPosX = new int[UiSearchResultLine.PropertiesCount];
             m_results = new UiSearchResultLine[MAX_LINE_RESULT];
             for (int i = 0; i < m_results.Length; i++)
             {
@@ -173,8 +171,6 @@ namespace NexHUD.Ui.Search
             m_loading.isVisible = false;
             displayMessage("Search Succedded!", EDColors.GREEN);
 
-            for (int i = 0; i < ResultPosX.Length; i++)
-                ResultPosX[i] = 0;
 
             for (int i = 0; i < m_results.Length; i++)
             {
@@ -182,15 +178,11 @@ namespace NexHUD.Ui.Search
                 {
                     m_results[i].isVisible = true;
                     m_results[i].SetDatas(obj, i - 1);
-                    for (int j = 0; j < ResultPosX.Length; j++)
-                        ResultPosX[j] = Math.Max(ResultPosX[j], m_results[i].XPos[j]);
                 }
                 else
                     m_results[i].isVisible = false;
             }
 
-            for (int i = 0; i < m_results.Length; i++)
-                m_results[i].setPositions(ResultPosX);
 
             MoveCursorToFirst();
         }
@@ -243,6 +235,31 @@ namespace NexHUD.Ui.Search
             if (Shortcuts.DownPressed) moveDown();
             if (Shortcuts.LeftPressed) moveLeft();
             if (Shortcuts.RightPressed) moveRight();
+
+            bool refreshAllWidth = m_results.Length > 0;
+            foreach(UiSearchResultLine line in m_results)
+            {
+                if( !line.WidthMustBeRefreshed )
+                {
+                    refreshAllWidth = false;
+                    break;
+                }
+            }
+            if( refreshAllWidth )
+            {
+                int[] MaxWidths = new int[m_results.First().Widths.Length];
+                foreach (UiSearchResultLine line in m_results)
+                {
+                    for(int i =0; i < MaxWidths.Length; i++)
+                    {
+                        MaxWidths[i] = Math.Max(MaxWidths[i], line.Widths[i]);
+                    }
+                }
+                foreach (UiSearchResultLine line in m_results)
+                {
+                    line.setPositions(MaxWidths);
+                }
+            }
         }
     }
 }

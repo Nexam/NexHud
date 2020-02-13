@@ -38,5 +38,22 @@ namespace NexHUD.Apis.Spansh
         public SpanshValue<long?> population;
         public SpanshValue<bool?> needs_permit;
 
+        public static string getNameOf(string propertie)
+        {
+            switch(propertie)
+            {
+                case nameof(SpanshFilterSystems.name): return "System name";
+                case nameof(SpanshFilterSystems.allegiance): return "Allegiance";
+                case nameof(SpanshFilterSystems.primary_economy): return "Economy";
+                case nameof(SpanshFilterSystems.government): return "Government";
+                case nameof(SpanshFilterSystems.power): return "Power";
+                case nameof(SpanshFilterSystems.power_state): return "Power state";
+                case nameof(SpanshFilterSystems.security): return "Security";
+                case nameof(SpanshFilterSystems.state): return "State(s)";
+                case nameof(SpanshFilterSystems.population): return "Population";
+            }
+            return propertie;
+        }
+
     }
 }
