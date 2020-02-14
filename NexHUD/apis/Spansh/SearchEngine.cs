@@ -91,26 +91,13 @@ namespace NexHUD.Apis.Spansh
                 catch (Exception ex)
                 {
                     NexHudEngine.Log(NxLog.Type.Error, ex.Message);
+                    NexHudEngine.Log(NxLog.Type.Error, ex.StackTrace);
                     _onFailedMethod?.Invoke(error = SearchError.DeserializationFailed);
                 }
             }
         }
         public async void SearchInBodies(SpanshSearchBodies _search, Action<SpanshBodiesResult> _method, Action<SearchError> _onFailedMethod)
         {
-            //for test purpose:
-          /*  _search = new SpanshSearchBodies()
-            {
-                filters = new SpanshFilterBodies()
-                {
-                    distance_from_coords = new SpanshValue<int>(0, 100),
-                    is_landable = new SpanshValue<bool>(true),
-                    estimated_mapping_value = new SpanshValue<int>(">", 100000)
-                },
-                reference_system = "Sol",
-                size = 10,
-                Page = 0,                
-            };*/
- 
             string _spanshJson = JsonConvert.SerializeObject(_search, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore }); ;
             NxLog.log(NxLog.Type.Debug, "SearchInBodies. json={0}", _spanshJson);
 
@@ -136,6 +123,7 @@ namespace NexHUD.Apis.Spansh
                 catch (Exception ex)
                 {
                     NexHudEngine.Log(NxLog.Type.Error, ex.Message);
+                    NexHudEngine.Log(NxLog.Type.Error, ex.StackTrace);
                     _onFailedMethod?.Invoke( error = SearchError.DeserializationFailed);
                 }
             }
