@@ -65,17 +65,6 @@ namespace NexHUD.Ui.Common
             ColorBackDisableSelected = EDColors.getColor(EDColors.WHITE, 0.2f);
         }
 
-        public void repos()
-        {
-            m_background.x = 0;
-            m_background.y = 0;
-            m_background.width = width;
-            m_background.height = height;
-
-
-            m_buttonName.x = (height / 2);
-            m_buttonName.y = (width / 2);
-        }
         public NxButton(int _x, int _y, int _width, int _height, string _label, NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
             RelativeChildPos = true;

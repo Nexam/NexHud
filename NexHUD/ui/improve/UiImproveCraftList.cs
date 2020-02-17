@@ -25,19 +25,21 @@ namespace NexHUD.Ui.Improve
         private CraftlistItem m_item;
 
         public CraftlistItem item { get => m_item; }
+
         public UiCraftListItem(int _x, int _y, UiImproveCraftlist _parent) : base( _x,_y, width, height, "Pin", _parent.UiImprove.Menu )
         {
             x = _x;
             y = _y;
             // m_background = new NxRectangle(_x, _y, width, height, EDColors.getColor(EDColors.WHITE, 0.1f));
             //Add(m_background);
+            
 
             this.labelST.isVisible = false;
 
-            m_bpType = new NxSimpleText(x + width / 2, y + 2, "5 x BEAM LASER", EDColors.ORANGE, 18, NxFonts.EuroCapital) { centerHorizontal = true };
-            m_bpName = new NxSimpleText(x + width / 2, y + 22, "> Long range G5 <", EDColors.LIGHTBLUE, 18, NxFonts.EuroStile) { centerHorizontal = true };
-            m_bpExp = new NxSimpleText(x + width / 2, y + 42, "[ Thermal vent ]", EDColors.YELLOW, 16, NxFonts.EuroStile) { centerHorizontal = true };
-            m_materials = new NxSimpleText(x + width / 2, y + 60, "All materials!", EDColors.GREEN, 16, NxFonts.EuroCapital) { centerHorizontal = true };
+            m_bpType = new NxSimpleText( width / 2, 2, "5 x BEAM LASER", EDColors.ORANGE, 18, NxFonts.EuroCapital) { centerHorizontal = true };
+            m_bpName = new NxSimpleText( width / 2, 22, "> Long range G5 <", EDColors.LIGHTBLUE, 18, NxFonts.EuroStile) { centerHorizontal = true };
+            m_bpExp = new NxSimpleText( width / 2, 42, "[ Thermal vent ]", EDColors.YELLOW, 16, NxFonts.EuroStile) { centerHorizontal = true };
+            m_materials = new NxSimpleText(width / 2, 60, "All materials!", EDColors.GREEN, 16, NxFonts.EuroCapital) { centerHorizontal = true };
 
             Add(m_bpType);
             Add(m_bpName);
@@ -83,6 +85,12 @@ namespace NexHUD.Ui.Improve
                 m_materials.text = "";
 
             }
+        }
+        public override void Render(Graphics _g)
+        {
+            if (Selected)
+                _g.DrawRectangle(new Pen(EDColors.ORANGE), Rectangle);
+            base.Render(_g);
         }
     }
     public class UiImproveCraftlist : NxGroup

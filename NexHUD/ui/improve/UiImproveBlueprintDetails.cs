@@ -296,6 +296,8 @@ namespace NexHUD.Ui.Improve
             m_ButtonPin.ColorBack = EDColors.getColor(EDColors.GREEN, 0.1f);
             m_ButtonPin.ColorBackSelected = EDColors.getColor(EDColors.GREEN, 0.8f);
             m_ButtonPin.LabelTextSize = 22;
+            m_ButtonPin.ColorLabel = EDColors.GREEN;
+            m_ButtonPin.ColorLabelSelected = EDColors.WHITE;
             m_ButtonPin.Coords = new Point(0, 100);
             Add(m_ButtonPin);
 
@@ -405,7 +407,7 @@ namespace NexHUD.Ui.Improve
             {
                 m_ButtonDelete.isVisible = true;
                 m_ButtonPin.y = NxMenu.Height - 105;
-                m_ButtonPin.repos();
+                
 
                
             }
@@ -413,7 +415,7 @@ namespace NexHUD.Ui.Improve
             {
                 m_ButtonDelete.isVisible = false;
                 m_ButtonPin.y = NxMenu.Height - 50;
-                m_ButtonPin.repos();
+              
             }
 
             m_updatePositions = true;
