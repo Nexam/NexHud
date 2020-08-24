@@ -64,17 +64,17 @@ namespace NexHUD.Ui
             }
 
             Radio.Label = string.Format("{0} {1}", RadioPlayer.Instance.isPlaying ? "[>]" : "[ ]", RadioPlayer.Instance.getRadioInfos().name);
-            Volume.width = (int)(RadioPlayer.Instance.Volume * totalWidth);
+           // Volume.width = (int)(RadioPlayer.Instance.Volume * totalWidth);
 
             if( VolumeSelected)
             {
                 if (right)
-                    RadioPlayer.Instance.Volume += 0.05f;
-                else if( left)
-                    RadioPlayer.Instance.Volume -= 0.05f;
+                    RadioPlayer.Instance.VolumeUp();
+                else if (left)
+                    RadioPlayer.Instance.VolumeDown();
             }
             Volume.Color = VolumeSelected ? EDColors.YELLOW : EDColors.getColor(EDColors.ORANGE, 0.6f);
-            Volume.Value = (int)(RadioPlayer.Instance.Volume * 100);
+            Volume.Value = (int)(RadioPlayer.Instance.Volume * 100.0f);
         }
     }
 }

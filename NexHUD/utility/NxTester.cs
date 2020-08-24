@@ -48,7 +48,7 @@ namespace NexHUD.Utility
                 }
             }
         }
-
+        /*
         public static void BodyTester()
         {
             string _currentSystem = "Nemehi";
@@ -115,5 +115,6 @@ namespace NexHUD.Utility
             Console.WriteLine("Type any key to exit");
             Console.ReadKey();
         }
+        */
     }
 }

@@ -73,9 +73,11 @@ namespace NexHUD.Apis
 
             return _alive;
         }
-        
+
+        // ===> Moved to Search engine
         public static SpanshBodiesResult SpanshBodies(string _systemOrigin, int _maxDistance, string[] _materials, bool _isLandable = true)
         {
+
             _maxDistance = Math.Min(_maxDistance, 100);
 
             Dictionary<string, string> _sParams = new Dictionary<string, string>();

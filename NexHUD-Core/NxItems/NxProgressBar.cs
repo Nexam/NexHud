@@ -50,7 +50,7 @@ namespace NexHUDCore.NxItems
             _g.FillRectangle( new SolidBrush(Color.FromArgb(124,0,0,0)) , x, y, width, height);
             float percent = m_value / m_maxValue;
             percent = Math.Min( Math.Max(percent, 0),100);
-            _g.FillRectangle(SolidBrush, x+1, y+1, (width-2)* percent, height-2);
+            _g.FillRectangle(SolidBrush, x+1, y+1, (float)(width-2) * percent, height-2);
         }
 
         public override void Update()

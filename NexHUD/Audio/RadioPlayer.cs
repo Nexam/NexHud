@@ -30,12 +30,30 @@ namespace NexHUD.Audio
         }
         #endregion
 
+        private const float m_maxVolume = 0.5f;
+        private const float m_volumeStep = 20f;
+
 
         private List<RadioInfos> m_radios;
         private int m_currentRadioId = 0;
-        private float m_volume = 0.5f;
+
+        private float m_volume = 0.25f;
         private MediaFoundationReader m_mf;
         private WaveOutEvent m_wo;
+
+        public void VolumeUp()
+        {
+            m_volume = Math.Min( m_volume + (m_maxVolume / m_volumeStep), m_maxVolume);
+            if (m_wo != null)
+                m_wo.Volume = m_volume;
+        }
+        public void VolumeDown()
+        {
+            m_volume = Math.Max(m_volume - (m_maxVolume / m_volumeStep), 0);
+            if (m_wo != null)
+                m_wo.Volume = m_volume;
+        }
+
 
         public bool isPlaying
         {
@@ -51,18 +69,7 @@ namespace NexHUD.Audio
         {
             get
             {
-                if (m_wo != null)
-                    return m_wo.Volume;
-                else
-                    return m_volume;
-            }
-            set
-            {
-                float v = value;
-                v = Math.Min(Math.Max(v,0),1);
-                if (m_wo != null)
-                    m_wo.Volume = v;
-                m_volume = v;
+                return m_volume / m_maxVolume;
             }
         }
         
