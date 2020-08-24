@@ -25,6 +25,7 @@ namespace NexHUD.Apis.Spansh
         public string primary_economy;
         public string secondary_economy;
         public string security;
+        public string region;
         public double x;
         public double y;
         public double z;

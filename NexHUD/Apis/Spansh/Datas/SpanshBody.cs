@@ -6,7 +6,7 @@
         public double? axial_tilt;
         public int? body_id;
         public double? distance;
-        public int? distance_to_arrival;
+        public double? distance_to_arrival;
         public double? earth_masses;
         public int? edsm_id;
         public int? estimated_mapping_value;

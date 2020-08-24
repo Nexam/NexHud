@@ -309,6 +309,8 @@ namespace NexHUD.Elite
                         if (m_lastUSRs[_id].entry.searchMaxRadius > 0)
                             maxDistance = Math.Min(m_lastUSRs[_id].entry.searchMaxRadius, 100);
 
+
+
                         SpanshBodiesResult _spanshResult = ApiConnection.SpanshBodies(getCurrentSystem().name, maxDistance, _listMaterials.ToArray(), isLandable);
 
                         //Get infos about the targeted systems
