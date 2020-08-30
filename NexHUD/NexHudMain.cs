@@ -157,7 +157,6 @@ namespace NexHUD
             NexHudEngine.Log(NxLog.Type.Info, "Current Star system: " + m_eliteApi.Location.StarSystem);
 
         }
-
        
         private static void OnNexHudEngineLog(string line)
         {

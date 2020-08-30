@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using System.Linq;
+using NexHUD.Elite;
 using NexHUD.Elite.Craft;
 using NexHUD.Elite.Engineers;
+using NexHUD.Elite.Searchs;
 using NexHUD.Inputs;
 using NexHUD.Ui.Common;
 using NexHUDCore;
@@ -606,7 +608,19 @@ namespace NexHUD.Ui.Improve
                     if (select)
                     {
                         m_uiImprove.changeState(UiImprove.UiImproveState.Search);
-                        m_uiImprove.search.processSearch(((MaterialDatas)_materialBtnSelected.Obj).nxSearch, _tips, ((MaterialDatas)_materialBtnSelected.Obj).Name);
+                        // m_uiImprove.search.processSearch(((MaterialDatas)_materialBtnSelected.Obj).nxSearch, _tips, ((MaterialDatas)_materialBtnSelected.Obj).Name);
+                        //m_uiImprove.search.UiSearchResult.processSearch(new Elite.Searchs.CustomSearch(), Search.UiSearch2.State.Bookmarks);
+                        MaterialDatas _md = ((MaterialDatas)_materialBtnSelected.Obj);
+                        if( _md.cSearch != null )
+                        {
+                            if( _md.cSearch.SearchBodies!= null)
+                            _md.cSearch.SearchBodies.reference_system = EDDatas.Instance.getCurrentSystem().name;
+                            m_uiImprove.search.processSearch(_md.cSearch);
+                        }
+                        else
+                        {
+                            NxLog.log(NxLog.Type.Error, "No researsh associate to material ", _md.Name);
+                        }
                     }
                 }
                 else

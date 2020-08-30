@@ -1,4 +1,5 @@
 ﻿using NexHUD.Elite;
+using NexHUD.Elite.Searchs;
 
 namespace NexHUD.Elite.Engineers
 {
@@ -23,6 +24,7 @@ namespace NexHUD.Elite.Engineers
         public string Group;
 
         public NxSearchEntry nxSearch;
+        public CustomSearch cSearch;
 
         public int Quantity = 1; //for crafting
     }

@@ -18,7 +18,7 @@ namespace NexHUD.Utility
                     NexHudEngine.Log(NxLog.Type.Info, message.Content);
                     break;
                 case Severity.Info:
-                    NexHudEngine.Log(NxLog.Type.Info, message.Content);
+                    //NexHudEngine.Log(NxLog.Type.Info, message.Content);
                     break;
                 case Severity.Warning:
                     NexHudEngine.Log(NxLog.Type.Warning, message.Content);
@@ -27,7 +27,7 @@ namespace NexHUD.Utility
                     NexHudEngine.Log(NxLog.Type.Error, message.Content);
                     break;
                 case Severity.Debug:
-                    NexHudEngine.Log(NxLog.Type.Debug, message.Content);
+                    //NexHudEngine.Log(NxLog.Type.Debug, message.Content);
                     break;
                 case Severity.Special:
                     NexHudEngine.Log(NxLog.Type.Info, message.Content);

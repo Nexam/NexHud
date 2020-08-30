@@ -26,13 +26,13 @@ namespace NexHUD.Ui.Improve
         private UiImproveCraftlist m_craftlist;
         private UiImproveBlueprints m_blueprints;
         private UiImproveBlueprintDetails m_blueprintDetails;
-        private UiSearch m_search;
+        private UiSearchResult m_search;
 
         public NxMenu Menu { get => m_menu;  }
         internal UiImproveCraftlist Craftlist { get => m_craftlist; }
         public UiImproveBlueprints Blueprints { get => m_blueprints;  }
         public UiImproveBlueprintDetails BlueprintDetails { get => m_blueprintDetails;  }
-        public UiSearch search { get => m_search; }
+        public UiSearchResult search { get => m_search; }
 
         public UiImprove(NxMenu _menu) : base(_menu.frame.NxOverlay)
         {
@@ -41,7 +41,7 @@ namespace NexHUD.Ui.Improve
             m_craftlist = new UiImproveCraftlist(this);
             m_blueprints = new UiImproveBlueprints(this);
             m_blueprintDetails = new UiImproveBlueprintDetails(this);
-            m_search = new UiSearch(m_menu, true);
+            m_search = new UiSearchResult(null, this);
 
             Add(m_craftlist);
             Add(m_blueprints);

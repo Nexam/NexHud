@@ -12,6 +12,7 @@ using NexHUD.Apis.Spansh;
 using NexHUD.Elite.Searchs;
 using NexHUD.Ui.Common;
 using System.Threading.Tasks;
+using NexHUD.Ui.Improve;
 
 namespace NexHUD.Ui.Search
 {
@@ -20,6 +21,20 @@ namespace NexHUD.Ui.Search
         public const int MAX_LINE_RESULT = 13;
 
         private UiSearch2 m_UiSearch;
+        private UiImprove m_UiImprove;
+
+        private NxMenu Menu
+        {
+            get
+            {
+                if (m_UiSearch != null)
+                    return m_UiSearch.Menu;
+                else if (m_UiImprove != null)
+                    return m_UiImprove.Menu;
+                else
+                    return null;
+            }
+        }
 
         private NxSimpleText m_title;
         private NxSimpleText m_messageInfo;
@@ -34,9 +49,10 @@ namespace NexHUD.Ui.Search
         private NxButton m_BtnDelete;
         private NxButton m_BtnSave;
         private CustomSearch m_LastSearch;
-        public UiSearchResult(UiSearch2 _search) : base(_search.Menu.frame.NxOverlay)
+        public UiSearchResult(UiSearch2 _search, UiImprove _uiImprove=null) : base( _search != null ? _search.Menu.frame.NxOverlay : _uiImprove.Menu.frame.NxOverlay)
         {
             m_UiSearch = _search;
+            m_UiImprove = _uiImprove;
             RelativeChildPos = true;
             //Title
             m_title = new NxSimpleText(0, 0, "Search result...", EDColors.ORANGE, 24, NxFonts.EuroCapital);
@@ -84,13 +100,13 @@ namespace NexHUD.Ui.Search
 
             MoveCursorToFirst();
 
-            m_BtnSave = new NxButton(width / 2 + 5, height - 135, width / 2 - 10, 35, "Save search", m_UiSearch.Menu);
+            m_BtnSave = new NxButton(width / 2 + 5, height - 135, width / 2 - 10, 35, "Save search", Menu);
             m_BtnSave.ColorBack = EDColors.getColor(EDColors.GREEN, 0.1f);
             m_BtnSave.ColorBackSelected = EDColors.getColor(EDColors.GREEN, 0.8f);
             m_BtnSave.onClick += onSaveClicked;
             Add(m_BtnSave);
 
-            m_BtnDelete = new NxButton(5, height - 135, width / 2 - 10, 35, "Delete search", m_UiSearch.Menu);
+            m_BtnDelete = new NxButton(5, height - 135, width / 2 - 10, 35, "Delete search", Menu);
             m_BtnDelete.ColorBack = EDColors.getColor(EDColors.RED, 0.1f);
             m_BtnDelete.ColorBackSelected = EDColors.getColor(EDColors.RED, 0.8f);
             m_BtnDelete.onClick += onDeleteClicked;
@@ -99,7 +115,7 @@ namespace NexHUD.Ui.Search
 
         private void onDeleteClicked(object sender, EventArgs e)
         {
-           if( m_LastSearch != null && m_PreviousState == UiSearch2.State.Bookmarks)
+           if( m_LastSearch != null && m_PreviousState == UiSearch2.State.Bookmarks && m_UiSearch != null)
             {
                 Bookmarks.Delete(m_LastSearch);
                 m_UiSearch.changeState(UiSearch2.State.Bookmarks);
@@ -109,7 +125,7 @@ namespace NexHUD.Ui.Search
 
         private void onSaveClicked(object sender, EventArgs e)
         {
-            if( m_LastSearch != null && m_PreviousState == UiSearch2.State.Create)
+            if( m_LastSearch != null && m_PreviousState == UiSearch2.State.Create && m_UiSearch != null)
             {
                 Bookmarks.Save(m_LastSearch);
                 m_UiSearch.changeState(UiSearch2.State.Bookmarks);
@@ -138,7 +154,7 @@ namespace NexHUD.Ui.Search
         }
 
 
-        public void processSearch(CustomSearch _search, UiSearch2.State _previous)
+        public void processSearch(CustomSearch _search, UiSearch2.State _previous = UiSearch2.State.SearchResult)
         {
             m_PreviousState = _previous;
             m_LastSearch = _search;
@@ -227,7 +243,10 @@ namespace NexHUD.Ui.Search
 
             if (Shortcuts.BackPressed)
             {
-                m_UiSearch.changeState(m_PreviousState);
+                if (m_UiSearch != null)
+                    m_UiSearch.changeState(m_PreviousState);
+                else if (m_UiImprove != null)
+                    m_UiImprove.changeState(UiImprove.UiImproveState.BlueprintDetail);
                 return;
             }
 

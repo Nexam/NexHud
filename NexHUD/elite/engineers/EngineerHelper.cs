@@ -1,6 +1,7 @@
 ﻿using EliteAPI.Events;
 using Newtonsoft.Json;
 using NexHUD.Elite;
+using NexHUD.Elite.Searchs;
 using NexHUDCore;
 using System;
 using System.Collections.Generic;
@@ -149,6 +150,25 @@ namespace NexHUD.Elite.Engineers
                     };
                     _newSearch.format();
                     md.nxSearch = _newSearch;
+                }
+                if( md.cSearch == null)
+                {
+                    CustomSearch _cSearch = new CustomSearch()
+                    {
+                        SearchName = md.Name,
+                        SearchBodies = new Apis.Spansh.SpanshSearchBodies()
+                        {
+                            filters = new Apis.Spansh.SpanshFilterBodies()
+                            {
+                                is_landable = new Apis.Spansh.SpanshValue<bool>(true),
+                                distance_from_coords = new Apis.Spansh.SpanshValue<int>(0, 30),
+                                materials = new Apis.Spansh.SpanshValue<double>[] { new Apis.Spansh.SpanshValue<double>(md.Name,">", 0.1) }
+
+                            },
+
+                        }
+                    };
+                    md.cSearch = _cSearch;
                 }
             }
 
