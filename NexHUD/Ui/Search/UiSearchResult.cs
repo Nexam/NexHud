@@ -174,10 +174,12 @@ namespace NexHUD.Ui.Search
             displayMessage(string.Format("Process search: '{0}'", _search.SearchName), EDColors.YELLOW);
             if (_search.SearchSystem != null)
             {
+                _search.SearchSystem.reference_system = EDDatas.Instance.getCurrentSystem().name;
                 SearchEngine.Instance.SearchInSystems(_search.SearchSystem, _onSystemsReceived, _onSearchFailed);
             }
             else if (_search.SearchBodies != null)
             {
+                _search.SearchBodies.reference_system = EDDatas.Instance.getCurrentSystem().name;
                 SearchEngine.Instance.SearchInBodies(_search.SearchBodies, _onBodiesReceived, _onSearchFailed);
             }
         }
@@ -185,7 +187,7 @@ namespace NexHUD.Ui.Search
         private void _onBodiesReceived(SpanshBodiesResult obj)
         {
             m_loading.isVisible = false;
-            displayMessage("Search Succeeded!", EDColors.GREEN);
+            displayMessage("Search Succeeded."+obj.count+" bodies found", EDColors.GREEN);
 
             string material_name = "";
 
@@ -211,7 +213,7 @@ namespace NexHUD.Ui.Search
         private void _onSystemsReceived(SpanshSystemsResult obj)
         {
             m_loading.isVisible = false;
-            displayMessage("Search Succedded!", EDColors.GREEN);
+            displayMessage("Search Succedded. "+obj.count+" systems found", EDColors.GREEN);
 
 
             for (int i = 0; i < m_results.Length; i++)

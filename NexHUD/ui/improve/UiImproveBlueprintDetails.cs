@@ -387,7 +387,7 @@ namespace NexHUD.Ui.Improve
                     m_materials[i].ColorLabel = _cargo >= _needed[i].Quantity ? EDColors.BLUE : EDColors.RED;
                     m_cargos[i].text = _cargo.ToString();
 
-                    if (_needed[i].nxSearch != null)
+                    if (_needed[i].cSearch != null)
                     {
                         m_materials[i].ColorBack = EDColors.getColor(Color.Orange, 0.1f);
                         m_materials[i].ColorBackSelected = EDColors.getColor(Color.Orange, 0.8f);
@@ -602,9 +602,9 @@ namespace NexHUD.Ui.Improve
                 _tips = _tips.Substring(0, _tips.Length - 1).Trim();
                 m_Tips.text = _tips;
 
-                if (((MaterialDatas)_materialBtnSelected.Obj).nxSearch != null)
+                if (((MaterialDatas)_materialBtnSelected.Obj).cSearch != null)
                 {
-                    m_NxSeachDescription.text = ((MaterialDatas)_materialBtnSelected.Obj).nxSearch.Description;
+                    m_NxSeachDescription.text = ((MaterialDatas)_materialBtnSelected.Obj).cSearch.SearchName;
                     if (select)
                     {
                         m_uiImprove.changeState(UiImprove.UiImproveState.Search);
@@ -613,8 +613,7 @@ namespace NexHUD.Ui.Improve
                         MaterialDatas _md = ((MaterialDatas)_materialBtnSelected.Obj);
                         if( _md.cSearch != null )
                         {
-                            if( _md.cSearch.SearchBodies!= null)
-                            _md.cSearch.SearchBodies.reference_system = EDDatas.Instance.getCurrentSystem().name;
+                            
                             m_uiImprove.search.processSearch(_md.cSearch);
                         }
                         else

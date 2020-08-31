@@ -1,5 +1,6 @@
 ﻿using EliteAPI.Events;
 using Newtonsoft.Json;
+using NexHUD.Apis.Spansh;
 using NexHUD.Elite;
 using NexHUD.Elite.Searchs;
 using NexHUDCore;
@@ -23,7 +24,7 @@ namespace NexHUD.Elite.Engineers
         public static BlueprintDatas[] blueprints { get { loadDatas(); return m_bpDatas; } }
         public static MaterialDatas[] materials { get { loadDatas(); return m_matDatas; } }
         public static int[] rollPerGrade { get => m_rollPerGrade; }
-        
+
         public static BlueprintDatas[] getExperimentals(string _blueprintType)
         {
             if (m_experimentals.ContainsKey(_blueprintType))
@@ -32,16 +33,16 @@ namespace NexHUD.Elite.Engineers
                 return null;
         }
 
-        
+
         public static MaterialDatas[] getAllCraftMaterials(string _blueprintType, string _blueprintName, string _experimental, int _grade)
         {
             Dictionary<string, MaterialDatas> _materials = new Dictionary<string, MaterialDatas>();
-            for (int g = 1; g <= _grade+1; g++)
+            for (int g = 1; g <= _grade + 1; g++)
             {
                 BlueprintDatas d = null;
-                if( g <= _grade)
+                if (g <= _grade)
                     d = blueprints.Where(x => x.Type == _blueprintType && x.Name == _blueprintName && x.Grade == g).FirstOrDefault();
-                else if( !string.IsNullOrEmpty(_experimental) )
+                else if (!string.IsNullOrEmpty(_experimental))
                     d = blueprints.Where(x => x.Type == _blueprintType && x.Name == _experimental && x.IsExperimental).FirstOrDefault();
 
                 if (d != null)
@@ -51,7 +52,7 @@ namespace NexHUD.Elite.Engineers
                         if (!_materials.ContainsKey(i.Name))
                         {
                             MaterialDatas m = materials.Where(x => x.Name == i.Name).FirstOrDefault();
-                            m.Quantity = i.Size * ( d.IsExperimental ? 1 : rollPerGrade[g] );
+                            m.Quantity = i.Size * (d.IsExperimental ? 1 : rollPerGrade[g]);
                             _materials.Add(i.Name, m);
                         }
                         else
@@ -77,14 +78,14 @@ namespace NexHUD.Elite.Engineers
             foreach (BlueprintDatas d in m_bpDatas)
             {
                 d.Categorie = getCategorie(d);
-                if(d.IsExperimental)
+                if (d.IsExperimental)
                 {
                     if (!m_experimentals.ContainsKey(d.Type))
-                        m_experimentals.Add(d.Type, new List<BlueprintDatas>() );
+                        m_experimentals.Add(d.Type, new List<BlueprintDatas>());
                     m_experimentals[d.Type].Add(d);
                 }
                 //max grade
-                if( !d.IsExperimental && !d.IsUnlock)
+                if (!d.IsExperimental && !d.IsUnlock)
                 {
                     d.MaxGrade = m_bpDatas.Where(x => x.Type == d.Type && x.Name == d.Name && x.Grade > 0).Count();
                     if (d.MaxGrade > 5 || d.MaxGrade < 0)
@@ -94,7 +95,7 @@ namespace NexHUD.Elite.Engineers
 
 
 
-                NexHudEngine.Log("Loading materials datas...");
+            NexHudEngine.Log("Loading materials datas...");
             _json = ResHelper.GetResourceText(Assembly.GetExecutingAssembly(), "Elite.Engineers.Datas.entryData.json");
             m_matDatas = JsonConvert.DeserializeObject<MaterialDatas[]>(_json);
             NexHudEngine.Log(">>{0} materials loaded", m_matDatas.Length);
@@ -138,20 +139,8 @@ namespace NexHUD.Elite.Engineers
             //Materials raw
             foreach (MaterialDatas md in m_matDatas.Where(x => x.Kind == "Material" && x.Subkind == "Raw" && x.Name != "Boron" && x.Name != "Lead" && x.Name != "Rhenium"))
             {
-                if (md.nxSearch == null)
-                {
-                    NxSearchEntry _newSearch = new NxSearchEntry()
-                    {
-                        searchName = md.Name,
-                        searchType = NxSearchType.body,
-                        searchDisplay = new string[] { "materials", "threat", "distanceToArrival" },
-                        searchMaxRadius = 0, //default
-                        searchParams = new string[][] { new string[] { "isLandable", "true" }, new string[] { "rawMaterial", md.Name } }
-                    };
-                    _newSearch.format();
-                    md.nxSearch = _newSearch;
-                }
-                if( md.cSearch == null)
+                
+                if (md.cSearch == null)
                 {
                     CustomSearch _cSearch = new CustomSearch()
                     {
@@ -175,69 +164,155 @@ namespace NexHUD.Elite.Engineers
                 }
             }
 
-            //Pre made searchs
-            NxSearchEntry _sysBoomState = new NxSearchEntry()
+            //premade searchs
+            int _radiusSystemSearch = 200;
+
+            CustomSearch _sysBoomState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "boom" } }
+                SearchName = "Auto search. System in boom",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        state = new SpanshValue<string[]>(new string[] { "Boom" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysBoomElectionState = new NxSearchEntry()
+            CustomSearch _sysBoomElectionState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "boom;election" }, }
+                SearchName = "Auto search. System in boom & election",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        state = new SpanshValue<string[]>(new string[] { "Boom","Election" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysElectionCivilwarState = new NxSearchEntry()
+            CustomSearch _sysElectionCivilwarState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "election;civil war" }, }
+                SearchName = "Auto search. System in election & civil war",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        state = new SpanshValue<string[]>(new string[] { "Election", "Civil war" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysBoomRetreatState = new NxSearchEntry()
+            CustomSearch _sysBoomRetreatState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "boom;retreat" }, }
+                SearchName = "Auto search. System in boom & retreat ",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        state = new SpanshValue<string[]>(new string[] { "Boom", "Retreat" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysElectionState = new NxSearchEntry()
+            CustomSearch _sysElectionState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "election" }, }
+                SearchName = "Auto search. System in election",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        state = new SpanshValue<string[]>(new string[] { "Election" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysBoomOutbreakWarsEmpFedState = new NxSearchEntry()
+            CustomSearch _sysBoomOutbreakWarsEmpFedState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "boom;outbreak;war;civil war;civil unrest" }, new string[] { "allegiance", "empire;federation" } }
+                SearchName = "Auto search. Empire/Federation system in various states",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        allegiance = new SpanshValue<string[]>(new string[] { "Empire", "Federation" }),
+                        state = new SpanshValue<string[]>(new string[] { "Boom","Outbreak","War","Civil war","Civil unrest" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysBoomOutbreakWarsFedState = new NxSearchEntry()
+            CustomSearch _sysBoomOutbreakWarsFedState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "boom;outbreak;war;civil war;civil unrest" }, new string[] { "allegiance", "federation" } }
+                SearchName = "Auto search. Federation system in boom, war states or outbreak",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        allegiance = new SpanshValue<string[]>(new string[] { "Federation" }),
+                        state = new SpanshValue<string[]>(new string[] { "Boom", "Outbreak", "War", "Civil war", "Civil unrest" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysOutbreakState = new NxSearchEntry()
+            CustomSearch _sysOutbreakState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "allegiance", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "outbreak" }, }
+                SearchName = "Auto search. System in outbreak",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        state = new SpanshValue<string[]>(new string[] { "Outbreak" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
-            NxSearchEntry _sysAnarchyOutbreakState = new NxSearchEntry()
+            CustomSearch _sysAnarchyOutbreakState = new CustomSearch()
             {
-                searchName = "auto search",
-                searchType = NxSearchType.system,
-                searchDisplay = new string[] { "state", "government", "security", "threat" },
-                searchParams = new string[][] { new string[] { "state", "outbreak" }, new string[] { "government", "anarchy" }, }
+                SearchName = "Auto search. Anarchy system in outbreak",
+                SearchSystem = new SpanshSearchSystems()
+                {
+                    filters = new SpanshFilterSystems()
+                    {
+                        distance_from_coords = new SpanshValue<int?>(0,_radiusSystemSearch),
+                        government = new SpanshValue<string[]>(new string[] { "Anarchy" }),
+                        state = new SpanshValue<string[]>(new string[] { "Outbreak" }),
+                    },
+                    sort = new SpanshSort[]{ new SpanshSort(){
+                            distance_from_coords = new SpanshSortValue(true)
+                        }
+                    }
+                }
             };
             //Materials other
             foreach (MaterialDatas md in m_matDatas.Where(x => x.nxSearch == null))
@@ -254,35 +329,35 @@ namespace NexHUD.Elite.Engineers
                     case "Inconsistent Shield Soak Analysis":
                     case "Strange Wake Solutions":
                     case "Phase Alloys":
-                        md.nxSearch = _sysBoomState;
+                        md.cSearch = _sysBoomState;
                         break;
                     case "Unexpected Emission Data":
-                        md.nxSearch = _sysBoomElectionState;
+                        md.cSearch = _sysBoomElectionState;
                         break;
                     case "Modified Consumer Firmware":
-                        md.nxSearch = _sysElectionCivilwarState;
+                        md.cSearch = _sysElectionCivilwarState;
                         break;
                     case "Security Firmware Patch":
-                        md.nxSearch = _sysBoomRetreatState;
+                        md.cSearch = _sysBoomRetreatState;
                         break;
                     case "Galvanising Alloys":
-                        md.nxSearch = _sysElectionState;
+                        md.cSearch = _sysElectionState;
                         break;
                     case "Proto Light Alloys":
                     case "Proto Radiolic Alloys":
                     case "Military Supercapacitors":
-                        md.nxSearch = _sysBoomOutbreakWarsEmpFedState;
+                        md.cSearch = _sysBoomOutbreakWarsEmpFedState;
                         break;
                     case "Polymer Capacitors":
                     case "Pharmaceutical Isolators":
-                        md.nxSearch = _sysOutbreakState;
+                        md.cSearch = _sysOutbreakState;
                         break;
                     case "Chemical Manipulators":
-                        md.nxSearch = _sysAnarchyOutbreakState;
+                        md.cSearch = _sysAnarchyOutbreakState;
                         break;
                     case "Core Dynamics Composites":
                     case "Proprietary Composites": //last entry
-                        md.nxSearch = _sysBoomOutbreakWarsFedState;
+                        md.cSearch = _sysBoomOutbreakWarsFedState;
                         break;
 
                 }
@@ -303,9 +378,9 @@ namespace NexHUD.Elite.Engineers
             if (e != null)
                 _count += e.Count;
             Encoded m = NexHudMain.EliteApi.Materials.Manufactured.Where(x => x.NameLocalised == name).FirstOrDefault();
-            if( m != null)
+            if (m != null)
                 _count += m.Count;
-            Raw r = NexHudMain.EliteApi.Materials.Raw.Where(x => x.Name == name.ToLower() ).FirstOrDefault();
+            Raw r = NexHudMain.EliteApi.Materials.Raw.Where(x => x.Name == name.ToLower()).FirstOrDefault();
             if (r != null)
                 _count += r.Count;
 
