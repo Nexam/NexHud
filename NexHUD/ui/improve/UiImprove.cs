@@ -41,7 +41,7 @@ namespace NexHUD.Ui.Improve
             m_craftlist = new UiImproveCraftlist(this);
             m_blueprints = new UiImproveBlueprints(this);
             m_blueprintDetails = new UiImproveBlueprintDetails(this);
-            m_search = new UiSearchResult(null, this);
+            m_search = new UiSearchResult(null, this) { y = 80 };
 
             Add(m_craftlist);
             Add(m_blueprints);

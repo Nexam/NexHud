@@ -26,6 +26,7 @@ namespace NexHUD.Ui.Search
         public EventHandler onClick;
 
         public SpanshSystem LastSystem;
+        public SpanshBody LastBody;
 
         private bool m_registerWidth = false;
         public bool WidthMustBeRefreshed = false;
@@ -71,6 +72,7 @@ namespace NexHUD.Ui.Search
             Selected = false;
 
             LastSystem = null;
+            LastBody = null;
 
             List<string> fields = new List<string>();
 
@@ -173,7 +175,81 @@ namespace NexHUD.Ui.Search
             m_background.Color = isEnable ? Color.Orange : Color.White;
 
         }
-        public void setPositions(int[] _Widths)
+
+        public void SetDatas(SpanshBodiesResult result, string material_name, int index = -1)
+        {
+            m_background.width = width;
+            m_background.height = height;
+
+
+            isSelectable = index != -1;
+            isEnable = index != -1;
+            Selected = false;
+
+            LastSystem = null;
+            LastBody = null;
+            //datas
+
+         
+
+            //Visibilitys
+            for (int i = 0; i < m_props.Length; i++)
+            {
+                if (i < 6)
+                {
+                    m_props[i].isVisible = true;
+                    m_separators[i].isVisible = true;
+                }
+                else
+                {
+                    m_props[i].isVisible = false;
+                    m_separators[i].isVisible = false;
+                }
+            }
+
+            if (index == -1)
+            {
+
+                m_props[0].text = "Dist.";
+                m_props[1].text = "System name";
+
+                m_props[2].text = "Body";
+                m_props[3].text = "Dist. to arrival";
+                m_props[4].text = "Gravity";
+                m_props[5].text = material_name; //??? Nom material
+            }
+            else if (index < result.count)
+            {
+                LastBody = result.results[index];
+                //distance from system to system
+                m_props[0].text = Math.Round( (double)result.results[index].distance, 1).ToString();
+                //System name
+                m_props[1].text = result.results[index].system_name;
+                //Body
+                m_props[2].text = result.results[index].name;
+                //Distance to arrival
+                m_props[3].text = Math.Round((double)result.results[index].distance_to_arrival, 0).ToString();
+                //Gravity
+                m_props[4].text = Math.Round((double)result.results[index].gravity, 2).ToString();
+
+                //Material
+                foreach(SpanshMaterial mat in result.results[index].materials )
+                {
+                    if( mat.name.ToLower()== material_name.ToLower() )
+                    {
+                        m_props[5].text = Math.Round( (double)mat.share, 2).ToString() + " %";
+                    }
+                }
+            }
+
+            ///
+
+            m_registerWidth = true;
+
+            m_background.Color = isEnable ? Color.Orange : Color.White;
+
+        }
+            public void setPositions(int[] _Widths)
         {
             int _totalWidth = 0;
             for (int i = 0; i < m_props.Length; i++)

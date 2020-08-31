@@ -138,10 +138,17 @@ namespace NexHUD.Ui.Search
             if (sender is UiSearchResultLine)
             {
                 SpanshSystem system = ((UiSearchResultLine)sender).LastSystem;
+                SpanshBody body = ((UiSearchResultLine)sender).LastBody;
+
                 if (system != null)
                 {
                     displayMessage(string.Format("{0} has been copied to your clipboard!", system.name.ToString()), EDColors.BLUE);
                     Clipboard.SetText(system.name.ToString());
+                }
+                else if( body != null )
+                {
+                    displayMessage(string.Format("{0} has been copied to your clipboard!", body.system_name.ToString()), EDColors.BLUE);
+                    Clipboard.SetText(body.system_name.ToString());
                 }
             }
         }
@@ -179,6 +186,25 @@ namespace NexHUD.Ui.Search
         {
             m_loading.isVisible = false;
             displayMessage("Search Succeeded!", EDColors.GREEN);
+
+            string material_name = "";
+
+            if (m_LastSearch.SearchBodies.filters.materials != null && m_LastSearch.SearchBodies.filters.materials.Length > 0)
+                material_name = m_LastSearch.SearchBodies.filters.materials[0].name;
+
+            for (int i = 0; i < m_results.Length; i++)
+            {
+                if (i < obj.results.Length)
+                {
+                    m_results[i].isVisible = true;
+                    m_results[i].SetDatas(obj, material_name, i - 1);
+                }
+                else
+                    m_results[i].isVisible = false;
+            }
+
+
+            MoveCursorToFirst();
         }
 
 

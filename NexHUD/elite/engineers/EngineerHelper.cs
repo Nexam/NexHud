@@ -161,11 +161,14 @@ namespace NexHUD.Elite.Engineers
                             filters = new Apis.Spansh.SpanshFilterBodies()
                             {
                                 is_landable = new Apis.Spansh.SpanshValue<bool>(true),
-                                distance_from_coords = new Apis.Spansh.SpanshValue<int>(0, 30),
-                                materials = new Apis.Spansh.SpanshValue<double>[] { new Apis.Spansh.SpanshValue<double>(md.Name,">", 0.1) }
+                                distance_from_coords = new Apis.Spansh.SpanshValue<int>(0, 100),
+                                materials = new Apis.Spansh.SpanshValue<double>[] { new Apis.Spansh.SpanshValue<double>(md.Name, ">", 0.1) }
 
                             },
-
+                            sort = new Apis.Spansh.SpanshSort[]{
+                                new Apis.Spansh.SpanshSort() { materials =  new Apis.Spansh.SpanshSortValue[]{new Apis.Spansh.SpanshSortValue(md.Name, false) } },
+                                new Apis.Spansh.SpanshSort(){ distance_from_coords = new Apis.Spansh.SpanshSortValue(true)}
+                            }
                         }
                     };
                     md.cSearch = _cSearch;
