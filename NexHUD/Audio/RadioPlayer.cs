@@ -15,9 +15,19 @@ namespace NexHUD.Audio
     public class RadioPlayer : IDisposable
     {
         #region singleton
-        public static RadioPlayer Instance { get { return Nested.instance; } }
+        public static RadioPlayer Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new RadioPlayer();
+                return instance;
+            }
+        }
 
 
+        private static RadioPlayer instance;
+        /*
         private class Nested
         {
             // Explicit static constructor to tell C# compiler
@@ -27,7 +37,7 @@ namespace NexHUD.Audio
             }
 
             internal static readonly RadioPlayer instance = new RadioPlayer();
-        }
+        }*/
         #endregion
 
         private const float m_maxVolume = 0.5f;
@@ -43,7 +53,7 @@ namespace NexHUD.Audio
 
         public void VolumeUp()
         {
-            m_volume = Math.Min( m_volume + (m_maxVolume / m_volumeStep), m_maxVolume);
+            m_volume = Math.Min(m_volume + (m_maxVolume / m_volumeStep), m_maxVolume);
             if (m_wo != null)
                 m_wo.Volume = m_volume;
         }
@@ -72,7 +82,7 @@ namespace NexHUD.Audio
                 return m_volume / m_maxVolume;
             }
         }
-        
+
         private RadioPlayer()
         {
             registerRadios();

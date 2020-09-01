@@ -361,11 +361,9 @@ namespace NexHUD.Elite.Engineers
                         break;
 
                 }
-                if (md.nxSearch != null)
-                    md.nxSearch.format();
             }
 
-            int searchFoundAndCreated = m_matDatas.Where(x => x.nxSearch != null).Count();
+            int searchFoundAndCreated = m_matDatas.Where(x => x.cSearch != null).Count();
 
             NexHudEngine.Log("{0}/{1} materials with available searchs", searchFoundAndCreated, m_matDatas.Length);
         }

@@ -59,6 +59,7 @@ namespace NexHUD.Elite
             _unknowSystem.government = EliteGovernment.None;
 
             NexHudMain.EliteApi.Events.LocationEvent += Events_LocationEvent;
+
         }
 
         private void Events_LocationEvent(object sender, EliteAPI.Events.LocationInfo e)

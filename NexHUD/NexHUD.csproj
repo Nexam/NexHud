@@ -198,6 +198,7 @@
     <Compile Include="Ui\Search\UiSearchResult.cs" />
     <Compile Include="Ui\Search\UiSearchCreate.cs" />
     <Compile Include="Ui\Search\UiSearchResultLine.cs" />
+    <Compile Include="Ui\Trade\UiTrade.cs" />
     <Compile Include="Ui\UiMainRadio.cs" />
     <Compile Include="Utility\EliteApiLogger.cs" />
     <Compile Include="Utility\FocusHelper.cs" />
@@ -284,9 +285,7 @@
       <Name>NexHUDCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Ui\Trade\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -298,7 +297,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
+      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
