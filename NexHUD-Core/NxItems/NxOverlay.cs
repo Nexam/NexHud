@@ -55,41 +55,50 @@ namespace NexHUDCore.NxItems
         {
             if (isDirty)
             {
-                m_RenderCount++;
-                Stopwatch _watch = new Stopwatch();
-                _watch.Start();
+                try
+                {
+                    m_RenderCount++;
+                    Stopwatch _watch = new Stopwatch();
+                    _watch.Start();
 
-                if (m_drawDefaultBackground)
-                {
-                    _g.FillRegion(new SolidBrush(EDColors.BACKGROUND), _g.Clip);
-                    int _u = 2;
-                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, 0, Overlay.WindowWidth, _u));
-                    _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, Overlay.WindowHeight - _u, Overlay.WindowWidth, _u));
-                }
-                foreach (NxItem i in m_nxItems)
-                {
-                    if (i.isVisible)
+                    if (m_drawDefaultBackground)
                     {
-                        if (RenderDirtyBox && i.isDirty)
-                            _g.DrawRectangle(Pens.Crimson, i.Rectangle);
-                        i.Render(_g);
+                        _g.FillRegion(new SolidBrush(EDColors.BACKGROUND), _g.Clip);
+                        int _u = 2;
+                        _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, 0, Overlay.WindowWidth, _u));
+                        _g.FillRectangle(new SolidBrush(EDColors.ORANGE), new Rectangle(0, Overlay.WindowHeight - _u, Overlay.WindowWidth, _u));
                     }
-                    i.isDirty = false;
-                    i.visIsUptodate = true;
+                    foreach (NxItem i in m_nxItems)
+                    {
+                        if (i.isVisible)
+                        {
+                            if (RenderDirtyBox && i.isDirty)
+                                _g.DrawRectangle(Pens.Crimson, i.Rectangle);
+                            i.Render(_g);
+                        }
+                        i.isDirty = false;
+                        i.visIsUptodate = true;
+                    }
+                    isDirty = false;
+
+                    _watch.Stop();
+
+                    if (LogRenderTime && _watch.ElapsedMilliseconds > 100)
+                        NexHudEngine.Log("NxOverlay " + this + " rendered in " + _watch.ElapsedMilliseconds + "ms");
+
+                    if (RenderCount)
+                    {
+                        _g.FillRectangle(new SolidBrush(EDColors.getColor(Color.White, 0.5f)), new Rectangle(0, Overlay.WindowHeight - 20, 300, 20));
+                        _g.DrawString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, 0, Overlay.WindowHeight - 20);
+                        SizeF s = _g.MeasureString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17));
+                        _g.DrawString(string.Format("// {0}ms", _watch.ElapsedMilliseconds), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, s.Width + 5, Overlay.WindowHeight - 20);
+                    }
                 }
-                isDirty = false;
-
-                _watch.Stop();
-
-                if (LogRenderTime && _watch.ElapsedMilliseconds > 100)
-                    NexHudEngine.Log("NxOverlay " + this + " rendered in " + _watch.ElapsedMilliseconds + "ms");
-
-                if (RenderCount)
+                catch (Exception ex)
                 {
-                    _g.FillRectangle(new SolidBrush( EDColors.getColor( Color.White, 0.5f) ), new Rectangle(0, Overlay.WindowHeight - 20, 300, 20));
-                    _g.DrawString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, 0, Overlay.WindowHeight - 20);
-                    SizeF s = _g.MeasureString(m_RenderCount.ToString(), NxFont.getFont(NxFonts.EuroStile, 17) );
-                    _g.DrawString(string.Format("// {0}ms" , _watch.ElapsedMilliseconds), NxFont.getFont(NxFonts.EuroStile, 17), Brushes.Crimson, s.Width + 5, Overlay.WindowHeight - 20);
+                    NxLog.log(NxLog.Type.Error, "NxOverlay failed to render frame:");
+                    NxLog.log(NxLog.Type.Error, ex.Message);
+                    makeItDirty();
                 }
             }
         }
