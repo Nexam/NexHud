@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NexHUD.Elite.Searchs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,26 @@ using System.Threading.Tasks;
 
 namespace NexHUD.Apis.Spansh
 {
+    public class SpanshFilterStations
+    {
+        public SpanshValue<int> distance_from_coords;
+        public SpanshValue<int> distance_to_arrival;
+        public SpanshValue<bool> has_large_pad;
+        public SpanshValue<bool> is_planetary;
+        public SpanshValue<string[]> type = new SpanshValue<string[]>()
+        {
+            value = new string[] {
+                "Asteroid base",
+                "Coriolis Starport",
+                "Ocellus Starport",
+                "Orbis Starport",
+                "Outpost",
+                "Planetary Outpost",
+                "Planetary Port",
+        }
+        };
+
+    }
     public class SpanshFilterBodies
     {
         public SpanshValue<string[]> name;
@@ -40,7 +61,7 @@ namespace NexHUD.Apis.Spansh
 
         public static string getNameOf(string propertie)
         {
-            switch(propertie)
+            switch (propertie)
             {
                 case nameof(SpanshFilterSystems.name): return "System name";
                 case nameof(SpanshFilterSystems.allegiance): return "Allegiance";

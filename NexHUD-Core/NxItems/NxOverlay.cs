@@ -21,7 +21,7 @@ namespace NexHUDCore.NxItems
 
         public DateTime lastDirtyCheck { get { return m_lastDirtyCheck; } }
 
-        public bool LogRenderTime = true;
+        public bool LogRenderTime = false;
 
         public override bool isVisible
         {

@@ -152,6 +152,7 @@
     <Compile Include="Apis\Eddb\EddbSystemPresence.cs" />
     <Compile Include="Apis\Edsm\EDSMSystemDatas.cs" />
     <Compile Include="Apis\SpanshSort.cs" />
+    <Compile Include="Apis\Spansh\Datas\SpanshStation.cs" />
     <Compile Include="Apis\Spansh\SearchEngine.cs" />
     <Compile Include="Apis\Spansh\Datas\SpanshResult.cs" />
     <Compile Include="Apis\Spansh\Datas\SpanshBody.cs" />
@@ -297,7 +298,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
+      <UserProperties config_4shortcuts-debug_1json__JsonSchema="http://json-schema.org/draft-04/schema" config_4materialssearchs_1json__JsonSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
