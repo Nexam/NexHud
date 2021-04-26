@@ -1,4 +1,9 @@
 # NexHud
+## Status of the project
+
+I stopped the dev of this mid 2020. I plan to get back to it one day or another. 
+Feel free to conttribute to the project if you are a programmer.
+
 ## Enhanced Hud for Elite: Dangerous (VR and Classic)
 
 This is the early version of **NexHud**, *you can already test it and play with it* if you want to :)
